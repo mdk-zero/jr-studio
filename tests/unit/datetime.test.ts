@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   addDaysToDateString,
+  formatDuration,
   formatManilaDate,
   manilaToUtc,
   manilaWeekday,
@@ -88,3 +89,20 @@ describe("formatManilaDate", () => {
     expect(formatManilaDate(new Date("2026-10-04T16:30:00Z"))).toContain("Oct 5");
   });
 });
+
+describe("formatDuration", () => {
+  it("formats sub-hour durations in minutes", () => {
+    expect(formatDuration(15)).toBe("15 min");
+    expect(formatDuration(45)).toBe("45 min");
+  });
+
+  it("formats whole hours without stray minutes", () => {
+    expect(formatDuration(60)).toBe("1 hr");
+    expect(formatDuration(480)).toBe("8 hr");
+  });
+
+  it("formats mixed durations", () => {
+    expect(formatDuration(90)).toBe("1 hr 30 min");
+    expect(formatDuration(305)).toBe("5 hr 5 min");
+  });
+})

@@ -23,12 +23,17 @@ truncate table
   public.categories,
   public.addons,
   public.customer_notes,
-  public.customers,
   public.staff_members,
   public.contact_messages,
   public.email_log,
   public.blocked_dates
 restart identity cascade;
+
+-- Customers are deleted selectively, NOT truncated: a row with a profile_id
+-- belongs to a real signed-up account, and wiping it would leave that person
+-- able to sign in but unable to book, with no obvious cause. Only the seeded
+-- walk-ins (profile_id is null) are removed.
+delete from public.customers where profile_id is null;
 
 -- ---------------------------------------------------------------------------
 -- Categories: the legacy package categories and service categories, unified.
@@ -309,15 +314,15 @@ select b.id, -1000.00, 'gcash', 'GC-RFD-7781', b.created_at + interval '2 days',
 -- policy requires of customers too.
 -- ---------------------------------------------------------------------------
 insert into public.testimonials
-  (customer_id, booking_id, package_id, rating, message, status, is_featured, reviewed_at)
-select b.customer_id, b.id, b.package_id, v.rating, v.message,
+  (customer_id, booking_id, package_id, rating, message, author_name, status, is_featured, reviewed_at)
+select b.customer_id, b.id, b.package_id, v.rating, v.message, v.author_name,
        v.status::public.testimonial_status, v.is_featured,
        case when v.status = 'pending' then null else now() end
 from (values
-  ('pro-portraits', 5, 'Sobrang ganda ng results! Rina made me feel comfortable the whole time, and the photos came back in two days.', 'approved', true),
-  ('prenup-studio', 5, 'Worth every peso. Joed found angles we never would have thought of, and the HMUA add-on was a great call.', 'approved', true),
-  ('corporate-headshots', 4, 'Efficient and professional. Eight of us done in an hour, and the lighting is consistent across every shot.', 'approved', false)
-) as v(package_slug, rating, message, status, is_featured)
+  ('pro-portraits', 5, 'Sobrang ganda ng results! Rina made me feel comfortable the whole time, and the photos came back in two days.', 'Andrea S.', 'approved', true),
+  ('prenup-studio', 5, 'Worth every peso. Joed found angles we never would have thought of, and the HMUA add-on was a great call.', 'Mike O.', 'approved', true),
+  ('corporate-headshots', 4, 'Efficient and professional. Eight of us done in an hour, and the lighting is consistent across every shot.', 'Dennis U.', 'approved', false)
+) as v(package_slug, rating, message, author_name, status, is_featured)
 join public.packages p on p.slug = v.package_slug
 join public.bookings b on b.package_id = p.id and b.status = 'completed';
 

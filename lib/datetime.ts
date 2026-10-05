@@ -127,3 +127,12 @@ export function manilaWeekday(date: string): number {
   const [y, m, d] = date.split("-").map(Number);
   return new Date(Date.UTC(y, m - 1, d)).getUTCDay();
 }
+
+/** "90" -> "1 hr 30 min". Durations are stored in minutes, never free text. */
+export function formatDuration(minutes: number): string {
+  if (minutes < 60) return `${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  const hourLabel = `${hours} hr`;
+  return rest ? `${hourLabel} ${rest} min` : hourLabel;
+}

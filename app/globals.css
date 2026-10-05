@@ -48,3 +48,84 @@ h2,
 h3 {
   font-family: var(--font-display);
 }
+
+/* ---------------------------------------------------------------------------
+   Editorial treatment for the public site: warm paper, film grain, hairline
+   rules and staggered reveals. Kept here (not per component) so the marketing
+   pages share one visual language.
+   --------------------------------------------------------------------------- */
+
+@theme {
+  --tracking-caps: 0.22em;
+}
+
+/* Film grain. An inline SVG turbulence beats shipping a texture image, and at
+   this opacity it reads as paper rather than noise. */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Small-caps label used for metadata, captions and eyebrows. */
+.caps {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+/* A plate: the frame a photograph will eventually sit in. Until then the frame
+   itself is the design, rather than a grey box pretending to be an image. */
+.plate {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 100% at 15% 0%, var(--color-sand-200) 0%, transparent 60%),
+    linear-gradient(160deg, var(--color-sand-100) 0%, var(--color-sand-300) 100%);
+}
+
+.plate-empty::after {
+  content: "";
+  position: absolute;
+  inset: 0.75rem;
+  border: 1px dashed color-mix(in oklab, var(--color-burgundy-600) 22%, transparent);
+}
+
+/* One orchestrated page-load reveal, staggered with delays, rather than many
+   scattered micro-animations. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.d1 { animation-delay: 0.05s; }
+.d2 { animation-delay: 0.14s; }
+.d3 { animation-delay: 0.23s; }
+.d4 { animation-delay: 0.32s; }
+.d5 { animation-delay: 0.41s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
+
+/* Numbers in prices and durations should not shift width between values. */
+.nums {
+  font-variant-numeric: tabular-nums;
+}

@@ -1081,6 +1081,7 @@ export type Database = {
       testimonials: {
         Row: {
           admin_notes: string | null
+          author_name: string | null
           booking_id: string | null
           created_at: string
           customer_id: string
@@ -1095,6 +1096,7 @@ export type Database = {
         }
         Insert: {
           admin_notes?: string | null
+          author_name?: string | null
           booking_id?: string | null
           created_at?: string
           customer_id: string
@@ -1109,6 +1111,7 @@ export type Database = {
         }
         Update: {
           admin_notes?: string | null
+          author_name?: string | null
           booking_id?: string | null
           created_at?: string
           customer_id?: string
