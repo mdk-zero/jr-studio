@@ -1,69 +1,72 @@
-import Image from "next/image";
+import { Suspense } from "react";
+import { publicEnv } from "@/lib/env";
 
+/**
+ * Phase 0 placeholder. The real landing page arrives in Phase 3, once the
+ * catalog exists and can be read through a cached query.
+ */
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center gap-8 px-4 py-16">
+      <div>
+        <p className="text-sm font-medium tracking-[0.2em] text-burgundy-500 uppercase">
+          J&amp;R Studio
+        </p>
+        <h1 className="mt-3 text-4xl font-semibold text-burgundy-700 sm:text-5xl">
+          Foundation in place
+        </h1>
+        <p className="mt-4 max-w-prose text-muted">
+          Next.js 16 with the backend inside the app, Supabase for data, auth and
+          storage. Brand tokens, Manila-safe date helpers and peso formatting are
+          wired up. Next: the database schema.
+        </p>
+      </div>
+
+      <section className="rounded-xl border border-sand-300 bg-white/70 p-6">
+        <h2 className="text-lg font-semibold text-ink">Environment</h2>
+        <dl className="mt-4 space-y-3 text-sm">
+          <div className="flex flex-wrap justify-between gap-2">
+            <dt className="text-muted">Supabase project</dt>
+            <dd className="font-mono text-ink">
+              {new URL(publicEnv.NEXT_PUBLIC_SUPABASE_URL).hostname}
+            </dd>
+          </div>
+          <div className="flex flex-wrap justify-between gap-2">
+            <dt className="text-muted">Connection</dt>
+            <dd>
+              <Suspense fallback={<span className="text-muted">checking…</span>}>
+                <SupabaseStatus />
+              </Suspense>
+            </dd>
+          </div>
+        </dl>
+      </section>
+    </main>
+  );
+}
+
+/**
+ * Deliberately uncached, so it streams in behind Suspense rather than being
+ * baked into the prerendered shell — the Cache Components pattern this app
+ * uses for every request-time read.
+ */
+async function SupabaseStatus() {
+  let ok = false;
+  try {
+    const res = await fetch(`${publicEnv.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/health`, {
+      // Supabase rejects unkeyed requests with a 401, so send the publishable key.
+      headers: { apikey: publicEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY },
+      signal: AbortSignal.timeout(5000),
+      cache: "no-store",
+    });
+    ok = res.ok;
+  } catch {
+    ok = false;
+  }
+
+  return ok ? (
+    <span className="font-medium text-burgundy-600">reachable</span>
+  ) : (
+    <span className="font-medium text-red-700">unreachable</span>
   );
 }

@@ -1,26 +1,50 @@
 @import "tailwindcss";
 
+/**
+ * J&R Studio brand tokens.
+ * Burgundy + warm beige, carried over from the legacy site so the studio's
+ * identity survives the redesign. Light-only for now; a dark theme can be
+ * layered on later by redefining the semantic tokens under a [data-theme].
+ */
+@theme {
+  --color-burgundy-50: #f9f3f4;
+  --color-burgundy-100: #f0dfe2;
+  --color-burgundy-200: #ddbcc3;
+  --color-burgundy-300: #c48f9b;
+  --color-burgundy-400: #a66374;
+  --color-burgundy-500: #873f52;
+  --color-burgundy-600: #662d38;
+  --color-burgundy-700: #551e2f;
+  --color-burgundy-800: #4a1f28;
+  --color-burgundy-900: #33151c;
+
+  --color-sand-50: #faf8f6;
+  --color-sand-100: #f5f1ee;
+  --color-sand-200: #e9e2db;
+  --color-sand-300: #d9d3ce;
+  --color-sand-400: #b9afa6;
+
+  --color-ink: #1c1a19;
+  --color-muted: #6b625d;
+
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: var(--color-sand-50);
+  --foreground: var(--color-ink);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
 }
