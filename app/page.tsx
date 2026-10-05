@@ -1,9 +1,10 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import { publicEnv } from "@/lib/env";
 
 /**
- * Phase 0 placeholder. The real landing page arrives in Phase 3, once the
- * catalog exists and can be read through a cached query.
+ * Placeholder. The real landing page arrives in Phase 3, once the catalog
+ * exists and can be read through a cached query.
  */
 export default function Home() {
   return (
@@ -17,9 +18,24 @@ export default function Home() {
         </h1>
         <p className="mt-4 max-w-prose text-muted">
           Next.js 16 with the backend inside the app, Supabase for data, auth and
-          storage. Brand tokens, Manila-safe date helpers and peso formatting are
-          wired up. Next: the database schema.
+          storage. Schema, accounts and role-based access are in place. Next: the
+          catalog and the public site.
         </p>
+      </div>
+
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href="/signup"
+          className="rounded-lg bg-burgundy-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-burgundy-700"
+        >
+          Create an account
+        </Link>
+        <Link
+          href="/login"
+          className="rounded-lg border border-sand-300 bg-white px-4 py-2.5 text-sm font-semibold text-burgundy-700 hover:bg-sand-100"
+        >
+          Sign in
+        </Link>
       </div>
 
       <section className="rounded-xl border border-sand-300 bg-white/70 p-6">

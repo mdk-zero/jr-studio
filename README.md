@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# J&R Studio
 
-## Getting Started
+Studio management for J&R Studio (Nasugbu, Batangas): a public site where customers
+browse packages and book sessions, plus a back office for bookings, customers,
+catalog, portfolio, staff and testimonials.
 
-First, run the development server:
+A rebuild of a PHP/MySQL system, now Next.js 16 (App Router, backend in the same
+app) on Supabase for Postgres, Auth and Storage. Prices are in PHP (₱) and all
+scheduling is in `Asia/Manila`.
+
+## Requirements
+
+- Node.js 22+
+- A Supabase project (the CLI is used against the hosted project; Docker is not required)
+
+## Setup
 
 ```bash
+npm install
+cp .env.example .env.local   # then fill in the values below
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`.env.local`:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable | Where to find it |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Project Settings → Data API |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Project Settings → API Keys (publishable) |
+| `SUPABASE_SECRET_KEY` | Project Settings → API Keys (secret). Server-only — never prefix with `NEXT_PUBLIC_` |
+| `RESEND_API_KEY`, `EMAIL_FROM`, `STUDIO_NOTIFY_EMAIL` | Resend (transactional email) |
+| `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` in development |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Database
 
-## Learn More
+Migrations and the dev seed live in `supabase/`. The schema is applied to the
+linked project with the CLI:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+supabase link                        # once, select the project
+supabase db push                     # apply migrations
+supabase db push --include-seed      # apply migrations + reset the dev seed
+supabase gen types typescript --linked --schema public > lib/supabase/database.types.ts
+supabase db advisors                 # security + performance lint
+supabase config push                 # apply supabase/config.toml (auth settings) to the project
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The seed truncates the app tables before inserting, so it is safe to re-run. It
+never touches `auth.users`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Creating the first admin
 
-## Deploy on Vercel
+Everyone who signs up is a `customer`. Promote yourself once, in the Supabase SQL
+editor:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```sql
+update public.profiles set role = 'admin' where email = 'you@example.com';
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+After that, admins invite staff from `/admin/staff` and no one needs SQL again.
+Roles are read live from `profiles` on every request, so a change takes effect
+immediately rather than when the user's token happens to refresh.
+
+## Email in development
+
+Supabase's built-in email provider is rate limited (a couple of messages an hour)
+and **cannot use custom templates on the free tier**, so:
+
+- Signup confirmation currently arrives as a **link**, handled by
+  `/auth/callback`. The 6-digit code field on `/verify` works the moment a custom
+  template is live.
+- The branded templates are written and waiting in `supabase/templates/`. Enable
+  them by configuring Resend as custom SMTP and uncommenting
+  `[auth.email.template.*]` in `supabase/config.toml`, then `supabase config push`.
+- Tests avoid sending email entirely: they mint confirmation codes with
+  `auth.admin.generateLink()`.
+
+## Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Development server |
+| `npm run build` | Production build (also type-checks) |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run lint` | ESLint |
+| `npm test` | Vitest: unit + integration |
+
+Unit tests are pure logic (Manila dates, pricing rules, redirect safety).
+Integration tests run against the linked Supabase project using real signed-in
+users, so they need `.env.local`; they share one database and therefore run
+serially.
+
+## Architecture notes
+
+- **Authorization** lives in `lib/dal.ts`. `getCurrentUser()` verifies the JWT with
+  `getClaims()` (not `getSession()`, which only decodes the cookie) and reads the
+  role from `profiles`. `proxy.ts` only does an optimistic redirect; it is never
+  the security boundary.
+- **Four Supabase clients**, each with one job: `client.ts` (browser),
+  `server.ts` (cookie-based, RLS as the user), `public.ts` (cookie-less, safe
+  inside `use cache`), `admin.ts` (secret key, bypasses RLS — authorize first).
+- **Booking rules live in the database.** `quote_booking()` is the only pricing
+  formula, `available_slots()` the only availability source, and `create_booking()`
+  writes atomically. A `tstzrange` exclusion constraint makes double-booking
+  impossible rather than unlikely.
+- **Cache Components** is on. Public pages cache with `use cache` + `cacheTag`;
+  authenticated areas set `instant = false` and render per request.
