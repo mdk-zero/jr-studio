@@ -9,15 +9,17 @@ import { SignOutButton } from "@/components/layout/sign-out-button";
  */
 export const instant = false;
 
+// `ready: false` marks a section that later phases build. It renders as a
+// muted label rather than a link, so the sidebar never points at a 404.
 const NAV = [
-  { href: "/admin", label: "Dashboard" },
-  { href: "/admin/bookings", label: "Bookings" },
-  { href: "/admin/customers", label: "Customers" },
-  { href: "/admin/catalog/packages", label: "Catalog" },
-  { href: "/admin/portfolio", label: "Portfolio" },
-  { href: "/admin/staff", label: "Staff" },
-  { href: "/admin/testimonials", label: "Testimonials" },
-  { href: "/admin/settings", label: "Settings" },
+  { href: "/admin", label: "Dashboard", ready: true },
+  { href: "/admin/bookings", label: "Bookings", ready: false },
+  { href: "/admin/customers", label: "Customers", ready: false },
+  { href: "/admin/catalog/packages", label: "Catalog", ready: true },
+  { href: "/admin/portfolio", label: "Portfolio", ready: false },
+  { href: "/admin/staff", label: "Staff", ready: false },
+  { href: "/admin/testimonials", label: "Testimonials", ready: false },
+  { href: "/admin/settings", label: "Settings", ready: false },
 ] as const;
 
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
@@ -34,15 +36,25 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
           </Link>
         </div>
         <nav className="flex gap-1 overflow-x-auto px-2 pb-2 md:flex-col md:px-2">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted hover:bg-sand-100 hover:text-ink"
-            >
-              {item.label}
-            </Link>
-          ))}
+          {NAV.map((item) =>
+            item.ready ? (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted hover:bg-sand-100 hover:text-ink"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <span
+                key={item.href}
+                className="shrink-0 cursor-default rounded-lg px-3 py-2 text-sm text-sand-400"
+                title="Coming in a later phase"
+              >
+                {item.label}
+              </span>
+            ),
+          )}
         </nav>
       </aside>
 
