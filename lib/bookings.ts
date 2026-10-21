@@ -1,25 +1,9 @@
 import "server-only";
 
 import { createClient } from "@/lib/supabase/server";
-import type { Database } from "@/lib/supabase/database.types";
 
-export type BookingStatus = Database["public"]["Enums"]["booking_status"];
-
-export const STATUS_COPY: Record<BookingStatus, { label: string; tone: string }> = {
-  pending: { label: "Awaiting confirmation", tone: "bg-sand-200 text-ink" },
-  approved: { label: "Confirmed", tone: "bg-burgundy-50 text-burgundy-700" },
-  completed: { label: "Completed", tone: "bg-burgundy-100 text-burgundy-800" },
-  cancelled: { label: "Cancelled", tone: "bg-sand-200 text-muted" },
-  rejected: { label: "Declined", tone: "bg-red-50 text-red-700" },
-  expired: { label: "Expired", tone: "bg-sand-200 text-muted" },
-};
-
-export const PAYMENT_COPY: Record<string, { label: string; tone: string }> = {
-  unpaid: { label: "Unpaid", tone: "bg-sand-200 text-muted" },
-  partial: { label: "Part paid", tone: "bg-sand-300 text-ink" },
-  paid: { label: "Paid", tone: "bg-burgundy-50 text-burgundy-700" },
-  refunded: { label: "Refunded", tone: "bg-sand-200 text-muted" },
-};
+// The vocabulary lives in booking-status.ts so client components can use it.
+export { PAYMENT_COPY, STATUS_COPY, type BookingStatus } from "@/lib/booking-status";
 
 // One literal string: supabase-js infers the row type from the select text, so
 // building it by concatenation loses the types.

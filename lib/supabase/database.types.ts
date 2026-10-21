@@ -743,6 +743,9 @@ export type Database = {
           receipt_path: string | null
           recorded_by: string | null
           reference_no: string | null
+          void_reason: string | null
+          voided_at: string | null
+          voided_by: string | null
         }
         Insert: {
           amount: number
@@ -755,6 +758,9 @@ export type Database = {
           receipt_path?: string | null
           recorded_by?: string | null
           reference_no?: string | null
+          void_reason?: string | null
+          voided_at?: string | null
+          voided_by?: string | null
         }
         Update: {
           amount?: number
@@ -767,6 +773,9 @@ export type Database = {
           receipt_path?: string | null
           recorded_by?: string | null
           reference_no?: string | null
+          void_reason?: string | null
+          voided_at?: string | null
+          voided_by?: string | null
         }
         Relationships: [
           {
@@ -786,6 +795,13 @@ export type Database = {
           {
             foreignKeyName: "payments_recorded_by_fkey"
             columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_voided_by_fkey"
+            columns: ["voided_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -1212,6 +1228,40 @@ export type Database = {
       }
     }
     Functions: {
+      assign_booking_staff: {
+        Args: { p_booking_id: string; p_staff_id?: string }
+        Returns: {
+          addons_total: number
+          cancelled_at: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string
+          discount_amount: number
+          ends_at: string
+          id: string
+          notes: string | null
+          package_id: string
+          package_price: number
+          promotion_id: string | null
+          reference: string
+          slot: unknown
+          source: string
+          staff_id: string | null
+          starts_at: string
+          status: Database["public"]["Enums"]["booking_status"]
+          status_before_cancel:
+            | Database["public"]["Enums"]["booking_status"]
+            | null
+          total_amount: number
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "bookings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       available_slots: {
         Args: { p_date: string; p_package_id: string }
         Returns: {
@@ -1292,6 +1342,50 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      create_staff_booking: {
+        Args: {
+          p_addon_ids?: string[]
+          p_customer_email?: string
+          p_customer_id?: string
+          p_customer_name?: string
+          p_customer_phone?: string
+          p_notes?: string
+          p_package_id: string
+          p_staff_id?: string
+          p_starts_at: string
+        }
+        Returns: {
+          addons_total: number
+          cancelled_at: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string
+          discount_amount: number
+          ends_at: string
+          id: string
+          notes: string | null
+          package_id: string
+          package_price: number
+          promotion_id: string | null
+          reference: string
+          slot: unknown
+          source: string
+          staff_id: string | null
+          starts_at: string
+          status: Database["public"]["Enums"]["booking_status"]
+          status_before_cancel:
+            | Database["public"]["Enums"]["booking_status"]
+            | null
+          total_amount: number
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "bookings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       quote_booking: {
         Args: { p_addon_ids?: string[]; p_package_id: string }
         Returns: {
@@ -1301,6 +1395,120 @@ export type Database = {
           package_price: number
           promotion_id: string
           total_amount: number
+        }[]
+      }
+      record_payment: {
+        Args: {
+          p_amount: number
+          p_booking_id: string
+          p_method: Database["public"]["Enums"]["payment_method"]
+          p_note?: string
+          p_paid_at?: string
+          p_reference_no?: string
+        }
+        Returns: {
+          amount: number
+          booking_id: string
+          created_at: string
+          id: string
+          method: Database["public"]["Enums"]["payment_method"]
+          note: string | null
+          paid_at: string
+          receipt_path: string | null
+          recorded_by: string | null
+          reference_no: string | null
+          void_reason: string | null
+          voided_at: string | null
+          voided_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "payments"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      reschedule_booking: {
+        Args: { p_booking_id: string; p_note?: string; p_starts_at: string }
+        Returns: {
+          addons_total: number
+          cancelled_at: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string
+          discount_amount: number
+          ends_at: string
+          id: string
+          notes: string | null
+          package_id: string
+          package_price: number
+          promotion_id: string | null
+          reference: string
+          slot: unknown
+          source: string
+          staff_id: string | null
+          starts_at: string
+          status: Database["public"]["Enums"]["booking_status"]
+          status_before_cancel:
+            | Database["public"]["Enums"]["booking_status"]
+            | null
+          total_amount: number
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "bookings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      set_booking_status: {
+        Args: {
+          p_booking_id: string
+          p_note?: string
+          p_status: Database["public"]["Enums"]["booking_status"]
+        }
+        Returns: {
+          addons_total: number
+          cancelled_at: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string
+          discount_amount: number
+          ends_at: string
+          id: string
+          notes: string | null
+          package_id: string
+          package_price: number
+          promotion_id: string | null
+          reference: string
+          slot: unknown
+          source: string
+          staff_id: string | null
+          starts_at: string
+          status: Database["public"]["Enums"]["booking_status"]
+          status_before_cancel:
+            | Database["public"]["Enums"]["booking_status"]
+            | null
+          total_amount: number
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "bookings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      staff_available_slots: {
+        Args: {
+          p_date: string
+          p_duration_minutes: number
+          p_exclude_booking_id?: string
+        }
+        Returns: {
+          ends_at: string
+          starts_at: string
         }[]
       }
       undo_cancel_booking: {
@@ -1333,6 +1541,30 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "bookings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      void_payment: {
+        Args: { p_payment_id: string; p_reason: string }
+        Returns: {
+          amount: number
+          booking_id: string
+          created_at: string
+          id: string
+          method: Database["public"]["Enums"]["payment_method"]
+          note: string | null
+          paid_at: string
+          receipt_path: string | null
+          recorded_by: string | null
+          reference_no: string | null
+          void_reason: string | null
+          voided_at: string | null
+          voided_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "payments"
           isOneToOne: true
           isSetofReturn: false
         }

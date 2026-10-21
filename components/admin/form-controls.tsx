@@ -23,18 +23,27 @@ export function SubmitButton({
   quiet = false,
   className = "",
   confirm,
+  name,
+  value,
 }: {
   children: React.ReactNode;
   pendingLabel?: string;
   quiet?: boolean;
   className?: string;
   confirm?: string;
+  /** Lets one form offer several actions: the pressed button's value is submitted. */
+  name?: string;
+  value?: string;
 }) {
-  const { pending } = useFormStatus();
+  const { pending, data } = useFormStatus();
+  // With several submit buttons, only the one that was pressed shows progress.
+  const isThisOne = pending && (!name || data?.get(name) === value);
 
   return (
     <button
       type="submit"
+      name={name}
+      value={value}
       disabled={pending}
       className={`${quiet ? adminButtonQuiet : adminButton} ${className}`}
       onClick={
@@ -47,7 +56,7 @@ export function SubmitButton({
           : undefined
       }
     >
-      {pending ? (pendingLabel ?? "Saving…") : children}
+      {isThisOne ? (pendingLabel ?? "Saving…") : children}
     </button>
   );
 }

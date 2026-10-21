@@ -136,3 +136,64 @@ export function formatDuration(minutes: number): string {
   const hourLabel = `${hours} hr`;
   return rest ? `${hourLabel} ${rest} min` : hourLabel;
 }
+
+/** The Monday of the week containing "YYYY-MM-DD". The studio's week starts on Monday. */
+export function startOfWeek(date: string): string {
+  const weekday = manilaWeekday(date);
+  return addDaysToDateString(date, weekday === 0 ? -6 : 1 - weekday);
+}
+
+// Date-only strings carry no zone, so they are formatted as UTC calendar dates.
+const dayFormatter = new Intl.DateTimeFormat("en-PH", {
+  timeZone: "UTC",
+  weekday: "short",
+  month: "short",
+  day: "numeric",
+});
+
+const monthFormatter = new Intl.DateTimeFormat("en-PH", {
+  timeZone: "UTC",
+  month: "long",
+  year: "numeric",
+});
+
+/** "Mon, Oct 19" for "2026-10-19". */
+export function formatDateString(date: string): string {
+  const [y, m, d] = date.split("-").map(Number);
+  return dayFormatter.format(new Date(Date.UTC(y, m - 1, d)));
+}
+
+/**
+ * A `<input type="datetime-local">` value ("2026-10-19T14:30"), read as Manila
+ * wall-clock time, to its UTC instant.
+ */
+export function manilaDateTimeLocalToUtc(value: string): Date {
+  const [date, time] = value.split("T");
+  return manilaToUtc(date, time);
+}
+
+/** "2026-10" for the month containing an instant, as seen in Manila. */
+export function manilaMonth(instant: Date = new Date()): string {
+  return toManilaDateString(instant).slice(0, 7);
+}
+
+/** Shift a "YYYY-MM" month by whole months. */
+export function addMonths(month: string, months: number): string {
+  const [y, m] = month.split("-").map(Number);
+  const shifted = new Date(Date.UTC(y, m - 1 + months, 1));
+  return shifted.toISOString().slice(0, 7);
+}
+
+/** The UTC instants bounding a Manila calendar month: [start, end). */
+export function manilaMonthRange(month: string): { start: Date; end: Date } {
+  return {
+    start: manilaToUtc(`${month}-01`, "00:00"),
+    end: manilaToUtc(`${addMonths(month, 1)}-01`, "00:00"),
+  };
+}
+
+/** "October 2026" for "2026-10". */
+export function formatMonth(month: string): string {
+  const [y, m] = month.split("-").map(Number);
+  return monthFormatter.format(new Date(Date.UTC(y, m - 1, 1)));
+}

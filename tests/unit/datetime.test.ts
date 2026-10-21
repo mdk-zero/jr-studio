@@ -1,11 +1,18 @@
 import { describe, expect, it } from "vitest";
 import {
   addDaysToDateString,
+  addMonths,
+  formatDateString,
   formatDuration,
   formatManilaDate,
+  formatMonth,
+  manilaDateTimeLocalToUtc,
+  manilaMonth,
+  manilaMonthRange,
   manilaToUtc,
   manilaWeekday,
   minutesToTime,
+  startOfWeek,
   timeToMinutes,
   toManilaDateString,
 } from "@/lib/datetime";
@@ -106,3 +113,58 @@ describe("formatDuration", () => {
     expect(formatDuration(305)).toBe("5 hr 5 min");
   });
 })
+
+describe("startOfWeek", () => {
+  it("returns the Monday on or before the date", () => {
+    expect(startOfWeek("2026-10-19")).toBe("2026-10-19"); // Monday
+    expect(startOfWeek("2026-10-24")).toBe("2026-10-19"); // Saturday
+  });
+
+  it("treats Sunday as the end of the week, not the start", () => {
+    expect(startOfWeek("2026-10-25")).toBe("2026-10-19");
+  });
+
+  it("crosses month and year boundaries", () => {
+    expect(startOfWeek("2026-11-01")).toBe("2026-10-26");
+    expect(startOfWeek("2027-01-01")).toBe("2026-12-28");
+  });
+});
+
+describe("formatDateString", () => {
+  it("formats the calendar date as written, whatever the host zone", () => {
+    expect(formatDateString("2026-10-19")).toBe("Mon, Oct 19");
+  });
+});
+
+describe("manilaDateTimeLocalToUtc", () => {
+  it("reads a datetime-local value as Manila time", () => {
+    expect(manilaDateTimeLocalToUtc("2026-10-19T08:30").toISOString()).toBe("2026-10-19T00:30:00.000Z");
+  });
+
+  it("keeps an early-morning Manila time on the right day", () => {
+    // 01:00 in Manila is still the previous day in UTC.
+    expect(manilaDateTimeLocalToUtc("2026-10-19T01:00").toISOString()).toBe("2026-10-18T17:00:00.000Z");
+  });
+});
+
+describe("months", () => {
+  it("names the Manila month of an instant", () => {
+    // 2026-10-31 20:00 UTC is already November 1 in Manila.
+    expect(manilaMonth(new Date("2026-10-31T20:00:00Z"))).toBe("2026-11");
+  });
+
+  it("shifts across years", () => {
+    expect(addMonths("2026-12", 1)).toBe("2027-01");
+    expect(addMonths("2026-01", -1)).toBe("2025-12");
+  });
+
+  it("bounds a month at Manila midnight", () => {
+    const { start, end } = manilaMonthRange("2026-10");
+    expect(start.toISOString()).toBe("2026-09-30T16:00:00.000Z");
+    expect(end.toISOString()).toBe("2026-10-31T16:00:00.000Z");
+  });
+
+  it("formats a month for headings", () => {
+    expect(formatMonth("2026-10")).toBe("October 2026");
+  });
+});

@@ -13,7 +13,8 @@ export const instant = false;
 // muted label rather than a link, so the sidebar never points at a 404.
 const NAV = [
   { href: "/admin", label: "Dashboard", ready: true },
-  { href: "/admin/bookings", label: "Bookings", ready: false },
+  { href: "/admin/bookings", label: "Bookings", ready: true },
+  { href: "/admin/payments", label: "Payments", ready: true },
   { href: "/admin/customers", label: "Customers", ready: false },
   { href: "/admin/catalog/packages", label: "Catalog", ready: true },
   { href: "/admin/portfolio", label: "Portfolio", ready: false },
