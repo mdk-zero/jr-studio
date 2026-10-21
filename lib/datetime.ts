@@ -197,3 +197,11 @@ export function formatMonth(month: string): string {
   const [y, m] = month.split("-").map(Number);
   return monthFormatter.format(new Date(Date.UTC(y, m - 1, 1)));
 }
+
+const shortMonthFormatter = new Intl.DateTimeFormat("en-PH", { timeZone: "UTC", month: "short" });
+
+/** "Oct" for "2026-10", for chart labels. */
+export function formatMonthShort(month: string): string {
+  const [y, m] = month.split("-").map(Number);
+  return shortMonthFormatter.format(new Date(Date.UTC(y, m - 1, 1)));
+}

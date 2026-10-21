@@ -561,6 +561,23 @@ Notes carried forward:
 - `site_url` is still `http://localhost:3000`, which reset links use: set it at deploy (Phase 8).
 - The studio's public email in Settings is still the seed's `hello@jrstudio.ph`.
 
-### Phase 7 — Dashboard — next
-KPIs from the real ledger (₱), bookings by status, 12-month revenue, recent/upcoming (pending +
-approved, by start time), top packages (excluding cancelled).
+### Phase 7 — Dashboard ✅ (2026-10-21)
+`/admin` replaces the placeholder: received this month (net of refunds, with change on last month),
+still owed (balances on approved and completed sessions only; a cancelled request's "balance" is not
+money owed), sessions this month, the approval queue, new customers; a 12-month revenue chart with a
+screen-reader table of the same figures; this month by status; coming up (pending + approved, by start
+time); latest requests; top packages over 12 months (cancelled, declined and expired excluded).
+
+No migration: one studio's year of bookings is small, so `lib/admin-dashboard.ts` reads rows with the
+staff member's session and `lib/dashboard-math.ts` (pure, unit-tested) sums them by **Manila**
+calendar month, with the same rules as the Payments page, so the two always agree. The still-owed
+lookup batches booking ids so the request URL cannot grow without bound.
+
+Verified: 8 new unit tests (a payment at 00:30 on the 1st in Manila lands in that month, not the
+previous one as the legacy UTC maths did; refunds, voids, centavo rounding, numeric strings). A Chrome
+check recomputed every tile straight from the database and compared the month's net with the
+Payments page: all equal. No sideways scroll at phone width.
+
+### Phase 8 — Hardening & deploy — next
+Rate limits, CSP, advisors, legacy asset compression, Vercel env + Auth redirect URLs, README,
+end-to-end tests, mobile pass.
