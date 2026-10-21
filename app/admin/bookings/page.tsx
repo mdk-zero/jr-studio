@@ -7,7 +7,7 @@ import { ADMIN_STATUS_LABEL } from "@/lib/booking-status";
 import { formatManilaDate, formatManilaTime } from "@/lib/datetime";
 import { formatPeso } from "@/lib/money";
 import { EmptyState, PageHeader, Table } from "@/components/admin/ui";
-import { adminButton, adminInput } from "@/components/admin/form-controls";
+import { adminButton, adminInput } from "@/components/admin/styles";
 import { PaymentBadge, StatusBadge } from "@/components/admin/bookings/badges";
 
 export const metadata: Metadata = { title: "Bookings" };
@@ -62,7 +62,7 @@ export default async function AdminBookingsPage(props: PageProps<"/admin/booking
 
       <form method="get" className="flex flex-wrap items-end gap-3">
         <div>
-          <label htmlFor="when" className="text-xs font-medium text-muted">When</label>
+          <label htmlFor="when" className="block text-xs font-medium text-muted">When</label>
           <select id="when" name="when" defaultValue={filters.when} className={`${adminInput} mt-1 w-auto`}>
             <option value="upcoming">Upcoming</option>
             <option value="past">Past</option>
@@ -70,7 +70,7 @@ export default async function AdminBookingsPage(props: PageProps<"/admin/booking
           </select>
         </div>
         <div>
-          <label htmlFor="status" className="text-xs font-medium text-muted">Status</label>
+          <label htmlFor="status" className="block text-xs font-medium text-muted">Status</label>
           <select id="status" name="status" defaultValue={filters.status} className={`${adminInput} mt-1 w-auto`}>
             {STATUS_OPTIONS.map((s) => (
               <option key={s} value={s}>{s === "all" ? "Any status" : ADMIN_STATUS_LABEL[s]}</option>
@@ -78,7 +78,7 @@ export default async function AdminBookingsPage(props: PageProps<"/admin/booking
           </select>
         </div>
         <div className="min-w-48 flex-1">
-          <label htmlFor="q" className="text-xs font-medium text-muted">Search</label>
+          <label htmlFor="q" className="block text-xs font-medium text-muted">Search</label>
           <input
             id="q"
             name="q"

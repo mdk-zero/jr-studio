@@ -5,7 +5,8 @@ import { AccountNav, AccountNavFallback } from "@/components/marketing/account-n
 const LINKS = [
   { href: "/#packages", label: "Packages" },
   { href: "/portfolio", label: "Portfolio" },
-  { href: "/#visit", label: "Visit" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 export function SiteHeader() {

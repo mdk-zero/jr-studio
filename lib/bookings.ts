@@ -43,7 +43,7 @@ export async function getMyBooking(id: string) {
 
   if (!booking) return null;
 
-  const [{ data: addons }, { data: payment }, { data: events }, { data: settings }] =
+  const [{ data: addons }, { data: payment }, { data: events }, { data: settings }, { data: review }] =
     await Promise.all([
       supabase
         .from("booking_addons")
@@ -63,6 +63,11 @@ export async function getMyBooking(id: string) {
         .from("studio_settings")
         .select("cancel_cutoff_hours, undo_window_seconds")
         .single(),
+      supabase
+        .from("testimonials")
+        .select("rating, message, status")
+        .eq("booking_id", id)
+        .maybeSingle(),
     ]);
 
   const cancelCutoffHours = settings?.cancel_cutoff_hours ?? 24;
@@ -81,5 +86,6 @@ export async function getMyBooking(id: string) {
     cancelCutoffHours,
     cancellable,
     undoWindowSeconds: settings?.undo_window_seconds ?? 300,
+    review,
   };
 }

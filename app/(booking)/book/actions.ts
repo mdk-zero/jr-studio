@@ -1,10 +1,12 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { z } from "zod";
 import { requireUser } from "@/lib/dal";
 import { createClient } from "@/lib/supabase/server";
 import { createBookingSchema } from "@/lib/validators/booking";
+import { notifyStudioOfRequest } from "@/lib/email/notices";
 
 export type BookingState = {
   errors?: Record<string, string[]>;
@@ -61,5 +63,7 @@ export async function createBookingAction(
   const booking = data as unknown as { id: string } | null;
   if (!booking?.id) return { message: "The booking could not be created. Please try again." };
 
+  // after() runs even though redirect() throws below.
+  after(() => notifyStudioOfRequest(booking.id));
   redirect(`/account/bookings/${booking.id}?created=1`);
 }

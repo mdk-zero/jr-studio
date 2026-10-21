@@ -10,6 +10,8 @@ import { SlotGrid, useStudioSlots } from "@/components/admin/bookings/studio-slo
 import { createClient } from "@/lib/supabase/client";
 import { formatDuration, formatManilaDate, formatManilaTime, manilaToday } from "@/lib/datetime";
 import { formatPeso } from "@/lib/money";
+import { contactMatch, searchTerm } from "@/lib/search";
+import { useFormMemory } from "@/components/forms/use-form-memory";
 
 type Pkg = {
   id: string;
@@ -26,11 +28,6 @@ type Quote = { addons_total: number; discount_percent: number | null; discount_a
 
 const initial: ActionState = {};
 
-/** Same character whitelist the server applies before an or=() filter. */
-function searchTerm(q: string): string {
-  return q.replace(/[^\p{L}\p{N}\s@.+-]/gu, "").trim();
-}
-
 /**
  * A booking made by the studio: walk-ins, phone and Messenger requests. It is
  * approved on creation, and the price comes from quote_booking like any other.
@@ -38,16 +35,20 @@ function searchTerm(q: string): string {
 export function StaffBookingForm({
   packages,
   staff,
+  initialCustomer = null,
 }: {
   packages: Pkg[];
   staff: Array<{ id: string; full_name: string }>;
+  /** Preselected when arriving from a customer's page. */
+  initialCustomer?: Customer | null;
 }) {
   const [state, action] = useActionState(createStaffBookingAction, initial);
+  const memory = useFormMemory(state);
 
   const [mode, setMode] = useState<"existing" | "new">("existing");
   const [query, setQuery] = useState("");
   const [term, setTerm] = useState("");
-  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [customer, setCustomer] = useState<Customer | null>(initialCustomer);
   const [searchCache, setSearchCache] = useState<Record<string, Customer[]>>({});
 
   const [packageId, setPackageId] = useState("");
@@ -76,7 +77,7 @@ export function StaffBookingForm({
       .from("customers")
       .select("id, full_name, email, phone")
       .eq("status", "active")
-      .or(`full_name.ilike."%${term}%",email.ilike."%${term}%",phone.ilike."%${term}%"`)
+      .or(contactMatch(term))
       .order("full_name")
       .limit(8)
       .then(({ data }) => {
@@ -121,7 +122,7 @@ export function StaffBookingForm({
   const customerReady = mode === "new" || Boolean(customer);
 
   return (
-    <form action={action} className="grid gap-6 lg:grid-cols-[1fr_22rem]">
+    <form onSubmit={memory.onSubmit} action={action} className="grid gap-6 lg:grid-cols-[1fr_22rem]">
       <div className="flex flex-col gap-6">
         <Panel title="Customer">
           <input type="hidden" name="customer_mode" value={mode} />
@@ -198,17 +199,17 @@ export function StaffBookingForm({
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <label htmlFor="customer_name" className="text-sm font-medium text-ink">Full name</label>
-                <input id="customer_name" name="customer_name" maxLength={100} className={`${adminInput} mt-1`} />
+                <input id="customer_name" name="customer_name" defaultValue={memory.text("customer_name")} maxLength={100} className={`${adminInput} mt-1`} />
                 <FieldError errors={state.errors?.customer_name} />
               </div>
               <div>
                 <label htmlFor="customer_phone" className="text-sm font-medium text-ink">Mobile</label>
-                <input id="customer_phone" name="customer_phone" inputMode="tel" placeholder="09171234567" className={`${adminInput} mt-1`} />
+                <input id="customer_phone" name="customer_phone" defaultValue={memory.text("customer_phone")} inputMode="tel" placeholder="09171234567" className={`${adminInput} mt-1`} />
                 <FieldError errors={state.errors?.customer_phone} />
               </div>
               <div>
                 <label htmlFor="customer_email" className="text-sm font-medium text-ink">Email</label>
-                <input id="customer_email" name="customer_email" type="email" className={`${adminInput} mt-1`} />
+                <input id="customer_email" name="customer_email" defaultValue={memory.text("customer_email")} type="email" className={`${adminInput} mt-1`} />
                 <FieldError errors={state.errors?.customer_email} />
               </div>
               <p className="text-xs text-muted sm:col-span-2">
@@ -288,7 +289,7 @@ export function StaffBookingForm({
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label htmlFor="staff_id" className="text-sm font-medium text-ink">Assign to</label>
-              <select id="staff_id" name="staff_id" defaultValue="" className={`${adminInput} mt-1`}>
+              <select id="staff_id" name="staff_id" defaultValue={memory.text("staff_id")} className={`${adminInput} mt-1`}>
                 <option value="">Decide later</option>
                 {staff.map((person) => (
                   <option key={person.id} value={person.id}>{person.full_name}</option>
@@ -297,7 +298,7 @@ export function StaffBookingForm({
             </div>
             <div className="sm:col-span-2">
               <label htmlFor="notes" className="text-sm font-medium text-ink">Notes</label>
-              <textarea id="notes" name="notes" rows={2} maxLength={1000} className={`${adminInput} mt-1`} />
+              <textarea id="notes" name="notes" defaultValue={memory.text("notes")} rows={2} maxLength={1000} className={`${adminInput} mt-1`} />
               <p className="mt-1 text-xs text-muted">Visible to the customer if they have an account.</p>
             </div>
           </div>

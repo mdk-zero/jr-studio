@@ -32,7 +32,7 @@ export async function signUpAction(
   const parsed = signUpSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return fieldErrors(parsed.error);
 
-  const { fullName, email, phone, password } = parsed.data;
+  const { fullName, email, phone, password, marketing } = parsed.data;
   const supabase = await createClient();
 
   const { error } = await supabase.auth.signUp({
@@ -41,7 +41,8 @@ export async function signUpAction(
     options: {
       // Stored on auth.users and copied into profiles by the handle_new_user
       // trigger. Role is NOT passed: it is never taken from user input.
-      data: { full_name: fullName, phone: phone || null },
+      // marketing_opt_in is read by link_customer once the email is confirmed.
+      data: { full_name: fullName, phone: phone || null, marketing_opt_in: marketing === "on" },
       emailRedirectTo: `${publicEnv.NEXT_PUBLIC_SITE_URL}/auth/callback`,
     },
   });

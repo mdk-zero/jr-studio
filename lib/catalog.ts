@@ -274,6 +274,24 @@ export async function getPortfolio() {
   };
 }
 
+/** Active staff the studio chose to show on the About page. */
+export async function getAboutTeam() {
+  "use cache";
+  cacheTag("staff");
+  cacheLife("hours");
+
+  const { data, error } = await createPublicClient()
+    .from("staff_members")
+    .select("id, full_name, position, bio, photo_path")
+    .eq("show_on_about", true)
+    .eq("status", "active")
+    .order("sort_order")
+    .order("full_name");
+
+  if (error) throw error;
+  return data ?? [];
+}
+
 /** Public URL for a path in a public Storage bucket. */
 export function storageUrl(bucket: string, path: string | null | undefined): string | null {
   if (!path) return null;

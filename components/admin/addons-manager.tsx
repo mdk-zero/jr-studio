@@ -6,6 +6,7 @@ import { ActionFeedback, FieldError } from "@/components/admin/action-feedback";
 import { SubmitButton, adminInput } from "@/components/admin/form-controls";
 import { Badge, Panel, Table } from "@/components/admin/ui";
 import { formatPeso } from "@/lib/money";
+import { useFormMemory } from "@/components/forms/use-form-memory";
 
 type AddonRow = {
   id: string;
@@ -27,6 +28,7 @@ export function AddonsManager({
 }) {
   const [editing, setEditing] = useState<AddonRow | null>(null);
   const [state, action] = useActionState(saveAddon, initial);
+  const memory = useFormMemory(state);
   const [deleteState, deleteAction] = useActionState(deleteAddon, initial);
 
   return (
@@ -86,25 +88,25 @@ export function AddonsManager({
       </div>
 
       <Panel title={editing ? "Edit add-on" : "New add-on"}>
-        <form key={editing?.id ?? "new"} action={action} className="flex flex-col gap-4">
+        <form onSubmit={memory.onSubmit} key={editing?.id ?? "new"} action={action} className="flex flex-col gap-4">
           <ActionFeedback state={state} />
           {editing ? <input type="hidden" name="id" value={editing.id} /> : null}
 
           <div>
             <label htmlFor="name" className="text-sm font-medium text-ink">Name</label>
-            <input id="name" name="name" defaultValue={editing?.name ?? ""} required className={`${adminInput} mt-1`} />
+            <input id="name" name="name" defaultValue={memory.text("name", editing?.name)} required className={`${adminInput} mt-1`} />
             <FieldError errors={state.errors?.name} />
           </div>
 
           <div>
             <label htmlFor="price" className="text-sm font-medium text-ink">Price (₱)</label>
-            <input id="price" name="price" inputMode="decimal" defaultValue={editing?.price ?? ""} required className={`${adminInput} mt-1`} />
+            <input id="price" name="price" inputMode="decimal" defaultValue={memory.text("price", editing?.price)} required className={`${adminInput} mt-1`} />
             <FieldError errors={state.errors?.price} />
           </div>
 
           <div>
             <label htmlFor="description" className="text-sm font-medium text-ink">Description</label>
-            <textarea id="description" name="description" rows={2} defaultValue={editing?.description ?? ""} className={`${adminInput} mt-1`} />
+            <textarea id="description" name="description" rows={2} defaultValue={memory.text("description", editing?.description)} className={`${adminInput} mt-1`} />
           </div>
 
           <fieldset className="flex flex-col gap-2">
@@ -116,7 +118,7 @@ export function AddonsManager({
                     type="checkbox"
                     name="package_ids"
                     value={pkg.id}
-                    defaultChecked={editing?.packageIds.includes(pkg.id) ?? false}
+                    defaultChecked={memory.includes("package_ids", pkg.id, editing?.packageIds.includes(pkg.id) ?? false)}
                     className="size-4 accent-burgundy-600"
                   />
                   {pkg.name}
@@ -126,7 +128,7 @@ export function AddonsManager({
           </fieldset>
 
           <label className="flex items-center gap-2 text-sm text-ink">
-            <input name="is_active" type="checkbox" defaultChecked={editing ? editing.is_active : true} className="size-4 accent-burgundy-600" />
+            <input name="is_active" type="checkbox" defaultChecked={memory.checked("is_active", editing ? editing.is_active : true)} className="size-4 accent-burgundy-600" />
             Available to book
           </label>
 

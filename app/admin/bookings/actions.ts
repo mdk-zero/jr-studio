@@ -2,10 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { z } from "zod";
 import { requireAdmin, requireStaff } from "@/lib/dal";
 import { createClient } from "@/lib/supabase/server";
 import type { ActionState } from "@/app/admin/catalog/actions";
+import { notifyCustomer } from "@/lib/email/notices";
 import {
   assignStaffSchema,
   bookingIdSchema,
@@ -55,7 +57,7 @@ export async function setBookingStatusAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireStaff();
+  const user = await requireStaff();
 
   const parsed = statusChangeSchema.safeParse({
     booking_id: formData.get("booking_id"),
@@ -66,12 +68,26 @@ export async function setBookingStatusAction(
   if (!parsed.success) return invalid(parsed.error);
 
   const supabase = await createClient();
+  // Read first: repeating the current status is a no-op in the database, and
+  // must not email the customer a second time.
+  const { data: before } = await supabase
+    .from("bookings")
+    .select("status")
+    .eq("id", parsed.data.booking_id)
+    .maybeSingle();
+
   const { error } = await supabase.rpc("set_booking_status", {
     p_booking_id: parsed.data.booking_id,
     p_status: parsed.data.status,
     p_note: parsed.data.note,
   });
   if (error) return { message: describe(error) };
+
+  const notice = { approved: "approved", rejected: "declined", cancelled: "cancelled", completed: null } as const;
+  const kind = notice[parsed.data.status];
+  if (kind && before?.status !== parsed.data.status) {
+    after(() => notifyCustomer(parsed.data.booking_id, kind, parsed.data.note, user.id));
+  }
 
   refreshAdmin();
   const done = {
@@ -87,7 +103,7 @@ export async function rescheduleBookingAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireStaff();
+  const user = await requireStaff();
 
   const parsed = rescheduleSchema.safeParse({
     booking_id: formData.get("booking_id"),
@@ -104,8 +120,9 @@ export async function rescheduleBookingAction(
   });
   if (error) return { message: describe(error) };
 
+  after(() => notifyCustomer(parsed.data.booking_id, "rescheduled", parsed.data.note, user.id));
   refreshAdmin();
-  return { ok: true, message: "Booking moved." };
+  return { ok: true, message: "Booking moved. The customer is emailed the new time." };
 }
 
 export async function assignStaffAction(
@@ -162,7 +179,7 @@ export async function createStaffBookingAction(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  await requireStaff();
+  const user = await requireStaff();
 
   const parsed = staffBookingSchema.safeParse({
     package_id: formData.get("package_id"),
@@ -195,6 +212,9 @@ export async function createStaffBookingAction(
   });
   if (error) return { message: describe(error) };
 
+  // Studio bookings are confirmed on creation, so the customer (if they gave
+  // an email) gets the same confirmation an approved request does.
+  after(() => notifyCustomer(data.id, "approved", null, user.id));
   refreshAdmin();
   redirect(`/admin/bookings/${data.id}?created=1`);
 }

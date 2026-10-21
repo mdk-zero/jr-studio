@@ -29,6 +29,8 @@ npm run dev
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Project Settings → API Keys (publishable) |
 | `SUPABASE_SECRET_KEY` | Project Settings → API Keys (secret). Server-only — never prefix with `NEXT_PUBLIC_` |
 | `RESEND_API_KEY`, `EMAIL_FROM`, `STUDIO_NOTIFY_EMAIL` | Resend (transactional email) |
+| `RESEND_SMTP_KEY` | Resend → API Keys → *Sending access*, limited to the studio domain. Supabase Auth's SMTP password; needed only for `supabase config push` |
+| `EMAIL_MODE` | `live` delivers email. Anything else (the default) sends every message to Resend's test inbox, so a dev database never emails real people |
 | `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` in development |
 
 ## Database
@@ -42,6 +44,10 @@ supabase db push                     # apply migrations
 supabase db push --include-seed      # apply migrations + reset the dev seed
 supabase gen types typescript --linked --schema public > lib/supabase/database.types.ts
 supabase db advisors                 # security + performance lint
+# Auth settings. Load .env.local first: the SMTP password is env(RESEND_SMTP_KEY),
+# and pushing without it would blank the password and stop signup emails.
+# The push does not ask for confirmation when run non-interactively.
+set -a; . ./.env.local; set +a
 supabase config push                 # apply supabase/config.toml (auth settings) to the project
 ```
 

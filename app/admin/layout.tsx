@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { requireStaff } from "@/lib/dal";
+import { getInboxCounts } from "@/lib/admin-content";
 import { SignOutButton } from "@/components/layout/sign-out-button";
 
 /**
@@ -9,24 +10,26 @@ import { SignOutButton } from "@/components/layout/sign-out-button";
  */
 export const instant = false;
 
-// `ready: false` marks a section that later phases build. It renders as a
-// muted label rather than a link, so the sidebar never points at a 404.
+// Sections only an admin can use are hidden from staff, rather than shown and
+// then bounced by the page's own check.
 const NAV = [
-  { href: "/admin", label: "Dashboard", ready: true },
-  { href: "/admin/bookings", label: "Bookings", ready: true },
-  { href: "/admin/payments", label: "Payments", ready: true },
-  { href: "/admin/customers", label: "Customers", ready: false },
-  { href: "/admin/catalog/packages", label: "Catalog", ready: true },
-  { href: "/admin/portfolio", label: "Portfolio", ready: false },
-  { href: "/admin/staff", label: "Staff", ready: false },
-  { href: "/admin/testimonials", label: "Testimonials", ready: false },
-  { href: "/admin/settings", label: "Settings", ready: false },
+  { href: "/admin", label: "Dashboard" },
+  { href: "/admin/bookings", label: "Bookings" },
+  { href: "/admin/payments", label: "Payments" },
+  { href: "/admin/customers", label: "Customers" },
+  { href: "/admin/messages", label: "Messages", badge: "unread" },
+  { href: "/admin/testimonials", label: "Reviews", badge: "pendingReviews" },
+  { href: "/admin/portfolio", label: "Portfolio" },
+  { href: "/admin/catalog/packages", label: "Catalog", adminOnly: true },
+  { href: "/admin/staff", label: "Staff", adminOnly: true },
+  { href: "/admin/settings", label: "Settings", adminOnly: true },
 ] as const;
 
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   // Authoritative check. proxy.ts only does an optimistic redirect, so this is
   // what actually keeps customers out of the back office.
   const user = await requireStaff("/admin");
+  const counts = await getInboxCounts();
 
   return (
     <div className="flex min-h-full flex-1 flex-col md:flex-row">
@@ -37,25 +40,23 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
           </Link>
         </div>
         <nav className="flex gap-1 overflow-x-auto px-2 pb-2 md:flex-col md:px-2">
-          {NAV.map((item) =>
-            item.ready ? (
+          {NAV.filter((item) => !("adminOnly" in item) || user.role === "admin").map((item) => {
+            const count = "badge" in item ? counts[item.badge] : 0;
+            return (
               <Link
                 key={item.href}
                 href={item.href}
-                className="shrink-0 rounded-lg px-3 py-2 text-sm text-muted hover:bg-sand-100 hover:text-ink"
+                className="flex shrink-0 items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm text-muted hover:bg-sand-100 hover:text-ink"
               >
                 {item.label}
+                {count > 0 ? (
+                  <span className="nums rounded-full bg-burgundy-600 px-1.5 py-0.5 text-[11px] leading-none font-semibold text-white">
+                    {count}
+                  </span>
+                ) : null}
               </Link>
-            ) : (
-              <span
-                key={item.href}
-                className="shrink-0 cursor-default rounded-lg px-3 py-2 text-sm text-sand-400"
-                title="Coming in a later phase"
-              >
-                {item.label}
-              </span>
-            ),
-          )}
+            );
+          })}
         </nav>
       </aside>
 

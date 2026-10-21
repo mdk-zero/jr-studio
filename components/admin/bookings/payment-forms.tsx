@@ -7,6 +7,7 @@ import { ActionFeedback, FieldError } from "@/components/admin/action-feedback";
 import { SubmitButton, adminInput } from "@/components/admin/form-controls";
 import { PAYMENT_METHOD_LABEL, PAYMENT_METHODS } from "@/lib/booking-status";
 import { formatPeso } from "@/lib/money";
+import { useFormMemory } from "@/components/forms/use-form-memory";
 
 const initial: ActionState = {};
 
@@ -27,6 +28,7 @@ export function RecordPaymentForm({
   canPay: boolean;
 }) {
   const [state, action] = useActionState(recordPaymentAction, initial);
+  const memory = useFormMemory(state);
   const paymentOpen = canPay && balance > 0;
   const refundOpen = paidTotal > 0;
   const [kind, setKind] = useState<"payment" | "refund">(paymentOpen ? "payment" : "refund");
@@ -48,7 +50,7 @@ export function RecordPaymentForm({
   const limit = effectiveKind === "payment" ? balance : paidTotal;
 
   return (
-    <form action={action} className="flex flex-col gap-3">
+    <form onSubmit={memory.onSubmit} action={action} className="flex flex-col gap-3">
       <ActionFeedback state={state} />
       <input type="hidden" name="booking_id" value={bookingId} />
       <input type="hidden" name="kind" value={effectiveKind} />
@@ -88,14 +90,14 @@ export function RecordPaymentForm({
             inputMode="decimal"
             autoComplete="off"
             required
-            defaultValue={effectiveKind === "payment" ? limit.toFixed(2) : ""}
+            defaultValue={memory.text("amount", effectiveKind === "payment" ? limit.toFixed(2) : "")}
             className={`${adminInput} nums mt-1`}
           />
           <FieldError errors={state.errors?.amount} />
         </div>
         <div>
           <label htmlFor="method" className="text-sm font-medium text-ink">Method</label>
-          <select id="method" name="method" defaultValue="cash" className={`${adminInput} mt-1`}>
+          <select id="method" name="method" defaultValue={memory.text("method", "cash")} className={`${adminInput} mt-1`}>
             {PAYMENT_METHODS.map((m) => (
               <option key={m} value={m}>{PAYMENT_METHOD_LABEL[m]}</option>
             ))}
@@ -109,11 +111,11 @@ export function RecordPaymentForm({
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor="reference_no" className="text-sm font-medium text-ink">Reference no.</label>
-          <input id="reference_no" name="reference_no" maxLength={100} placeholder="GCash / bank ref" className={`${adminInput} mt-1`} />
+          <input id="reference_no" name="reference_no" defaultValue={memory.text("reference_no")} maxLength={100} placeholder="GCash / bank ref" className={`${adminInput} mt-1`} />
         </div>
         <div>
           <label htmlFor="paid_at" className="text-sm font-medium text-ink">When</label>
-          <input id="paid_at" name="paid_at" type="datetime-local" className={`${adminInput} nums mt-1`} />
+          <input id="paid_at" name="paid_at" defaultValue={memory.text("paid_at")} type="datetime-local" className={`${adminInput} nums mt-1`} />
           <FieldError errors={state.errors?.paid_at} />
         </div>
       </div>
@@ -123,7 +125,7 @@ export function RecordPaymentForm({
         <label htmlFor="payment-note" className="text-sm font-medium text-ink">
           Note <span className="font-normal text-muted">(optional, staff only)</span>
         </label>
-        <input id="payment-note" name="note" maxLength={300} className={`${adminInput} mt-1`} />
+        <input id="payment-note" name="note" defaultValue={memory.text("note")} maxLength={300} className={`${adminInput} mt-1`} />
       </div>
 
       <div>

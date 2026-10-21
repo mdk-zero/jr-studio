@@ -5,6 +5,7 @@ import { deleteCategory, saveCategory, type ActionState } from "@/app/admin/cata
 import { ActionFeedback, FieldError } from "@/components/admin/action-feedback";
 import { SubmitButton, adminInput } from "@/components/admin/form-controls";
 import { Badge, Panel, Table } from "@/components/admin/ui";
+import { useFormMemory } from "@/components/forms/use-form-memory";
 
 type Category = {
   id: string;
@@ -21,6 +22,7 @@ const initial: ActionState = {};
 export function CategoriesManager({ categories }: { categories: Category[] }) {
   const [editing, setEditing] = useState<Category | null>(null);
   const [state, action] = useActionState(saveCategory, initial);
+  const memory = useFormMemory(state);
   const [deleteState, deleteAction] = useActionState(deleteCategory, initial);
 
   return (
@@ -79,7 +81,7 @@ export function CategoriesManager({ categories }: { categories: Category[] }) {
 
       <Panel title={editing ? "Edit category" : "New category"}>
         {/* key resets the uncontrolled inputs when switching rows. */}
-        <form key={editing?.id ?? "new"} action={action} className="flex flex-col gap-4">
+        <form onSubmit={memory.onSubmit} key={editing?.id ?? "new"} action={action} className="flex flex-col gap-4">
           <ActionFeedback state={state} />
           {editing ? <input type="hidden" name="id" value={editing.id} /> : null}
 
@@ -90,7 +92,7 @@ export function CategoriesManager({ categories }: { categories: Category[] }) {
             <input
               id="name"
               name="name"
-              defaultValue={editing?.name ?? ""}
+              defaultValue={memory.text("name", editing?.name)}
               required
               className={`${adminInput} mt-1`}
             />
@@ -105,7 +107,7 @@ export function CategoriesManager({ categories }: { categories: Category[] }) {
               id="description"
               name="description"
               rows={3}
-              defaultValue={editing?.description ?? ""}
+              defaultValue={memory.text("description", editing?.description)}
               className={`${adminInput} mt-1`}
             />
           </div>
@@ -119,7 +121,7 @@ export function CategoriesManager({ categories }: { categories: Category[] }) {
               name="sort_order"
               type="number"
               min={0}
-              defaultValue={editing?.sort_order ?? 0}
+              defaultValue={memory.text("sort_order", editing?.sort_order ?? 0)}
               className={`${adminInput} mt-1`}
             />
           </div>
@@ -128,7 +130,7 @@ export function CategoriesManager({ categories }: { categories: Category[] }) {
             <input
               name="is_active"
               type="checkbox"
-              defaultChecked={editing ? editing.is_active : true}
+              defaultChecked={memory.checked("is_active", editing ? editing.is_active : true)}
               className="size-4 accent-burgundy-600"
             />
             Show on the public site

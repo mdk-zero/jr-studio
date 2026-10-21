@@ -478,6 +478,89 @@ Notes carried forward:
   feature that does not exist yet.
 - Approve/decline emails wait for Resend (Phase 6/8).
 
-### Phase 6 — People & content — next
-Customers (server-side paging/filters), notes, staff + invites, testimonial moderation + feedback
-requests, contact inbox, bulk email.
+### Phase 6 — People & content ✅ (2026-10-21)
+Scope grew by two admin pages no phase owned: **Portfolio** (uploads) and **Settings** (studio
+details, opening hours, closed days, booking rules). Both were "coming later" in the sidebar with no
+phase assigned. Public **About** and **Contact** pages came along, since the inbox needs a form and
+`staff_members.show_on_about` needs a page.
+
+Migration `20261021103000_people_and_content`:
+- **Customers**: `marketing_opt_in` (+ `marketing_opt_in_at`, stamped by trigger, never client-set)
+  and a per-customer `unsubscribe_token`. A trigger now stops a customer changing their own tier,
+  status, email or link (RLS let them; `WITH CHECK` cannot see the old row). `link_customer` reads
+  signup consent from user metadata (adds to a claimed walk-in's consent, never withdraws it) and
+  **skips non-customer roles**, so an accepted staff invite no longer creates a customer record.
+  `customer_summary` view (security_invoker): bookings, completed, last/next session, total paid.
+- **Notes**: `author_id` defaults to `auth.uid()` and the insert policy requires it (was spoofable).
+- **Roles**: `guard_profile_role` also refuses changing your own role and demoting the last admin.
+- **Reviews**: staff may update only status/featured/notes/wording (column grants); reviewer and time
+  are stamped by trigger; un-publishing un-features. `request_feedback` (staff; completed sessions;
+  reuses the open link), `get_feedback_request` / `submit_feedback` (anon, token-gated, 60-day
+  expiry), and a trigger that closes the request whichever way the review arrives.
+- **Inbox**: anon INSERT on `contact_messages` revoked. Messages arrive only through the server
+  action (secret key), rate-limited by salted IP hash (3/hour), by sender (3/hour) and site-wide
+  (30/10 min), with a honeypot. Staff can update `is_read` only.
+- **Email log**: `customer_id`, `campaign_key`, unique `(campaign_key, to_email)`: a bulk send logs
+  every recipient as `queued` before sending, so a double submit reaches nobody twice.
+
+Email (`lib/email/`): Resend from `bookings@jrstudio.digital`, replies to `STUDIO_NOTIFY_EMAIL`.
+**`EMAIL_MODE` must be `live` to deliver**; anything else sends to Resend's test inbox and logs
+status `test`, because the seed's staff have made-up `@jrstudio.ph` addresses (a domain someone else
+may own). Every user-typed value is escaped. Sent: booking confirmed/declined/cancelled/moved and
+studio bookings (to the customer), new online requests and contact messages (to the studio), staff
+invites, review requests, campaigns (with RFC 8058 one-click unsubscribe + `/api/unsubscribe`).
+
+**Supabase Auth now sends through Resend SMTP** (config pushed: SMTP, the two custom templates,
+`email_sent` 2 → 30/hour). The user reported signup emailed a link while `/verify` asked for a code;
+that was the Phase 2 blocker (custom templates need custom SMTP on the free tier). The SMTP password
+is a Resend key created for this, **sending-only and limited to jrstudio.digital**
+(`RESEND_SMTP_KEY` in `.env.local`); the full-access key never leaves this machine. Note:
+`supabase config push` does not prompt when stdin is not a terminal, so piping "n" to preview a
+diff applies it. Verified with a real signup to Resend's test address: the email arrived from the
+studio domain with a 6-digit code, the code confirmed the account and recorded the opt-in; the reset
+email is branded and links to `/auth/confirm`.
+
+Staff invites use `auth.admin.generateLink` and the app's own email, because the built-in mailer only
+reaches the project's team. The role is set before the invitee confirms. In test mode the admin is
+shown the link to pass on. Uploads (portfolio, staff photos, **and package covers**) now go straight
+from the browser to Storage (`lib/storage-upload.ts`): Server Actions cap bodies at 1MB, so the
+Phase 3 cover upload failed for any real photo.
+
+Pages: `/admin/customers` (+ `/new`, `/[id]`, `/email`), `/admin/staff`, `/admin/testimonials`
+("Reviews"), `/admin/messages`, `/admin/portfolio`, `/admin/settings`; `/about`, `/contact`,
+`/review/[token]`, `/unsubscribe`; review form on a completed account booking; consent checkbox on
+signup and profile; `?customer=` preselect on the studio booking form. The sidebar hides admin-only
+sections from staff and shows unread messages and pending reviews.
+
+**Bugs fixed that predate this phase**, found because a browser finally ran:
+1. Every filter bar on a server-rendered admin page (Phase 5's bookings list included) was unstyled.
+   `adminInput`/`adminButton` were exported from a `"use client"` module, so a Server Component got a
+   client reference instead of the class string. Moved to `components/admin/styles.ts`.
+2. **Every form lost its input after a validation error.** React 19 resets an uncontrolled form after
+   each action submission, failures included (signup: untick "terms" and name/email are wiped).
+   `components/forms/use-form-memory.ts` records the submitted values and offers them as defaults
+   until a success, so the reset restores what was typed. Applied to all forms (auth, account,
+   catalog, bookings, payments, Phase 6). No-JS submission still works.
+3. Package cover uploads over 1MB failed (above).
+
+Verified: 130/130 tests (23 new integration, 5 new unit) · tsc · lint · build · advisors: warnings
+only (the 3 token-gated anon functions are intentional; `rls_auto_enable` is a platform event-trigger
+function, not ours; leaked-password protection needs a paid plan). Browser walkthrough in Chrome
+against `next start`, 81 checks: customer search/filters/create/duplicate/notes/inactive/delete;
+staff add, 3.5MB photo, invite → accept → staff-only sidebar → revoke takes effect next request;
+contact form, honeypot, rate limit, inbox badge; review link → publish → feature → home page → hide;
+customer's own review; album with 3 uploads incl. 6MB, cover, delete removes file; settings with the
+studio's real socials (from the legacy site) reaching the footer; closed day removes slots; campaign
+sent once despite re-submit; unsubscribe by button (not on page load) and one-click POST (GET 405);
+approval emails the customer; real signup by code. All test data and accounts were removed.
+
+Notes carried forward:
+- Seed staff emails are invented (`@jrstudio.ph`); real staff details are needed before inviting.
+- On phones the site header hides its page links (Portfolio/About/Contact): Phase 8 mobile pass.
+- The admin sidebar does not highlight the current section.
+- `site_url` is still `http://localhost:3000`, which reset links use: set it at deploy (Phase 8).
+- The studio's public email in Settings is still the seed's `hello@jrstudio.ph`.
+
+### Phase 7 — Dashboard — next
+KPIs from the real ledger (₱), bookings by status, 12-month revenue, recent/upcoming (pending +
+approved, by start time), top packages (excluding cancelled).

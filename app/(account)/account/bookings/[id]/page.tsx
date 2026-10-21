@@ -6,11 +6,20 @@ import { getMyBooking, PAYMENT_COPY, STATUS_COPY } from "@/lib/bookings";
 import { formatDuration, formatManilaDate, formatManilaTime } from "@/lib/datetime";
 import { formatPeso } from "@/lib/money";
 import { BookingActions } from "@/components/account/booking-actions";
+import { ReviewForm } from "@/components/marketing/review-form";
+import { submitTestimonialAction } from "@/app/(account)/account/actions";
 
 export const metadata: Metadata = { title: "Booking" };
 
+/** "Andrea Salazar" -> "Andrea S.", the default credit on a public review. */
+function shortName(fullName: string): string {
+  const [first, ...rest] = fullName.trim().split(/\s+/);
+  const last = rest.at(-1);
+  return last ? `${first} ${last[0]}.` : first;
+}
+
 export default async function BookingDetailPage(props: PageProps<"/account/bookings/[id]">) {
-  await requireUser();
+  const user = await requireUser();
   const { id } = await props.params;
   const { created } = await props.searchParams;
 
@@ -138,6 +147,37 @@ export default async function BookingDetailPage(props: PageProps<"/account/booki
                   </li>
                 ))}
               </ol>
+            </section>
+          ) : null}
+
+          {booking.status === "completed" ? (
+            <section>
+              <h2 className="caps text-burgundy-500">Your review</h2>
+              {booking.review ? (
+                <div className="mt-3 text-sm">
+                  <p className="text-burgundy-600" aria-label={`${booking.review.rating} out of 5`}>
+                    {"★".repeat(booking.review.rating)}
+                    <span className="text-sand-300">{"★".repeat(5 - booking.review.rating)}</span>
+                  </p>
+                  <p className="mt-2 leading-relaxed whitespace-pre-line text-ink">{booking.review.message}</p>
+                  <p className="mt-2 text-xs text-muted">
+                    {booking.review.status === "approved"
+                      ? "Published on our website. Thank you!"
+                      : booking.review.status === "pending"
+                        ? "Thank you! The studio reads every review before it goes on the website."
+                        : "Thank you for your feedback."}
+                  </p>
+                </div>
+              ) : (
+                <div className="mt-3 border border-sand-300 bg-white p-5">
+                  <p className="mb-4 text-sm text-muted">How was your session? A few words help other families find us.</p>
+                  <ReviewForm
+                    action={submitTestimonialAction}
+                    hidden={{ booking_id: booking.id }}
+                    defaultName={shortName(user.fullName)}
+                  />
+                </div>
+              )}
             </section>
           ) : null}
         </div>

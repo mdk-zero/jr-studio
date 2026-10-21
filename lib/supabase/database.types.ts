@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "14.18"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       addons: {
@@ -289,6 +314,13 @@ export type Database = {
             foreignKeyName: "bookings_customer_id_fkey"
             columns: ["customer_id"]
             isOneToOne: false
+            referencedRelation: "customer_summary"
+            referencedColumns: ["customer_id"]
+          },
+          {
+            foreignKeyName: "bookings_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
             referencedRelation: "customers"
             referencedColumns: ["id"]
           },
@@ -381,6 +413,7 @@ export type Database = {
       }
       contact_messages: {
         Row: {
+          client_hash: string | null
           created_at: string
           email: string
           id: string
@@ -390,6 +423,7 @@ export type Database = {
           phone: string | null
         }
         Insert: {
+          client_hash?: string | null
           created_at?: string
           email: string
           id?: string
@@ -399,6 +433,7 @@ export type Database = {
           phone?: string | null
         }
         Update: {
+          client_hash?: string | null
           created_at?: string
           email?: string
           id?: string
@@ -443,6 +478,13 @@ export type Database = {
             foreignKeyName: "customer_notes_customer_id_fkey"
             columns: ["customer_id"]
             isOneToOne: false
+            referencedRelation: "customer_summary"
+            referencedColumns: ["customer_id"]
+          },
+          {
+            foreignKeyName: "customer_notes_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
             referencedRelation: "customers"
             referencedColumns: ["id"]
           },
@@ -455,10 +497,13 @@ export type Database = {
           email: string | null
           full_name: string
           id: string
+          marketing_opt_in: boolean
+          marketing_opt_in_at: string | null
           phone: string | null
           profile_id: string | null
           status: Database["public"]["Enums"]["entity_status"]
           tier: Database["public"]["Enums"]["customer_tier"]
+          unsubscribe_token: string
           updated_at: string
         }
         Insert: {
@@ -467,10 +512,13 @@ export type Database = {
           email?: string | null
           full_name: string
           id?: string
+          marketing_opt_in?: boolean
+          marketing_opt_in_at?: string | null
           phone?: string | null
           profile_id?: string | null
           status?: Database["public"]["Enums"]["entity_status"]
           tier?: Database["public"]["Enums"]["customer_tier"]
+          unsubscribe_token?: string
           updated_at?: string
         }
         Update: {
@@ -479,10 +527,13 @@ export type Database = {
           email?: string | null
           full_name?: string
           id?: string
+          marketing_opt_in?: boolean
+          marketing_opt_in_at?: string | null
           phone?: string | null
           profile_id?: string | null
           status?: Database["public"]["Enums"]["entity_status"]
           tier?: Database["public"]["Enums"]["customer_tier"]
+          unsubscribe_token?: string
           updated_at?: string
         }
         Relationships: [
@@ -498,8 +549,10 @@ export type Database = {
       email_log: {
         Row: {
           booking_id: string | null
+          campaign_key: string | null
           created_at: string
           created_by: string | null
+          customer_id: string | null
           error: string | null
           id: string
           provider_id: string | null
@@ -510,8 +563,10 @@ export type Database = {
         }
         Insert: {
           booking_id?: string | null
+          campaign_key?: string | null
           created_at?: string
           created_by?: string | null
+          customer_id?: string | null
           error?: string | null
           id?: string
           provider_id?: string | null
@@ -522,8 +577,10 @@ export type Database = {
         }
         Update: {
           booking_id?: string | null
+          campaign_key?: string | null
           created_at?: string
           created_by?: string | null
+          customer_id?: string | null
           error?: string | null
           id?: string
           provider_id?: string | null
@@ -552,6 +609,20 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_log_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customer_summary"
+            referencedColumns: ["customer_id"]
+          },
+          {
+            foreignKeyName: "email_log_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
             referencedColumns: ["id"]
           },
         ]
@@ -985,6 +1056,7 @@ export type Database = {
           full_name: string
           hire_date: string | null
           id: string
+          invited_at: string | null
           phone: string | null
           photo_path: string | null
           position: Database["public"]["Enums"]["staff_position"]
@@ -1003,6 +1075,7 @@ export type Database = {
           full_name: string
           hire_date?: string | null
           id?: string
+          invited_at?: string | null
           phone?: string | null
           photo_path?: string | null
           position?: Database["public"]["Enums"]["staff_position"]
@@ -1021,6 +1094,7 @@ export type Database = {
           full_name?: string
           hire_date?: string | null
           id?: string
+          invited_at?: string | null
           phone?: string | null
           photo_path?: string | null
           position?: Database["public"]["Enums"]["staff_position"]
@@ -1159,6 +1233,13 @@ export type Database = {
             foreignKeyName: "testimonials_customer_id_fkey"
             columns: ["customer_id"]
             isOneToOne: false
+            referencedRelation: "customer_summary"
+            referencedColumns: ["customer_id"]
+          },
+          {
+            foreignKeyName: "testimonials_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
             referencedRelation: "customers"
             referencedColumns: ["id"]
           },
@@ -1187,6 +1268,17 @@ export type Database = {
           paid_total: number | null
           payment_status: string | null
           total_amount: number | null
+        }
+        Relationships: []
+      }
+      customer_summary: {
+        Row: {
+          bookings_count: number | null
+          completed_count: number | null
+          customer_id: string | null
+          last_session_at: string | null
+          next_session_at: string | null
+          total_paid: number | null
         }
         Relationships: []
       }
@@ -1386,6 +1478,15 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      get_feedback_request: {
+        Args: { p_token: string }
+        Returns: {
+          first_name: string
+          package_name: string
+          session_at: string
+          state: string
+        }[]
+      }
       quote_booking: {
         Args: { p_addon_ids?: string[]; p_package_id: string }
         Returns: {
@@ -1428,6 +1529,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      request_feedback: { Args: { p_booking_id: string }; Returns: string }
       reschedule_booking: {
         Args: { p_booking_id: string; p_note?: string; p_starts_at: string }
         Returns: {
@@ -1511,6 +1613,15 @@ export type Database = {
           starts_at: string
         }[]
       }
+      submit_feedback: {
+        Args: {
+          p_author_name: string
+          p_message: string
+          p_rating: number
+          p_token: string
+        }
+        Returns: string
+      }
       undo_cancel_booking: {
         Args: { p_booking_id: string }
         Returns: {
@@ -1545,6 +1656,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      unsubscribe_marketing: { Args: { p_token: string }; Returns: boolean }
       void_payment: {
         Args: { p_payment_id: string; p_reason: string }
         Returns: {
@@ -1715,6 +1827,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
       booking_status: [

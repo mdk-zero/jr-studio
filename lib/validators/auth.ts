@@ -36,6 +36,8 @@ export const signUpSchema = z
     // The legacy signup only checked this box in the browser, so a direct POST
     // skipped it entirely.
     terms: z.literal("on", { message: "Please accept the terms to continue" }),
+    // Consent to promotional email, separate from the terms and unticked by default.
+    marketing: z.literal("on").optional(),
   })
   .refine((v) => v.password === v.confirmPassword, {
     path: ["confirmPassword"],

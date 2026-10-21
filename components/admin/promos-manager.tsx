@@ -5,6 +5,7 @@ import { deletePromotion, savePromotion, type ActionState } from "@/app/admin/ca
 import { ActionFeedback, FieldError } from "@/components/admin/action-feedback";
 import { SubmitButton, adminInput } from "@/components/admin/form-controls";
 import { Badge, Panel, Table } from "@/components/admin/ui";
+import { useFormMemory } from "@/components/forms/use-form-memory";
 
 type PromoRow = {
   id: string;
@@ -30,6 +31,7 @@ export function PromosManager({
 }) {
   const [editing, setEditing] = useState<PromoRow | null>(null);
   const [state, action] = useActionState(savePromotion, initial);
+  const memory = useFormMemory(state);
   const [deleteState, deleteAction] = useActionState(deletePromotion, initial);
 
   return (
@@ -91,13 +93,13 @@ export function PromosManager({
       </div>
 
       <Panel title={editing ? "Edit promotion" : "New promotion"}>
-        <form key={editing?.id ?? "new"} action={action} className="flex flex-col gap-4">
+        <form onSubmit={memory.onSubmit} key={editing?.id ?? "new"} action={action} className="flex flex-col gap-4">
           <ActionFeedback state={state} />
           {editing ? <input type="hidden" name="id" value={editing.id} /> : null}
 
           <div>
             <label htmlFor="name" className="text-sm font-medium text-ink">Name</label>
-            <input id="name" name="name" defaultValue={editing?.name ?? ""} required className={`${adminInput} mt-1`} />
+            <input id="name" name="name" defaultValue={memory.text("name", editing?.name)} required className={`${adminInput} mt-1`} />
             <FieldError errors={state.errors?.name} />
           </div>
 
@@ -109,7 +111,7 @@ export function PromosManager({
               type="number"
               min={1}
               max={100}
-              defaultValue={editing?.discount_percent ?? 10}
+              defaultValue={memory.text("discount_percent", editing?.discount_percent ?? 10)}
               required
               className={`${adminInput} mt-1`}
             />
@@ -119,12 +121,12 @@ export function PromosManager({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label htmlFor="starts_on" className="text-sm font-medium text-ink">Starts</label>
-              <input id="starts_on" name="starts_on" type="date" defaultValue={editing?.starts_on ?? ""} required className={`${adminInput} mt-1`} />
+              <input id="starts_on" name="starts_on" type="date" defaultValue={memory.text("starts_on", editing?.starts_on)} required className={`${adminInput} mt-1`} />
               <FieldError errors={state.errors?.starts_on} />
             </div>
             <div>
               <label htmlFor="ends_on" className="text-sm font-medium text-ink">Ends</label>
-              <input id="ends_on" name="ends_on" type="date" defaultValue={editing?.ends_on ?? ""} required className={`${adminInput} mt-1`} />
+              <input id="ends_on" name="ends_on" type="date" defaultValue={memory.text("ends_on", editing?.ends_on)} required className={`${adminInput} mt-1`} />
               <FieldError errors={state.errors?.ends_on} />
             </div>
           </div>
@@ -139,7 +141,7 @@ export function PromosManager({
                     type="checkbox"
                     name="package_ids"
                     value={pkg.id}
-                    defaultChecked={editing?.packageIds.includes(pkg.id) ?? false}
+                    defaultChecked={memory.includes("package_ids", pkg.id, editing?.packageIds.includes(pkg.id) ?? false)}
                     className="size-4 accent-burgundy-600"
                   />
                   {pkg.name}
@@ -155,7 +157,7 @@ export function PromosManager({
             <input
               name="visible_to_customers"
               type="checkbox"
-              defaultChecked={editing ? editing.visible_to_customers : true}
+              defaultChecked={memory.checked("visible_to_customers", editing ? editing.visible_to_customers : true)}
               className="size-4 accent-burgundy-600"
             />
             Advertise on the public site

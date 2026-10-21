@@ -357,7 +357,8 @@ update public.studio_settings set
   email = 'hello@jrstudio.ph',
   address = 'Miralles Street, Brgy. 3JGP+4J4, Nasugbu, 4231 Batangas',
   map_url = 'https://maps.google.com/?q=J%26R+Studio+Nasugbu+Batangas',
-  socials = '{"facebook":"https://facebook.com/jrstudio","instagram":"https://instagram.com/jrstudio","tiktok":"https://tiktok.com/@jrstudio"}'::jsonb
+  -- The studio's own accounts, as linked from the legacy landing page.
+  socials = '{"facebook":"https://www.facebook.com/profile.php?id=61552926344241","instagram":"https://www.instagram.com/jnr.studio8/","tiktok":"https://www.tiktok.com/@jnr.studio8"}'::jsonb
 where id;
 
 -- Studio is closed on Sundays; Christmas Day blocked as an example holiday.

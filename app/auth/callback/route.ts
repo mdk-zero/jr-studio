@@ -4,10 +4,10 @@ import { createClient } from "@/lib/supabase/server";
 import { postLoginPath, safeNextPath } from "@/lib/auth/roles";
 
 /**
- * Handles the `?code=` style email link, which is what Supabase's DEFAULT
- * confirmation template produces. Until custom templates are available (they
- * need Resend SMTP), signup confirmation arrives as a link rather than a
- * 6-digit code, so this is the path that actually runs today.
+ * Handles the `?code=` style email link from Supabase's default confirmation
+ * template. Signup emails now carry a 6-digit code instead (Resend SMTP and
+ * the custom template went live in Phase 6), so this only serves links from
+ * emails sent before the switch, and any OAuth provider added later.
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;

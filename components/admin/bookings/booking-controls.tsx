@@ -13,6 +13,7 @@ import { SubmitButton, adminInput } from "@/components/admin/form-controls";
 import { SlotGrid, useStudioSlots } from "@/components/admin/bookings/studio-slots";
 import type { StaffStatusAction } from "@/lib/booking-status";
 import { formatManilaDate, formatManilaTime, manilaToday } from "@/lib/datetime";
+import { useFormMemory } from "@/components/forms/use-form-memory";
 
 const initial: ActionState = {};
 
@@ -45,6 +46,7 @@ export function StatusActions({
   actions: StaffStatusAction[];
 }) {
   const [state, action] = useActionState(setBookingStatusAction, initial);
+  const memory = useFormMemory(state);
 
   if (actions.length === 0) {
     return (
@@ -56,7 +58,7 @@ export function StatusActions({
   }
 
   return (
-    <form action={action} className="flex flex-col gap-3">
+    <form onSubmit={memory.onSubmit} action={action} className="flex flex-col gap-3">
       <ActionFeedback state={state} />
       <input type="hidden" name="booking_id" value={bookingId} />
       <div>
@@ -66,6 +68,7 @@ export function StatusActions({
         <textarea
           id="status-note"
           name="note"
+          defaultValue={memory.text("note")}
           rows={2}
           maxLength={500}
           placeholder="e.g. No crew available that day"
@@ -106,6 +109,7 @@ export function RescheduleForm({
   currentStart: string;
 }) {
   const [state, action] = useActionState(rescheduleBookingAction, initial);
+  const memory = useFormMemory(state);
   const [date, setDate] = useState("");
   const [chosen, setChosen] = useState<string | null>(null);
   // Keyed on the current start too: after a move, the cached grid is stale.
@@ -115,7 +119,7 @@ export function RescheduleForm({
   const slot = slots?.find((s) => s.starts_at === chosen && s.starts_at !== currentStart) ?? null;
 
   return (
-    <form action={action} className="flex flex-col gap-3">
+    <form onSubmit={memory.onSubmit} action={action} className="flex flex-col gap-3">
       <ActionFeedback state={state} />
       <input type="hidden" name="booking_id" value={bookingId} />
       <div>
@@ -139,7 +143,7 @@ export function RescheduleForm({
             Move to {formatManilaDate(slot.starts_at)}, {formatManilaTime(slot.starts_at)} –{" "}
             {formatManilaTime(slot.ends_at)}
           </p>
-          <input name="note" maxLength={500} placeholder="Reason (optional, shown to the customer)" className={adminInput} />
+          <input name="note" defaultValue={memory.text("note")} maxLength={500} placeholder="Reason (optional, shown to the customer)" className={adminInput} />
           <div>
             <SubmitButton pendingLabel="Moving…">Move booking</SubmitButton>
           </div>

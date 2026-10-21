@@ -217,36 +217,31 @@ export async function deletePackage(
   return { ok: true, message: "Package deleted." };
 }
 
-/** Uploads a cover image to the `packages` bucket and points the row at it. */
-export async function uploadPackageCover(
+/**
+ * Points a package at a cover the browser has already uploaded to the
+ * `packages` bucket, and removes the previous file.
+ *
+ * The file itself never passes through here: Server Actions cap request bodies
+ * at 1MB, which a phone photo exceeds several times over.
+ */
+export async function setPackageCover(
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
   await requireAdmin();
 
-  const id = formData.get("id");
-  const file = formData.get("cover");
-
-  if (typeof id !== "string" || !(file instanceof File) || file.size === 0) {
-    return { message: "Choose an image to upload." };
+  const parsed = z
+    .object({
+      id: z.string().uuid(),
+      path: z.string().regex(/^[0-9a-f-]{36}\/[0-9a-f-]{36}\.(jpe?g|png|webp|avif)$/i),
+    })
+    .safeParse({ id: formData.get("id"), path: formData.get("path") });
+  if (!parsed.success || !parsed.data.path.startsWith(`${parsed.data.id}/`)) {
+    return { message: "Upload an image first." };
   }
-  if (!file.type.startsWith("image/")) {
-    return { message: "That file is not an image." };
-  }
-  if (file.size > 10 * 1024 * 1024) {
-    return { message: "Images must be 10MB or smaller." };
-  }
+  const { id, path } = parsed.data;
 
   const supabase = await createClient();
-  const extension = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
-  const path = `${id}/cover-${Date.now()}.${extension}`;
-
-  const { error: uploadError } = await supabase.storage
-    .from("packages")
-    .upload(path, file, { upsert: true, contentType: file.type });
-
-  if (uploadError) return { message: uploadError.message };
-
   const { data: previous } = await supabase
     .from("packages")
     .select("cover_path")

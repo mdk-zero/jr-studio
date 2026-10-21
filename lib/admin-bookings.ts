@@ -16,6 +16,7 @@ import {
   manilaWeekday,
   toManilaDateString,
 } from "@/lib/datetime";
+import { contactMatch, searchTerm } from "@/lib/search";
 
 export const PAGE_SIZE = 25;
 
@@ -29,15 +30,6 @@ export type BookingListFilters = {
 // One literal per select: supabase-js infers row types from the text.
 const LIST_FIELDS =
   "id, reference, starts_at, ends_at, status, total_amount, source, customers(full_name, phone), packages(name), staff_members(full_name)" as const;
-
-/**
- * Keeps a search term to characters that cannot change the meaning of a
- * PostgREST or=() filter. Values are also double-quoted where they are used,
- * because dots (as in an email address) are reserved in that syntax.
- */
-function searchTerm(q: string): string {
-  return q.replace(/[^\p{L}\p{N}\s@.+-]/gu, "").trim();
-}
 
 function money(n: number): number {
   return Math.round(n * 100) / 100;
@@ -65,7 +57,7 @@ export async function listBookings(filters: BookingListFilters) {
     const { data: matches } = await supabase
       .from("customers")
       .select("id")
-      .or(`full_name.ilike."%${term}%",email.ilike."%${term}%",phone.ilike."%${term}%"`)
+      .or(contactMatch(term))
       .limit(200);
     const ids = (matches ?? []).map((c) => c.id);
     query = ids.length
@@ -212,6 +204,18 @@ export async function getStaffBooking(id: string) {
 }
 
 export type StaffBooking = NonNullable<Awaited<ReturnType<typeof getStaffBooking>>>;
+
+/** A customer the booking form can preselect; inactive ones cannot be booked. */
+export async function getActiveCustomer(id: string) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("customers")
+    .select("id, full_name, email, phone")
+    .eq("id", id)
+    .eq("status", "active")
+    .maybeSingle();
+  return data;
+}
 
 /** Choices for the studio booking form. */
 export async function getNewBookingOptions() {

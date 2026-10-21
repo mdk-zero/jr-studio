@@ -16,4 +16,5 @@ export const profileSchema = z.object({
     .union([z.string().trim().regex(/^(\+63|0)9\d{9}$/, "Enter a PH mobile number"), z.literal("")])
     .optional(),
   address: z.string().trim().max(300).optional(),
+  marketing_opt_in: z.boolean().default(false),
 });

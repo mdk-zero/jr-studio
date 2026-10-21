@@ -11,7 +11,7 @@ export default async function ProfilePage() {
   const supabase = await createClient();
   const { data: customer } = await supabase
     .from("customers")
-    .select("full_name, phone, address")
+    .select("full_name, phone, address, marketing_opt_in")
     .eq("profile_id", user.id)
     .maybeSingle();
 
@@ -29,6 +29,7 @@ export default async function ProfilePage() {
           fullName={customer?.full_name ?? user.fullName}
           phone={customer?.phone ?? ""}
           address={customer?.address ?? ""}
+          marketingOptIn={customer?.marketing_opt_in ?? false}
         />
       </div>
     </div>
