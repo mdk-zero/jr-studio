@@ -35,7 +35,7 @@ export function PromosManager({
   const [deleteState, deleteAction] = useActionState(deletePromotion, initial);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_24rem]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_24rem]">
       <div className="flex flex-col gap-3">
         <ActionFeedback state={deleteState} />
         <Table

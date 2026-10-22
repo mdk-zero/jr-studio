@@ -57,7 +57,7 @@ export default async function TestimonialsPage(props: PageProps<"/admin/testimon
         description="Customer reviews appear on the website only after someone here publishes them. Featured reviews show first on the home page."
       />
 
-      <div className="grid items-start gap-6 lg:grid-cols-[1fr_22rem]">
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_22rem]">
         <div className="flex flex-col gap-4">
           <nav className="flex flex-wrap gap-1">
             {TABS.map((tab) => {

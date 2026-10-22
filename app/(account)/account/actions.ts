@@ -11,7 +11,6 @@ export type AccountState = {
   errors?: Record<string, string[]>;
   message?: string;
   ok?: boolean;
-  undoUntil?: string;
 };
 
 export async function cancelBookingAction(
@@ -24,7 +23,7 @@ export async function cancelBookingAction(
   if (!parsed.success) return { message: "That booking could not be found." };
 
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("cancel_booking", {
+  const { error } = await supabase.rpc("cancel_booking", {
     p_booking_id: parsed.data.booking_id,
   });
 
@@ -32,15 +31,11 @@ export async function cancelBookingAction(
   // cancellation cutoff. Its message is already written for the customer.
   if (error) return { message: error.message };
 
-  const booking = data as unknown as { cancelled_at: string } | null;
+  // The page re-renders with cancelled_at, which drives the undo countdown.
   revalidatePath("/account");
   revalidatePath(`/account/bookings/${parsed.data.booking_id}`);
 
-  return {
-    ok: true,
-    message: "Booking cancelled.",
-    undoUntil: booking?.cancelled_at ?? undefined,
-  };
+  return { ok: true, message: "Booking cancelled." };
 }
 
 export async function undoCancelBookingAction(

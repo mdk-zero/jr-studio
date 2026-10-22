@@ -22,7 +22,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 sm:flex">
+        <nav aria-label="Site" className="hidden items-center gap-7 sm:flex">
           {LINKS.map((link) => (
             <Link
               key={link.href}
@@ -38,6 +38,15 @@ export function SiteHeader() {
           <AccountNav />
         </Suspense>
       </div>
+
+      {/* Phones get the same links as a second row; it scrolls sideways if needed. */}
+      <nav aria-label="Site" className="flex gap-6 overflow-x-auto border-t border-burgundy-600/10 px-5 py-2.5 sm:hidden">
+        {LINKS.map((link) => (
+          <Link key={link.href} href={link.href} className="caps shrink-0 text-muted transition hover:text-burgundy-700">
+            {link.label}
+          </Link>
+        ))}
+      </nav>
     </header>
   );
 }

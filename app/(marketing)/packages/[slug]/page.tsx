@@ -63,7 +63,7 @@ export default async function PackagePage(props: PageProps<"/packages/[slug]">) 
         ) : null}
       </nav>
 
-      <div className="mt-8 grid gap-12 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
+      <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
         <div>
           <h1 className="font-display text-4xl leading-tight font-semibold text-burgundy-700 sm:text-5xl">
             {pkg.name}

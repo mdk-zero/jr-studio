@@ -66,10 +66,10 @@ export default async function AdminBookingPage(props: PageProps<"/admin/bookings
         </div>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_22rem]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_22rem]">
         <div className="flex flex-col gap-6">
           <Panel title="Customer">
-            <dl className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
+            <dl className="grid grid-cols-1 gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
               <div>
                 <dt className="text-xs text-muted">Name</dt>
                 <dd className="text-ink">{booking.customers?.full_name}</dd>

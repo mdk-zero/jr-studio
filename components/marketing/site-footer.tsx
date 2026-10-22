@@ -30,7 +30,7 @@ export async function SiteFooter() {
 
   return (
     <footer id="visit" className="border-t border-burgundy-600/10 bg-sand-100">
-      <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid grid-cols-1 w-full max-w-6xl gap-10 px-5 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div className="sm:col-span-2">
           <p className="font-display text-2xl font-semibold text-burgundy-700">
             {settings.studio_name}

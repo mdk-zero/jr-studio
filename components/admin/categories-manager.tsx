@@ -26,7 +26,7 @@ export function CategoriesManager({ categories }: { categories: Category[] }) {
   const [deleteState, deleteAction] = useActionState(deleteCategory, initial);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_22rem]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_22rem]">
       <div className="flex flex-col gap-3">
         <ActionFeedback state={deleteState} />
         <Table

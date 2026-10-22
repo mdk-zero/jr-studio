@@ -129,12 +129,12 @@ export function BookingWizard({
   const chosenAddons = selected?.addons.filter((a) => addonIds.includes(a.id)) ?? [];
 
   return (
-    <form action={action} className="grid gap-10 lg:grid-cols-[1fr_22rem]">
+    <form action={action} className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_22rem]">
       <div className="flex flex-col gap-10">
         {/* 1. Package */}
         <section>
           <Step n={1} title="Choose a package" />
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {packages.map((pkg) => (
               <label
                 key={pkg.id}

@@ -68,7 +68,7 @@ export default async function EmailCustomersPage() {
         </p>
       ) : null}
 
-      <div className="grid items-start gap-6 lg:grid-cols-[1fr_22rem]">
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_22rem]">
         <Panel title="New email">
           {audience.all === 0 ? (
             <p className="text-sm text-muted">

@@ -67,18 +67,20 @@ After that, admins invite staff from `/admin/staff` and no one needs SQL again.
 Roles are read live from `profiles` on every request, so a change takes effect
 immediately rather than when the user's token happens to refresh.
 
-## Email in development
+## Email
 
-Supabase's built-in email provider is rate limited (a couple of messages an hour)
-and **cannot use custom templates on the free tier**, so:
+Everything goes through Resend from the studio's domain:
 
-- Signup confirmation currently arrives as a **link**, handled by
-  `/auth/callback`. The 6-digit code field on `/verify` works the moment a custom
-  template is live.
-- The branded templates are written and waiting in `supabase/templates/`. Enable
-  them by configuring Resend as custom SMTP and uncommenting
-  `[auth.email.template.*]` in `supabase/config.toml`, then `supabase config push`.
-- Tests avoid sending email entirely: they mint confirmation codes with
+- **Auth email** (signup codes, password resets) is sent by Supabase over Resend
+  SMTP, using the branded templates in `supabase/templates/`. Signup emails carry
+  the 6-digit code `/verify` asks for.
+- **App email** (booking updates, staff invites, review requests, contact-form
+  notices, bulk email) is sent by `lib/email/` and logged in `email_log`.
+- **`EMAIL_MODE`**: unless it is `live`, every app email goes to Resend's test
+  inbox instead of the real recipient, and is logged as `test`. Staff invites in
+  test mode show the admin the link to pass on by hand. Auth email is not
+  affected by this setting.
+- Tests never read a mailbox: they mint confirmation codes with
   `auth.admin.generateLink()`.
 
 ## Scripts
@@ -90,11 +92,39 @@ and **cannot use custom templates on the free tier**, so:
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint |
 | `npm test` | Vitest: unit + integration |
+| `npm run test:e2e` | Playwright: the full journey in a browser, plus a phone-layout check |
 
 Unit tests are pure logic (Manila dates, pricing rules, redirect safety).
 Integration tests run against the linked Supabase project using real signed-in
 users, so they need `.env.local`; they share one database and therefore run
 serially.
+
+End-to-end tests run against a production build (`npm run build` first; the
+config starts `next start` on port 3100). The journey signs up through the real
+form (the email goes to a Resend test address), books, approves, takes payment,
+cancels and undoes; the phone check loads every page at Pixel 7 size and fails on
+sideways scrolling or any Content Security Policy violation. To use an installed
+Chrome instead of Playwright's own, set `CHROME_PATH`; otherwise run
+`npx playwright install chromium` once.
+
+## Going live
+
+1. **Production Supabase project** (separate from dev, where tests create and
+   delete data): link it, `supabase db push`, then load `.env.local` and
+   `supabase config push` for the auth settings and SMTP.
+2. **Auth URLs**: set `site_url` and `additional_redirect_urls` in
+   `supabase/config.toml` to the real domain (reset links use `site_url`), and
+   push again.
+3. **Vercel** environment variables: everything in `.env.example`, with
+   `NEXT_PUBLIC_SITE_URL=https://<domain>` (this also turns on HSTS and
+   `upgrade-insecure-requests`) and `EMAIL_MODE=live`. Set the function region
+   next to the Supabase project.
+4. **DNS**: point the domain at Vercel. Resend's records for the sending domain
+   stay as they are.
+5. **First admin**: sign up on the live site, then promote the account with the
+   SQL above.
+6. Check `/admin/settings` (studio email, hours, closed days) and invite staff
+   from `/admin/staff`.
 
 ## Architecture notes
 

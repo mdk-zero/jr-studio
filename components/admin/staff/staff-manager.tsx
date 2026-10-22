@@ -43,7 +43,7 @@ export function StaffManager({ staff, currentUserId }: { staff: Member[]; curren
   const editing = staff.find((s) => s.id === editingId) ?? null;
 
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[1fr_24rem]">
+    <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_24rem]">
       <Table
         head={
           <>
@@ -155,7 +155,7 @@ function StaffForm({ member, onCancel }: { member: Member | null; onCancel: () =
         <FieldError errors={state.errors?.full_name} />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="position" className="text-sm font-medium text-ink">Role</label>
           <select id="position" name="position" defaultValue={memory.text("position", member?.position ?? "photographer")} className={`${adminInput} mt-1`}>
@@ -177,7 +177,7 @@ function StaffForm({ member, onCancel }: { member: Member | null; onCancel: () =
         <FieldError errors={state.errors?.email} />
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="phone" className="text-sm font-medium text-ink">Mobile</label>
           <input id="phone" name="phone" inputMode="tel" defaultValue={memory.text("phone", member?.phone)} className={`${adminInput} nums mt-1`} />
@@ -189,7 +189,7 @@ function StaffForm({ member, onCancel }: { member: Member | null; onCancel: () =
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="birthday" className="text-sm font-medium text-ink">Birthday</label>
           <input id="birthday" name="birthday" type="date" defaultValue={memory.text("birthday", member?.birthday)} className={`${adminInput} mt-1`} />

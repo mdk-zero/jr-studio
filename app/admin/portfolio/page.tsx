@@ -34,7 +34,7 @@ export default async function PortfolioAdminPage() {
         }
       />
 
-      <div className="grid items-start gap-6 lg:grid-cols-[1fr_20rem]">
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_20rem]">
         <div className="flex flex-col gap-6">
           {albums.map((album) => (
             <section key={album.id} className="rounded-xl border border-sand-300 bg-white p-5">

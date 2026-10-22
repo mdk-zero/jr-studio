@@ -74,7 +74,7 @@ export default async function CustomerPage(props: PageProps<"/admin/customers/[i
         ) : null}
       </header>
 
-      <dl className="grid gap-3 sm:grid-cols-4">
+      <dl className="grid grid-cols-1 gap-3 sm:grid-cols-4">
         {[
           ["Bookings", String(summary?.bookings_count ?? 0)],
           ["Completed sessions", String(summary?.completed_count ?? 0)],
@@ -95,7 +95,7 @@ export default async function CustomerPage(props: PageProps<"/admin/customers/[i
         ))}
       </dl>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_22rem]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_22rem]">
         <div className="flex flex-col gap-6">
           <Panel title="Bookings">
             {customer.bookings.length === 0 ? (

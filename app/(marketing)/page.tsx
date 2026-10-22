@@ -34,7 +34,7 @@ export default async function HomePage() {
       {/* Hero: typography carries the page, with plates standing in for the
           photographs until the studio uploads its own. */}
       <section className="mx-auto w-full max-w-6xl px-5 pt-14 pb-20 sm:pt-20">
-        <div className="grid items-end gap-10 lg:grid-cols-[1.15fr_1fr]">
+        <div className="grid grid-cols-1 items-end gap-10 lg:grid-cols-[1.15fr_1fr]">
           <div>
             <p className="caps rise d1 text-burgundy-500">Nasugbu · Batangas</p>
             <h1 className="font-display rise d2 mt-5 text-5xl leading-[0.95] font-semibold text-burgundy-700 sm:text-6xl lg:text-7xl">
@@ -142,7 +142,7 @@ export default async function HomePage() {
           ))}
         </div>
 
-        <div className="mt-10 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {catalog.flatMap((category) =>
             category.packages.map((pkg, i) => (
               <div key={pkg.id} id={i === 0 ? `category-${category.slug}` : undefined} className="scroll-mt-28 h-full">
@@ -157,7 +157,7 @@ export default async function HomePage() {
       <section className="border-y border-burgundy-600/10 bg-sand-100">
         <div className="mx-auto w-full max-w-6xl px-5 py-20">
           <h2 className="font-display text-3xl font-semibold text-burgundy-700">How booking works</h2>
-          <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <ol className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((step, i) => (
               <li key={step.title} className="border-t border-burgundy-600/15 pt-4">
                 <span className="caps nums text-burgundy-500/60">
@@ -176,7 +176,7 @@ export default async function HomePage() {
           <h2 className="font-display text-3xl font-semibold text-burgundy-700">
             From the people we shot
           </h2>
-          <div className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((t) => (
               <TestimonialCard
                 key={t.id}

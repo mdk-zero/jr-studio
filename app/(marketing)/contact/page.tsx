@@ -18,7 +18,7 @@ export default async function ContactPage() {
         <h1 className="font-display mt-4 text-4xl font-semibold text-burgundy-700 sm:text-5xl">Contact</h1>
       </header>
 
-      <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_20rem]">
+      <div className="mt-10 grid grid-cols-1 gap-12 lg:grid-cols-[1fr_20rem]">
         <section className="max-w-xl border border-sand-300 bg-white p-6 sm:p-8">
           <p className="mb-6 text-sm leading-relaxed text-muted">
             Questions about a package, a date, or a shoot that isn&apos;t on the list? Write to us and the studio

@@ -76,7 +76,7 @@ export default async function BookingDetailPage(props: PageProps<"/account/booki
         </div>
       </header>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_20rem]">
         <div className="flex flex-col gap-8">
           <section>
             <h2 className="caps text-burgundy-500">What you booked</h2>

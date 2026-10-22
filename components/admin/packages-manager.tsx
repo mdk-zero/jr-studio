@@ -57,7 +57,7 @@ export function PackagesManager({
   const [deleteState, deleteAction] = useActionState(deletePackage, initial);
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[1fr_26rem]">
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_26rem]">
       <div className="flex flex-col gap-3">
         <ActionFeedback state={toggleState} />
         <ActionFeedback state={deleteState} />

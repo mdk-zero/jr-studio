@@ -122,7 +122,7 @@ export function StaffBookingForm({
   const customerReady = mode === "new" || Boolean(customer);
 
   return (
-    <form onSubmit={memory.onSubmit} action={action} className="grid gap-6 lg:grid-cols-[1fr_22rem]">
+    <form onSubmit={memory.onSubmit} action={action} className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_22rem]">
       <div className="flex flex-col gap-6">
         <Panel title="Customer">
           <input type="hidden" name="customer_mode" value={mode} />
@@ -196,7 +196,7 @@ export function StaffBookingForm({
               </div>
             )
           ) : (
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <label htmlFor="customer_name" className="text-sm font-medium text-ink">Full name</label>
                 <input id="customer_name" name="customer_name" defaultValue={memory.text("customer_name")} maxLength={100} className={`${adminInput} mt-1`} />
@@ -286,7 +286,7 @@ export function StaffBookingForm({
         </Panel>
 
         <Panel title="Staff and notes">
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
               <label htmlFor="staff_id" className="text-sm font-medium text-ink">Assign to</label>
               <select id="staff_id" name="staff_id" defaultValue={memory.text("staff_id")} className={`${adminInput} mt-1`}>

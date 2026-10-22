@@ -578,6 +578,36 @@ previous one as the legacy UTC maths did; refunds, voids, centavo rounding, nume
 check recomputed every tile straight from the database and compared the month's net with the
 Payments page: all equal. No sideways scroll at phone width.
 
-### Phase 8 — Hardening & deploy — next
-Rate limits, CSP, advisors, legacy asset compression, Vercel env + Auth redirect URLs, README,
-end-to-end tests, mobile pass.
+### Phase 8 — Hardening & deploy — in progress (2026-10-22)
+Done (everything that needs no outside account or decision):
+- **Security headers** in `next.config.ts`: a Content Security Policy, `nosniff`, `X-Frame-Options`,
+  `Referrer-Policy`, `Permissions-Policy`, no `X-Powered-By`; HSTS and `upgrade-insecure-requests`
+  only when the site URL is https. Nonce-based CSP needs per-request rendering, which Partial
+  Prerendering rules out, so this is Next's documented no-nonce policy: inline scripts allowed, but
+  no other origin for scripts, frames, plugins or form posts; the Supabase host only for images and
+  the browser's own calls.
+- **Rate limits**: the contact form is limited in the app (Phase 6); signups and sign-ins by Supabase
+  Auth's limits in `config.toml`; booking writes go through RPCs bound by the exclusion constraint.
+- **End-to-end tests** (`npm run test:e2e`, Playwright against `next start`): the full journey
+  through the UI (sign up and confirm by code → book → approve → pay → paid → cancel → undo, with the
+  audit trail checked), and every public and back-office page at phone size, failing on sideways
+  scrolling or any CSP violation.
+- **Mobile pass**: the public header now shows its links on phones; every responsive grid has an
+  explicit one-column base (a single implicit column grew to its widest content, so the catalog's
+  tables pushed four admin pages 200+ px wider than the screen and Settings' hours 49 px); the admin
+  sidebar marks the current section.
+- **README**: email, end-to-end tests, and a going-live checklist.
+
+Bug found by the journey test, from Phase 4: after a customer undid a cancellation, their booking
+page kept showing "Booking cancelled." and the undo countdown until reloaded. The panel took
+"cancelled" from the cancel action's stored result, which nothing cleared; it now reads the booking
+itself (refreshed in the same response) and shows whichever action ran last.
+
+Verified: 138/138 unit + integration, 3/3 end-to-end, tsc, lint, build; headers checked on the wire.
+
+Waiting on the user:
+- Vercel account (Pro: Hobby is non-commercial), a separate production Supabase project, DNS for
+  `jrstudio.digital`, `EMAIL_MODE=live`, production `site_url`.
+- Studio alert inbox (`STUDIO_NOTIFY_EMAIL`), real staff list, the studio's public email.
+- Legacy assets (now at `../adminMergedv1.3`): compressing them only makes sense once it is decided
+  where they go: hero slideshow (static or editable), portfolio, About.

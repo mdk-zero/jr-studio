@@ -59,7 +59,7 @@ export function StudioDetailsForm({
     <form onSubmit={memory.onSubmit} action={action} className="flex flex-col gap-4">
       <ActionFeedback state={state} />
       <Input label="Studio name" name="studio_name" defaultValue={memory.text("studio_name", settings.studio_name)} required errors={e.studio_name} />
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Input label="Phone" name="phone" defaultValue={memory.text("phone", settings.phone)} inputMode="tel" errors={e.phone} />
         <Input label="Public email" name="email" type="email" defaultValue={memory.text("email", settings.email)} errors={e.email} hint="Shown in the footer. Leave empty to hide it." />
       </div>
@@ -95,7 +95,7 @@ export function BookingRulesForm({
   return (
     <form onSubmit={memory.onSubmit} action={action} className="flex flex-col gap-4">
       <ActionFeedback state={state} />
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Input label="Start times every (minutes)" name="slot_interval_minutes" type="number" min={5} max={240} defaultValue={memory.text("slot_interval_minutes", rules.slot_interval_minutes)} errors={e.slot_interval_minutes} hint="60 offers 9:00, 10:00, 11:00…" />
         <Input label="Book at least (hours ahead)" name="min_lead_hours" type="number" min={0} max={720} defaultValue={memory.text("min_lead_hours", rules.min_lead_hours)} errors={e.min_lead_hours} hint="Online requests only. The studio can book any free slot." />
         <Input label="Book at most (days ahead)" name="max_advance_days" type="number" min={1} max={730} defaultValue={memory.text("max_advance_days", rules.max_advance_days)} errors={e.max_advance_days} />
@@ -123,7 +123,7 @@ export function BusinessHoursForm({
     <form onSubmit={memory.onSubmit} action={action} className="flex flex-col gap-3">
       <ActionFeedback state={state} />
       {hours.map((h) => (
-        <div key={h.weekday} className="grid grid-cols-[6.5rem_1fr_auto_1fr] items-center gap-x-3 gap-y-1 sm:grid-cols-[8rem_9rem_auto_9rem]">
+        <div key={h.weekday} className="grid grid-cols-[6.5rem_minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-x-3 gap-y-1 sm:grid-cols-[8rem_9rem_auto_9rem]">
           <label className="flex items-center gap-2 text-sm text-ink">
             <input
               type="checkbox"

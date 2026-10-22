@@ -28,7 +28,7 @@ export function ContactForm() {
         <input id="name" name="name" defaultValue={memory.text("name")} autoComplete="name" required className={inputClass} />
       </Field>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Email" name="email" errors={state.errors?.email}>
           <input id="email" name="email" defaultValue={memory.text("email")} type="email" autoComplete="email" required className={inputClass} />
         </Field>

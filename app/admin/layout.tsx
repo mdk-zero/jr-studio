@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireStaff } from "@/lib/dal";
 import { getInboxCounts } from "@/lib/admin-content";
 import { SignOutButton } from "@/components/layout/sign-out-button";
+import { SidebarNav } from "@/components/admin/sidebar-nav";
 
 /**
  * Authenticated area: every render reads the session cookie to decide whether
@@ -39,25 +40,13 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
             J&amp;R Admin
           </Link>
         </div>
-        <nav className="flex gap-1 overflow-x-auto px-2 pb-2 md:flex-col md:px-2">
-          {NAV.filter((item) => !("adminOnly" in item) || user.role === "admin").map((item) => {
-            const count = "badge" in item ? counts[item.badge] : 0;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex shrink-0 items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm text-muted hover:bg-sand-100 hover:text-ink"
-              >
-                {item.label}
-                {count > 0 ? (
-                  <span className="nums rounded-full bg-burgundy-600 px-1.5 py-0.5 text-[11px] leading-none font-semibold text-white">
-                    {count}
-                  </span>
-                ) : null}
-              </Link>
-            );
-          })}
-        </nav>
+        <SidebarNav
+          items={NAV.filter((item) => !("adminOnly" in item) || user.role === "admin").map((item) => ({
+            href: item.href,
+            label: item.label,
+            count: "badge" in item ? counts[item.badge] : 0,
+          }))}
+        />
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">

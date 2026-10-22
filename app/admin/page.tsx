@@ -55,7 +55,7 @@ export default async function AdminDashboardPage() {
         description={`Good to see you, ${user.fullName.split(" ")[0]}. ${formatMonth(d.month)}, in Manila time; money is from the payment ledger.`}
       />
 
-      <dl className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+      <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
         <Tile
           label={`Received in ${monthName}`}
           value={formatPeso(d.current.net)}
@@ -86,7 +86,7 @@ export default async function AdminDashboardPage() {
         <Tile label={`New customers in ${monthName}`} value={String(d.newCustomers)} href="/admin/customers?sort=newest" />
       </dl>
 
-      <div className="grid items-start gap-6 xl:grid-cols-[1fr_20rem]">
+      <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[1fr_20rem]">
         <Panel title="Revenue, last 12 months">
           <figure>
             <div className="flex h-48 items-end gap-1.5 sm:gap-2" aria-hidden="true">
@@ -155,7 +155,7 @@ export default async function AdminDashboardPage() {
         </Panel>
       </div>
 
-      <div className="grid items-start gap-6 xl:grid-cols-[1fr_20rem]">
+      <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[1fr_20rem]">
         <Panel title="Coming up">
           {d.upcoming.length === 0 ? (
             <EmptyState>No upcoming sessions.</EmptyState>

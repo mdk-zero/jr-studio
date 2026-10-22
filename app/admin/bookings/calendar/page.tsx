@@ -60,7 +60,7 @@ export default async function BookingCalendarPage(props: PageProps<"/admin/booki
         }
       />
 
-      <div className="grid gap-3 lg:grid-cols-7">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-7">
         {days.map((day) => (
           <section
             key={day.date}

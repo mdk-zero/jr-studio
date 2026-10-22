@@ -37,7 +37,7 @@ export default async function PaymentsPage(props: PageProps<"/admin/payments">) 
         }
       />
 
-      <dl className="grid gap-3 sm:grid-cols-3">
+      <dl className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {[
           { label: "Received", value: ledger.received },
           { label: "Refunded", value: ledger.refunded },

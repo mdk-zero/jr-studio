@@ -26,7 +26,7 @@ export default async function SettingsPage() {
         description="Studio details for the website, and the rules online booking follows."
       />
 
-      <div className="grid items-start gap-6 xl:grid-cols-2">
+      <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-2">
         <Panel title="Studio details">
           <StudioDetailsForm
             settings={{ ...settings, socials: (settings.socials ?? {}) as Record<string, string> }}

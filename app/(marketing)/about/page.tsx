@@ -29,7 +29,7 @@ export default async function AboutPage() {
       {team.length > 0 ? (
         <section className="mt-14">
           <h2 className="caps text-burgundy-500">The team</h2>
-          <ul className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {team.map((person) => (
               <li key={person.id}>
                 <Plate
