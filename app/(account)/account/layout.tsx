@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/dal";
 import { SignOutButton } from "@/components/layout/sign-out-button";
+import { BrandLogo } from "@/components/brand-logo";
 
 /**
  * Authenticated area: every render reads the session cookie to decide whether
@@ -16,8 +17,8 @@ export default async function AccountLayout({ children }: LayoutProps<"/account"
     <div className="flex min-h-full flex-1 flex-col">
       <header className="border-b border-sand-300 bg-white">
         <div className="mx-auto flex w-full max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-3">
-          <Link href="/" className="text-xs font-medium tracking-[0.2em] text-burgundy-500 uppercase">
-            J&amp;R Studio
+          <Link href="/" aria-label="J&R Studio, home" className="shrink-0 transition hover:opacity-80">
+            <BrandLogo className="size-11" />
           </Link>
           <nav className="flex items-center gap-4 text-sm">
             <Link href="/account" className="text-muted hover:text-ink">My bookings</Link>

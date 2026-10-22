@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { AccountNav, AccountNavFallback } from "@/components/marketing/account-nav";
+import { BrandLogo } from "@/components/brand-logo";
 
 const LINKS = [
   { href: "/#packages", label: "Packages" },
@@ -12,14 +13,9 @@ const LINKS = [
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-burgundy-600/10 bg-sand-50/85 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-5 py-4">
-        <Link href="/" className="group flex items-baseline gap-2">
-          <span className="font-display text-xl leading-none font-semibold text-burgundy-700">
-            J&amp;R
-          </span>
-          <span className="caps text-burgundy-500/70 transition group-hover:text-burgundy-600">
-            Studio
-          </span>
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-5 py-3">
+        <Link href="/" aria-label="J&R Studio, home" className="shrink-0 transition hover:opacity-80">
+          <BrandLogo className="size-12 sm:size-16" preload />
         </Link>
 
         <nav aria-label="Site" className="hidden items-center gap-7 sm:flex">
