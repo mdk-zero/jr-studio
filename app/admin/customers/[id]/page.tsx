@@ -15,6 +15,9 @@ import { deleteCustomerAction, deleteNoteAction, setCustomerStatusAction } from 
 
 export const metadata: Metadata = { title: "Customer" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 const EMAIL_LABEL: Record<string, string> = {
   booking_approved: "Booking confirmed",
   booking_declined: "Request declined",

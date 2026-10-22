@@ -9,6 +9,9 @@ import { EmptyState, PageHeader, Table } from "@/components/admin/ui";
 
 export const metadata: Metadata = { title: "Payments" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 export default async function PaymentsPage(props: PageProps<"/admin/payments">) {
   await requireStaff("/admin/payments");
   const { month: monthParam } = await props.searchParams;

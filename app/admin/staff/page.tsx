@@ -7,6 +7,9 @@ import { StaffManager } from "@/components/admin/staff/staff-manager";
 
 export const metadata: Metadata = { title: "Staff" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 export default async function StaffPage() {
   const user = await requireAdmin("/admin/staff");
   const staff = await listStaff();

@@ -5,6 +5,9 @@ import { getCurrentUser } from "@/lib/dal";
 
 export const metadata: Metadata = { title: "Choose a new password" };
 
+/** Reads the session or the link's parameters, so it renders per request. */
+export const instant = false;
+
 export default async function ResetPasswordPage(props: PageProps<"/reset-password">) {
   // Reaching here requires the session that /auth/confirm establishes, from a
   // recovery link or a staff invite.

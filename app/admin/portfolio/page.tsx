@@ -12,6 +12,9 @@ import { deleteAlbumAction } from "@/app/admin/portfolio/actions";
 
 export const metadata: Metadata = { title: "Portfolio" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 export default async function PortfolioAdminPage() {
   await requireStaff("/admin/portfolio");
   const { albums, loose, categories } = await getPortfolioAdmin();

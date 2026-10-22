@@ -9,6 +9,9 @@ import { CampaignForm } from "@/components/admin/customers/campaign-form";
 
 export const metadata: Metadata = { title: "Email customers" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 async function audienceCounts() {
   const supabase = await createClient();
   const count = async (tier?: (typeof CUSTOMER_TIERS)[number]) => {

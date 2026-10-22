@@ -18,6 +18,9 @@ import { RecordPaymentForm, VoidPaymentForm } from "@/components/admin/bookings/
 
 export const metadata: Metadata = { title: "Booking" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 export default async function AdminBookingPage(props: PageProps<"/admin/bookings/[id]">) {
   const user = await requireStaff();
   const { id } = await props.params;

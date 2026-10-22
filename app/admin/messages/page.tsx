@@ -11,6 +11,9 @@ import { deleteMessageAction, markReadAction } from "@/app/admin/messages/action
 
 export const metadata: Metadata = { title: "Messages" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 export default async function MessagesPage(props: PageProps<"/admin/messages">) {
   const user = await requireStaff("/admin/messages");
   const filters = messageListSchema.parse(await props.searchParams);

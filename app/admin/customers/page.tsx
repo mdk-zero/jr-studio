@@ -12,6 +12,9 @@ import { Pager } from "@/components/admin/pager";
 
 export const metadata: Metadata = { title: "Customers" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 const DEFAULTS: CustomerListFilters = {
   q: "",
   tier: "all",

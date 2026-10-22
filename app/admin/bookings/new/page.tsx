@@ -6,6 +6,9 @@ import { StaffBookingForm } from "@/components/admin/bookings/staff-booking-form
 
 export const metadata: Metadata = { title: "New booking" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 export default async function NewStaffBookingPage(props: PageProps<"/admin/bookings/new">) {
   await requireStaff("/admin/bookings/new");
   const { customer: customerId } = await props.searchParams;

@@ -6,6 +6,9 @@ import { PageHeader } from "@/components/admin/ui";
 
 export const metadata: Metadata = { title: "Promotions" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 export default async function AdminPromosPage() {
   await requireAdmin("/admin/catalog/promos");
 

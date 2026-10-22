@@ -5,6 +5,9 @@ import { VerifyForm } from "@/components/auth/verify-form";
 
 export const metadata: Metadata = { title: "Confirm your email" };
 
+/** Reads the session or the link's parameters, so it renders per request. */
+export const instant = false;
+
 export default async function VerifyPage(props: PageProps<"/verify">) {
   const { email } = await props.searchParams;
   if (typeof email !== "string" || !email) redirect("/signup");

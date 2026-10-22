@@ -14,6 +14,9 @@ import { StatusBadge } from "@/components/admin/bookings/badges";
 
 export const metadata: Metadata = { title: "Booking calendar" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 // Pending requests are outlined so they read as "not confirmed yet" at a glance.
 const ACCENT = {
   pending: "border-dashed border-sand-400 bg-white",

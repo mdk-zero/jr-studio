@@ -8,6 +8,9 @@ import { homePathFor, safeNextPath } from "@/lib/auth/roles";
 
 export const metadata: Metadata = { title: "Sign in" };
 
+/** Reads the session or the link's parameters, so it renders per request. */
+export const instant = false;
+
 const linkErrors: Record<string, string> = {
   invalid_link: "That link was not valid. Try signing in instead.",
   expired_link: "That link has expired. Request a new one.",

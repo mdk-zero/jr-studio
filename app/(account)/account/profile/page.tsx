@@ -5,6 +5,9 @@ import { ProfileForm } from "@/components/account/profile-form";
 
 export const metadata: Metadata = { title: "Profile" };
 
+/** Reads the signed-in customer's own data, so it renders per request. */
+export const instant = false;
+
 export default async function ProfilePage() {
   const user = await requireUser("/account/profile");
 

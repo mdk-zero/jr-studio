@@ -7,6 +7,9 @@ import { homePathFor } from "@/lib/auth/roles";
 
 export const metadata: Metadata = { title: "Create an account" };
 
+/** Reads the session or the link's parameters, so it renders per request. */
+export const instant = false;
+
 export default async function SignUpPage() {
   const user = await getCurrentUser();
   if (user) redirect(homePathFor(user.role));

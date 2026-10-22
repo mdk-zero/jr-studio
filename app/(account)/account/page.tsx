@@ -7,6 +7,9 @@ import { formatPeso } from "@/lib/money";
 
 export const metadata: Metadata = { title: "My bookings" };
 
+/** Reads the signed-in customer's own data, so it renders per request. */
+export const instant = false;
+
 export default async function AccountPage() {
   const [user, bookings] = await Promise.all([getCurrentUser(), getMyBookings()]);
 

@@ -11,6 +11,9 @@ import { StatusBadge } from "@/components/admin/bookings/badges";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 const STATUS_ORDER: BookingStatus[] = ["pending", "approved", "completed", "cancelled", "rejected", "expired"];
 
 function Tile({

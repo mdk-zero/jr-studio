@@ -5,6 +5,9 @@ import { CustomerForm } from "@/components/admin/customers/customer-form";
 
 export const metadata: Metadata = { title: "Add customer" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 export default async function NewCustomerPage() {
   await requireStaff("/admin/customers/new");
 

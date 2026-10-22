@@ -14,6 +14,9 @@ import { removeBlockedDateAction } from "@/app/admin/settings/actions";
 
 export const metadata: Metadata = { title: "Settings" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 export default async function SettingsPage() {
   await requireAdmin("/admin/settings");
   const { settings, hours, blocked } = await getSettingsAdmin();

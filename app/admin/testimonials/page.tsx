@@ -17,6 +17,9 @@ import {
 
 export const metadata: Metadata = { title: "Reviews" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 const TABS = [
   { value: "pending", label: "To review" },
   { value: "approved", label: "Published" },

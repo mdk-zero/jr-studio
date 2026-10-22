@@ -11,6 +11,9 @@ import { submitTestimonialAction } from "@/app/(account)/account/actions";
 
 export const metadata: Metadata = { title: "Booking" };
 
+/** Reads the signed-in customer's own data, so it renders per request. */
+export const instant = false;
+
 /** "Andrea Salazar" -> "Andrea S.", the default credit on a public review. */
 function shortName(fullName: string): string {
   const [first, ...rest] = fullName.trim().split(/\s+/);

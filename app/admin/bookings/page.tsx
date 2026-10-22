@@ -12,6 +12,9 @@ import { PaymentBadge, StatusBadge } from "@/components/admin/bookings/badges";
 
 export const metadata: Metadata = { title: "Bookings" };
 
+/** Back office: reads the session and live data, so it renders per request. */
+export const instant = false;
+
 const STATUS_OPTIONS = ["all", "pending", "approved", "completed", "cancelled", "rejected", "expired"] as const;
 
 export default async function AdminBookingsPage(props: PageProps<"/admin/bookings">) {
