@@ -48,7 +48,7 @@ export function VerifyForm({ email }: { email: string }) {
         <button
           type="submit"
           disabled={resending}
-          className="w-full text-xs font-medium text-burgundy-600 underline underline-offset-4 disabled:opacity-60"
+          className="w-full text-xs font-medium text-brand underline underline-offset-4 disabled:opacity-60"
         >
           {resending ? "Sending…" : "Send me a new code"}
         </button>

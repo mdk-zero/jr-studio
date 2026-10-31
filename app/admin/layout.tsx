@@ -3,6 +3,7 @@ import { requireStaff } from "@/lib/dal";
 import { getInboxCounts } from "@/lib/admin-content";
 import { SignOutButton } from "@/components/layout/sign-out-button";
 import { SidebarNav } from "@/components/admin/sidebar-nav";
+import { BrandLogo } from "@/components/brand-logo";
 
 /**
  * Authenticated area: every render reads the session cookie to decide whether
@@ -34,10 +35,15 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
 
   return (
     <div className="flex min-h-full flex-1 flex-col md:flex-row">
-      <aside className="border-b border-sand-300 bg-white md:w-56 md:border-r md:border-b-0">
-        <div className="flex items-center justify-between gap-3 p-4 md:block">
-          <Link href="/admin" className="text-xs font-medium tracking-[0.2em] text-burgundy-500 uppercase">
-            J&amp;R Admin
+      {/* A dark panel beside a light work surface, the way editing software
+          frames its canvas. The content stays light for dense tables. */}
+      <aside className="border-b border-night-700 bg-night-950 text-bone md:w-56 md:border-r md:border-b-0">
+        <div className="flex items-center justify-between gap-3 p-4">
+          <Link href="/admin" className="flex items-center gap-3 transition-opacity hover:opacity-75">
+            <BrandLogo className="size-10 text-bone" />
+            <span className="font-mono text-[11px] font-medium tracking-[0.16em] text-ash uppercase">
+              Back office
+            </span>
           </Link>
         </div>
         <SidebarNav

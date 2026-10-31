@@ -38,22 +38,22 @@ export default async function BookingDetailPage(props: PageProps<"/account/booki
   return (
     <div className="flex flex-col gap-8">
       <nav className="caps text-muted">
-        <Link href="/account" className="hover:text-burgundy-700">
+        <Link href="/account" className="hover:text-ink">
           My bookings
         </Link>
-        <span className="mx-2 text-burgundy-600/30">/</span>
-        <span className="text-burgundy-600">{booking.reference}</span>
+        <span className="mx-2 text-faint">/</span>
+        <span className="text-brand">{booking.reference}</span>
       </nav>
 
       {created ? (
-        <p role="status" className="rounded-lg bg-burgundy-50 px-4 py-3 text-sm text-burgundy-700">
+        <p role="status" className="rounded-sm bg-tint px-4 py-3 text-sm text-on-tint">
           Request received. The studio will confirm your slot shortly — we will email you either way.
         </p>
       ) : null}
 
-      <header className="flex flex-wrap items-start justify-between gap-4 border-b border-burgundy-600/15 pb-6">
+      <header className="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-6">
         <div>
-          <h1 className="font-display text-3xl font-semibold text-burgundy-700">
+          <h1 className="font-display text-3xl font-semibold text-heading">
             {booking.packages?.name ?? "Session"}
           </h1>
           <p className="nums mt-2 text-ink">
@@ -82,7 +82,7 @@ export default async function BookingDetailPage(props: PageProps<"/account/booki
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_20rem]">
         <div className="flex flex-col gap-8">
           <section>
-            <h2 className="caps text-burgundy-500">What you booked</h2>
+            <h2 className="caps text-brand">What you booked</h2>
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between gap-4">
                 <dt className="text-ink">{booking.packages?.name}</dt>
@@ -101,13 +101,13 @@ export default async function BookingDetailPage(props: PageProps<"/account/booki
               ))}
               {booking.discount_amount > 0 ? (
                 <div className="flex justify-between gap-4">
-                  <dt className="text-burgundy-600">Discount</dt>
-                  <dd className="nums text-burgundy-600">
+                  <dt className="text-brand">Discount</dt>
+                  <dd className="nums text-brand">
                     − {formatPeso(booking.discount_amount)}
                   </dd>
                 </div>
               ) : null}
-              <div className="flex justify-between gap-4 border-t border-sand-200 pt-2">
+              <div className="flex justify-between gap-4 border-t border-line pt-2">
                 <dt className="font-medium text-ink">Total</dt>
                 <dd className="font-display nums text-xl font-semibold text-ink">
                   {formatPeso(booking.total_amount)}
@@ -130,14 +130,14 @@ export default async function BookingDetailPage(props: PageProps<"/account/booki
 
           {booking.notes ? (
             <section>
-              <h2 className="caps text-burgundy-500">Your notes</h2>
+              <h2 className="caps text-brand">Your notes</h2>
               <p className="mt-3 text-sm leading-relaxed text-ink">{booking.notes}</p>
             </section>
           ) : null}
 
           {booking.events.length > 0 ? (
             <section>
-              <h2 className="caps text-burgundy-500">History</h2>
+              <h2 className="caps text-brand">History</h2>
               <ol className="mt-3 space-y-2">
                 {booking.events.map((event) => (
                   <li key={event.id} className="flex gap-3 text-sm">
@@ -155,12 +155,12 @@ export default async function BookingDetailPage(props: PageProps<"/account/booki
 
           {booking.status === "completed" ? (
             <section>
-              <h2 className="caps text-burgundy-500">Your review</h2>
+              <h2 className="caps text-brand">Your review</h2>
               {booking.review ? (
                 <div className="mt-3 text-sm">
-                  <p className="text-burgundy-600" aria-label={`${booking.review.rating} out of 5`}>
+                  <p className="text-brand" aria-label={`${booking.review.rating} out of 5`}>
                     {"★".repeat(booking.review.rating)}
-                    <span className="text-sand-300">{"★".repeat(5 - booking.review.rating)}</span>
+                    <span className="text-ink/15">{"★".repeat(5 - booking.review.rating)}</span>
                   </p>
                   <p className="mt-2 leading-relaxed whitespace-pre-line text-ink">{booking.review.message}</p>
                   <p className="mt-2 text-xs text-muted">
@@ -172,7 +172,7 @@ export default async function BookingDetailPage(props: PageProps<"/account/booki
                   </p>
                 </div>
               ) : (
-                <div className="mt-3 border border-sand-300 bg-white p-5">
+                <div className="mt-3 border border-line bg-surface p-5">
                   <p className="mb-4 text-sm text-muted">How was your session? A few words help other families find us.</p>
                   <ReviewForm
                     action={submitTestimonialAction}
@@ -186,7 +186,7 @@ export default async function BookingDetailPage(props: PageProps<"/account/booki
         </div>
 
         <aside className="flex flex-col gap-4">
-          <div className="border border-sand-300 bg-white p-5">
+          <div className="border border-line bg-surface p-5">
             <BookingActions
               bookingId={booking.id}
               status={booking.status}

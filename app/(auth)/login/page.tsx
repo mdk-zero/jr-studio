@@ -29,7 +29,7 @@ export default async function LoginPage(props: PageProps<"/login">) {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-semibold text-burgundy-700">Welcome back</h1>
+        <h1 className="text-2xl font-semibold text-heading">Welcome back</h1>
         <p className="mt-1 text-sm text-muted">Sign in to manage your bookings.</p>
       </div>
 
@@ -37,12 +37,12 @@ export default async function LoginPage(props: PageProps<"/login">) {
       <LoginForm next={nextPath ?? undefined} />
 
       <div className="flex flex-col gap-2 text-sm text-muted">
-        <Link href="/forgot-password" className="text-burgundy-600 underline underline-offset-4">
+        <Link href="/forgot-password" className="text-brand underline underline-offset-4">
           Forgot your password?
         </Link>
         <p>
           New here?{" "}
-          <Link href="/signup" className="font-medium text-burgundy-600 underline underline-offset-4">
+          <Link href="/signup" className="font-medium text-brand underline underline-offset-4">
             Create an account
           </Link>
         </p>

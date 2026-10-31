@@ -18,7 +18,7 @@ export default async function ResetPasswordPage(props: PageProps<"/reset-passwor
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-semibold text-burgundy-700">
+        <h1 className="text-2xl font-semibold text-heading">
           {welcome ? "Welcome! Set your password" : "Choose a new password"}
         </h1>
         <p className="mt-1 text-sm text-muted">

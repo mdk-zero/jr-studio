@@ -14,7 +14,7 @@ export function ContactForm() {
 
   if (state.ok) {
     return (
-      <p role="status" className="rounded-lg bg-burgundy-50 px-4 py-6 text-center text-burgundy-700">
+      <p role="status" className="rounded-sm bg-tint px-4 py-6 text-center text-on-tint">
         {state.message}
       </p>
     );

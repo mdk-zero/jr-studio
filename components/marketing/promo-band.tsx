@@ -7,25 +7,26 @@ type Promo = {
   ends_on: string;
 };
 
+/** Current offers, in the safelight's burgundy so they stand apart from the page. */
 export function PromoBand({ promos }: { promos: Promo[] }) {
   if (promos.length === 0) return null;
 
   return (
-    <section aria-label="Current offers" className="bg-burgundy-700 text-sand-100">
-      <div className="mx-auto w-full max-w-6xl divide-y divide-sand-100/15 px-5">
+    <section aria-label="Current offers" className="border-y border-burgundy-500/40 bg-burgundy-800 text-bone">
+      <div className="mx-auto w-full max-w-6xl divide-y divide-bone/15 px-5">
         {promos.map((promo) => (
           <div
             key={promo.id}
             className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 py-6"
           >
-            <div className="flex items-baseline gap-4">
-              <span className="font-display nums text-4xl leading-none font-semibold text-sand-100 sm:text-5xl">
+            <div className="flex items-baseline gap-3">
+              <span className="font-display nums text-4xl leading-none font-semibold sm:text-5xl">
                 {promo.discount_percent}%
               </span>
-              <span className="caps text-sand-200/80">off</span>
+              <span className="caps text-burgundy-200">off</span>
             </div>
-            <p className="font-display text-xl text-sand-100">{promo.name}</p>
-            <p className="caps nums text-sand-200/70">
+            <p className="font-display text-xl italic">{promo.name}</p>
+            <p className="caps nums text-burgundy-200">
               {/* Dates are inclusive, as the studio has always run them. */}
               Until {formatManilaDate(`${promo.ends_on}T12:00:00Z`)}
             </p>

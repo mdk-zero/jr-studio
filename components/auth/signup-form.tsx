@@ -48,16 +48,16 @@ export function SignUpForm() {
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="terms" className="flex items-start gap-2 text-sm text-muted">
-          <input id="terms" name="terms" type="checkbox" defaultChecked={memory.checked("terms", false)} className="mt-0.5 size-4 accent-burgundy-600" />
+          <input id="terms" name="terms" type="checkbox" defaultChecked={memory.checked("terms", false)} className="mt-0.5 size-4 accent-brand" />
           <span>I agree to the studio&apos;s booking terms.</span>
         </label>
         {state.errors?.terms?.length ? (
-          <p role="alert" className="text-xs font-medium text-red-700">{state.errors.terms[0]}</p>
+          <p role="alert" className="text-xs font-medium text-danger">{state.errors.terms[0]}</p>
         ) : null}
       </div>
 
       <label htmlFor="marketing" className="flex items-start gap-2 text-sm text-muted">
-        <input id="marketing" name="marketing" type="checkbox" defaultChecked={memory.checked("marketing", false)} className="mt-0.5 size-4 accent-burgundy-600" />
+        <input id="marketing" name="marketing" type="checkbox" defaultChecked={memory.checked("marketing", false)} className="mt-0.5 size-4 accent-brand" />
         <span>Email me studio news and offers. Optional; unsubscribe any time.</span>
       </label>
 

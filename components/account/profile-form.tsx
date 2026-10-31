@@ -28,8 +28,8 @@ export function ProfileForm({
           role={state.ok ? "status" : "alert"}
           className={
             state.ok
-              ? "rounded-lg bg-burgundy-50 px-3 py-2 text-sm text-burgundy-700"
-              : "rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700"
+              ? "rounded-sm bg-tint px-3 py-2 text-sm text-on-tint"
+              : "rounded-sm bg-danger-tint px-3 py-2 text-sm text-danger"
           }
         >
           {state.message}
@@ -54,7 +54,7 @@ export function ProfileForm({
           name="marketing_opt_in"
           type="checkbox"
           defaultChecked={memory.checked("marketing_opt_in", marketingOptIn)}
-          className="mt-0.5 size-4 accent-burgundy-600"
+          className="mt-0.5 size-4 accent-brand"
         />
         <span>Email me studio news and offers. Booking emails are sent either way.</span>
       </label>

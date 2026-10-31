@@ -2,9 +2,16 @@
 
 /**
  * J&R Studio brand tokens.
- * Burgundy + warm beige, carried over from the legacy site so the studio's
- * identity survives the redesign. Light-only for now; a dark theme can be
- * layered on later by redefining the semantic tokens under a [data-theme].
+ *
+ * Two layers. The raw palettes (burgundy, sand, night) are the studio's
+ * colours. The semantic tokens below them (canvas, surface, ink, brand,
+ * action…) are what components use, so one component reads correctly on both
+ * themes:
+ *
+ * - Light, the default: warm paper. The back office lives here.
+ * - Darkroom (`.darkroom`): everything a customer sees. Photographs are shown
+ *   on near-black the way a gallery or an editing suite shows them, and the
+ *   burgundy becomes the darkroom's safelight.
  */
 @theme {
   --color-burgundy-50: #f9f3f4;
@@ -24,108 +31,323 @@
   --color-sand-300: #d9d3ce;
   --color-sand-400: #b9afa6;
 
+  /* Warm near-blacks: a pure #000 looks like a screen that is off. */
+  --color-night-950: #0c0a0a;
+  --color-night-900: #121010;
+  --color-night-800: #1c1818;
+  --color-night-700: #2a2323;
+  --color-night-600: #3b3232;
+  --color-bone: #efe8e1;
+  --color-ash: #a59a95;
+
+  /* The record light. Only for REC, never for buttons or errors. */
+  --color-rec: #e5484d;
+
+  /* Semantic tokens, light values. `.darkroom` redefines them. */
+  --color-canvas: #faf8f6;
+  --color-surface: #ffffff;
+  --color-raised: #f5f1ee;
+  --color-line: #e9e2db;
+  --color-edge: #d9d3ce;
+  --color-faint: #b9afa6;
   --color-ink: #1c1a19;
   --color-muted: #6b625d;
+  --color-heading: #551e2f;
+  --color-brand: #662d38;
+  --color-action: #662d38;
+  --color-action-hover: #551e2f;
+  --color-on-action: #ffffff;
+  --color-tint: #f9f3f4;
+  --color-on-tint: #551e2f;
+  --color-danger: #b91c1c;
+  --color-danger-tint: #fef2f2;
 
   --font-display: var(--font-playfair), Georgia, serif;
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --tracking-caps: 0.16em;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-:root {
-  --background: var(--color-sand-50);
-  --foreground: var(--color-ink);
+/* Overscroll past a dark page shows the html background, so match it. */
+:root:has(.darkroom) {
+  background: #0c0a0a;
+  scrollbar-color: #3b3232 #0c0a0a;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
+:root:has(.darkroom) body {
+  background: #0c0a0a;
 }
 
-h1,
-h2,
-h3 {
-  font-family: var(--font-display);
+.darkroom ::selection {
+  background: #873f52;
+  color: #fff;
+}
+
+/* Base styles sit in the base layer so a utility or `.caps` on a heading wins. */
+@layer base {
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
 }
 
 /* ---------------------------------------------------------------------------
-   Editorial treatment for the public site: warm paper, film grain, hairline
-   rules and staggered reveals. Kept here (not per component) so the marketing
-   pages share one visual language.
+   Studio language for the customer side: film grain, camera readouts,
+   viewfinder brackets and a lit backdrop. Kept here (not per component) so
+   every page speaks it the same way.
    --------------------------------------------------------------------------- */
 
-@theme {
-  --tracking-caps: 0.22em;
-}
+@layer components {
+  /* Contrast checked against canvas and surface: ink 15:1, muted 6.8:1,
+     brand 7:1, faint 3.8:1 (placeholders only), edge 3:1 for field borders. */
+  .darkroom {
+    --color-canvas: #0c0a0a;
+    --color-surface: #151212;
+    --color-raised: #1c1818;
+    --color-line: #2a2323;
+    --color-edge: #6b5f5e;
+    --color-faint: #7a6f6c;
+    --color-ink: #efe8e1;
+    --color-muted: #a59a95;
+    --color-heading: #f6f0ea;
+    --color-brand: #d4899a;
+    --color-action: #efe8e1;
+    --color-action-hover: #ffffff;
+    --color-on-action: #0c0a0a;
+    --color-tint: #2a1419;
+    --color-on-tint: #f0c4cd;
+    --color-danger: #ff8f8f;
+    --color-danger-tint: #2d1213;
 
-/* Film grain. An inline SVG turbulence beats shipping a texture image, and at
-   this opacity it reads as paper rather than noise. */
-.grain::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* Small-caps label used for metadata, captions and eyebrows. */
-.caps {
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-caps);
-  font-size: 0.6875rem;
-  font-weight: 500;
-}
-
-/* A plate: the frame a photograph will eventually sit in. Until then the frame
-   itself is the design, rather than a grey box pretending to be an image. */
-.plate {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(120% 100% at 15% 0%, var(--color-sand-200) 0%, transparent 60%),
-    linear-gradient(160deg, var(--color-sand-100) 0%, var(--color-sand-300) 100%);
-}
-
-.plate-empty::after {
-  content: "";
-  position: absolute;
-  inset: 0.75rem;
-  border: 1px dashed color-mix(in oklab, var(--color-burgundy-600) 22%, transparent);
-}
-
-/* One orchestrated page-load reveal, staggered with delays, rather than many
-   scattered micro-animations. */
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
+    /* Native controls (date picker, checkboxes, scrollbars) follow. */
+    color-scheme: dark;
+    background: var(--color-canvas);
+    color: var(--color-ink);
   }
-  to {
+
+  /* Film grain. An inline SVG turbulence beats shipping a texture image. */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* On black, grain is what makes it read as film rather than a flat screen. */
+  .darkroom.grain::after {
+    opacity: 0.06;
+  }
+
+  /* Small-caps label in the camera's own type: metadata, captions, eyebrows. */
+  .caps {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps);
+    font-size: 0.6875rem;
+    font-weight: 500;
+  }
+
+  /* Numbers in prices and durations should not shift width between values. */
+  .nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Viewfinder brackets: the four corners of the studio's logo frame, drawn
+     with gradients so the element's own background stays free. Brackets are a
+     faded `currentColor` unless --vf-color says otherwise; --vf-length,
+     --vf-stroke and --vf-inset tune them per use. */
+  .viewfinder {
+    position: relative;
+  }
+
+  .viewfinder::after {
+    content: "";
+    color: var(--vf-color, color-mix(in oklab, currentColor 40%, transparent));
+    position: absolute;
+    inset: var(--vf-inset, 0);
+    pointer-events: none;
+    --vf-size: var(--vf-length, 1.25rem);
+    --vf-weight: var(--vf-stroke, 1.5px);
+    background:
+      linear-gradient(currentColor 0 0) top left / var(--vf-size) var(--vf-weight),
+      linear-gradient(currentColor 0 0) top left / var(--vf-weight) var(--vf-size),
+      linear-gradient(currentColor 0 0) top right / var(--vf-size) var(--vf-weight),
+      linear-gradient(currentColor 0 0) top right / var(--vf-weight) var(--vf-size),
+      linear-gradient(currentColor 0 0) bottom left / var(--vf-size) var(--vf-weight),
+      linear-gradient(currentColor 0 0) bottom left / var(--vf-weight) var(--vf-size),
+      linear-gradient(currentColor 0 0) bottom right / var(--vf-size) var(--vf-weight),
+      linear-gradient(currentColor 0 0) bottom right / var(--vf-weight) var(--vf-size);
+    background-repeat: no-repeat;
+  }
+
+  /* "Focus lock" on hover: the brackets close in on the card like autofocus
+     acquiring a subject. Pointer devices only; on touch it would stick. */
+  .focus-lock::after {
+    opacity: 0;
+    transform: scale(1.04);
+    transition:
+      opacity 160ms var(--ease-out),
+      transform 200ms var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .focus-lock:hover::after {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .focus-lock:focus-visible::after {
     opacity: 1;
     transform: none;
   }
-}
 
-.rise {
-  animation: rise 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-.d1 { animation-delay: 0.05s; }
-.d2 { animation-delay: 0.14s; }
-.d3 { animation-delay: 0.23s; }
-.d4 { animation-delay: 0.32s; }
-.d5 { animation-delay: 0.41s; }
-
-@media (prefers-reduced-motion: reduce) {
-  .rise {
-    animation: none;
+  /* A seamless paper backdrop under a key light, with the safelight glowing in
+     from one corner. Stands in for a photograph, and reads as "the studio". */
+  .backdrop {
+    background:
+      radial-gradient(42% 52% at 68% 46%, rgb(239 232 225 / 0.11), transparent 72%),
+      radial-gradient(38% 46% at 96% 0%, rgb(166 54 76 / 0.22), transparent 70%),
+      linear-gradient(to bottom, transparent 70%, rgb(239 232 225 / 0.025) 82%, transparent 96%),
+      linear-gradient(to bottom, #161212, #0c0a0a 85%);
   }
-}
 
-/* Numbers in prices and durations should not shift width between values. */
-.nums {
-  font-variant-numeric: tabular-nums;
+  /* A plate: the frame a photograph sits in. Empty, it is the lit backdrop
+     with brackets, which reads as a frame waiting rather than a broken image. */
+  .plate {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(70% 60% at 50% 40%, color-mix(in oklab, var(--color-ink) 9%, transparent), transparent 75%),
+      linear-gradient(to bottom, var(--color-raised), var(--color-surface));
+  }
+
+  /* The record light blinks on and off like a camera's, not a soft pulse. */
+  @keyframes rec-blink {
+    0%,
+    55% {
+      opacity: 1;
+    }
+    56%,
+    100% {
+      opacity: 0.2;
+    }
+  }
+
+  .rec-dot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: var(--color-rec);
+    animation: rec-blink 1.4s linear infinite;
+  }
+
+  /* Film-strip edge: sprocket holes along the top and bottom. */
+  .sprockets {
+    --hole: rgb(239 232 225 / 0.14);
+    background:
+      repeating-linear-gradient(to right, var(--hole) 0 10px, transparent 10px 22px) top 6px left 6px / calc(100% - 12px) 6px,
+      repeating-linear-gradient(to right, var(--hole) 0 10px, transparent 10px 22px) bottom 6px left 6px / calc(100% - 12px) 6px;
+    background-repeat: no-repeat;
+    padding-block: 1.25rem;
+  }
+
+  /* Timeline ruler: major ticks every quarter, minor ticks between. */
+  .ruler {
+    background:
+      repeating-linear-gradient(to right, rgb(239 232 225 / 0.35) 0 1px, transparent 1px 25%) bottom / 100% 10px,
+      repeating-linear-gradient(to right, rgb(239 232 225 / 0.14) 0 1px, transparent 1px 2.5%) bottom / 100% 5px;
+    background-repeat: no-repeat;
+  }
+
+  /* One orchestrated page-load reveal, staggered with delays, rather than many
+     scattered micro-animations. */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .rise {
+    animation: rise 0.7s var(--ease-out) both;
+  }
+
+  .d1 { animation-delay: 0.05s; }
+  .d2 { animation-delay: 0.13s; }
+  .d3 { animation-delay: 0.21s; }
+  .d4 { animation-delay: 0.29s; }
+  .d5 { animation-delay: 0.37s; }
+
+  /* The hero's focus box acquires its subject once, after the copy settles. */
+  @keyframes acquire {
+    from {
+      opacity: 0;
+      transform: scale(1.12);
+    }
+    60% {
+      opacity: 1;
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .acquire {
+    animation: acquire 0.5s var(--ease-out) 0.6s both;
+  }
+
+  /* Buttons acknowledge the press. */
+  .press {
+    transition:
+      background-color 150ms ease,
+      color 150ms ease,
+      border-color 150ms ease,
+      transform 160ms var(--ease-out);
+  }
+
+  .press:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  /* Reduced motion keeps the fades that explain, drops movement and blinking. */
+  @media (prefers-reduced-motion: reduce) {
+    .rise,
+    .acquire {
+      animation: none;
+    }
+
+    .rec-dot {
+      animation: none;
+    }
+
+    .focus-lock::after {
+      transform: none;
+      transition: opacity 160ms ease;
+    }
+
+    .press:active:not(:disabled) {
+      transform: none;
+    }
+  }
 }

@@ -20,24 +20,24 @@ export default async function AccountPage() {
     <div className="flex flex-col gap-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-semibold text-burgundy-700">
+          <h1 className="text-4xl font-semibold text-heading">
             Hello, {user?.fullName.split(" ")[0]}
           </h1>
           <p className="mt-1 text-sm text-muted">Your sessions with J&amp;R Studio.</p>
         </div>
         <Link
           href="/book"
-          className="caps rounded-full bg-burgundy-600 px-5 py-2.5 text-white transition hover:bg-burgundy-700"
+          className="caps press rounded-full bg-action px-5 py-2.5 text-on-action hover:bg-action-hover"
         >
           Book a session
         </Link>
       </div>
 
       {bookings.length === 0 ? (
-        <div className="border border-sand-300 bg-white p-8 text-center">
+        <div className="border border-line bg-surface p-8 text-center">
           <p className="text-sm text-muted">
             You have no bookings yet.{" "}
-            <Link href="/" className="text-burgundy-600 underline underline-offset-4">
+            <Link href="/" className="text-brand underline underline-offset-4">
               Browse the packages
             </Link>{" "}
             to get started.
@@ -67,8 +67,8 @@ export default async function AccountPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="caps border-b border-burgundy-600/15 pb-3 text-burgundy-500">{title}</h2>
-      <div className="divide-y divide-sand-200">{children}</div>
+      <h2 className="caps border-b border-line pb-3 text-brand">{title}</h2>
+      <div className="divide-y divide-line">{children}</div>
     </section>
   );
 }
@@ -82,7 +82,7 @@ function BookingRow({ booking }: { booking: Awaited<ReturnType<typeof getMyBooki
   return (
     <Link
       href={`/account/bookings/${booking.id}`}
-      className="flex flex-wrap items-center justify-between gap-4 py-4 transition hover:bg-sand-50"
+      className="-mx-3 flex flex-wrap items-center justify-between gap-4 px-3 py-4 transition-colors hover:bg-raised"
     >
       <div className="min-w-0">
         <p className="font-display text-lg font-semibold text-ink">
@@ -94,7 +94,7 @@ function BookingRow({ booking }: { booking: Awaited<ReturnType<typeof getMyBooki
             ? ` · ${formatDuration(booking.packages.duration_minutes)}`
             : ""}
         </p>
-        <p className="caps mt-1 text-burgundy-500/60">{booking.reference}</p>
+        <p className="caps mt-1 text-muted">{booking.reference}</p>
       </div>
 
       <div className="flex items-center gap-2">

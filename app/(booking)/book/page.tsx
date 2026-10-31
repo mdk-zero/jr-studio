@@ -44,10 +44,13 @@ export default async function BookPage(props: PageProps<"/book">) {
   }));
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-5 py-12">
-      <header className="border-b border-burgundy-600/20 pb-6">
-        <p className="caps text-burgundy-500">Book a session</p>
-        <h1 className="font-display mt-3 text-4xl font-semibold text-burgundy-700">
+    <div className="mx-auto w-full max-w-5xl px-5 py-16">
+      <header className="border-b border-line pb-8">
+        <p className="caps flex items-center gap-2.5 text-brand">
+          <span aria-hidden className="rec-dot" />
+          Book a session
+        </p>
+        <h1 className="mt-4 text-4xl font-semibold text-heading sm:text-5xl">
           Let&apos;s get you in the studio
         </h1>
         <p className="mt-2 max-w-lg text-sm text-muted">
@@ -59,7 +62,7 @@ export default async function BookPage(props: PageProps<"/book">) {
       {options.length === 0 ? (
         <p className="mt-10 text-sm text-muted">
           No packages are available right now. Please{" "}
-          <Link href="/" className="text-burgundy-600 underline underline-offset-4">
+          <Link href="/" className="text-brand underline underline-offset-4">
             check back soon
           </Link>
           .

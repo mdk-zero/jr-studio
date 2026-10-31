@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Viewport } from "next";
 import { requireUser } from "@/lib/dal";
 import { SignOutButton } from "@/components/layout/sign-out-button";
 import { BrandLogo } from "@/components/brand-logo";
@@ -10,24 +11,26 @@ import { BrandLogo } from "@/components/brand-logo";
  */
 export const instant = false;
 
+export const viewport: Viewport = { themeColor: "#0c0a0a" };
+
 export default async function AccountLayout({ children }: LayoutProps<"/account">) {
   const user = await requireUser("/account");
 
   return (
-    <div className="flex min-h-full flex-1 flex-col">
-      <header className="border-b border-sand-300 bg-white">
+    <div className="darkroom grain flex min-h-full flex-1 flex-col">
+      <header className="border-b border-line bg-canvas/80 backdrop-blur-md">
         <div className="mx-auto flex w-full max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-3">
-          <Link href="/" aria-label="J&R Studio, home" className="shrink-0 transition hover:opacity-80">
+          <Link href="/" aria-label="J&R Studio, home" className="shrink-0 transition-opacity hover:opacity-75">
             <BrandLogo className="size-11" />
           </Link>
-          <nav className="flex items-center gap-4 text-sm">
-            <Link href="/account" className="text-muted hover:text-ink">My bookings</Link>
-            <Link href="/account/profile" className="text-muted hover:text-ink">Profile</Link>
+          <nav className="flex items-center gap-5">
+            <Link href="/account" className="caps text-muted transition-colors hover:text-ink">My bookings</Link>
+            <Link href="/account/profile" className="caps text-muted transition-colors hover:text-ink">Profile</Link>
             <SignOutButton />
           </nav>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8">
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-10">
         <p className="sr-only">Signed in as {user.email}</p>
         {children}
       </main>

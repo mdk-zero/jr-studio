@@ -5,6 +5,7 @@ import { createBookingAction, type BookingState } from "@/app/(booking)/book/act
 import { createClient } from "@/lib/supabase/client";
 import { formatDuration, formatManilaDate, formatManilaTime, manilaToday, addDaysToDateString } from "@/lib/datetime";
 import { formatPeso } from "@/lib/money";
+import { inputClass } from "@/components/ui/field";
 
 type Pkg = {
   id: string;
@@ -138,10 +139,10 @@ export function BookingWizard({
             {packages.map((pkg) => (
               <label
                 key={pkg.id}
-                className={`cursor-pointer border p-4 transition ${
+                className={`cursor-pointer border p-4 transition-colors duration-150 has-focus-visible:ring-2 has-focus-visible:ring-brand/50 ${
                   packageId === pkg.id
-                    ? "border-burgundy-600 bg-burgundy-50"
-                    : "border-sand-300 bg-white hover:border-burgundy-300"
+                    ? "viewfinder border-brand bg-tint [--vf-color:var(--color-brand)] [--vf-inset:-6px]"
+                    : "border-line bg-surface hover:border-brand/50"
                 }`}
               >
                 <input
@@ -151,7 +152,7 @@ export function BookingWizard({
                   checked={packageId === pkg.id}
                   onChange={() => choosePackage(pkg.id)}
                 />
-                <span className="caps text-burgundy-500/70">{pkg.category}</span>
+                <span className="caps text-muted">{pkg.category}</span>
                 <span className="font-display mt-1 block text-lg font-semibold text-ink">
                   {pkg.name}
                 </span>
@@ -173,7 +174,7 @@ export function BookingWizard({
               {selected.addons.map((addon) => (
                 <label
                   key={addon.id}
-                  className="flex items-center gap-3 border border-sand-300 bg-white px-4 py-3"
+                  className="flex cursor-pointer items-center gap-3 border border-line bg-surface px-4 py-3 transition-colors duration-150 hover:border-brand/50 has-checked:border-brand has-checked:bg-tint"
                 >
                   <input
                     type="checkbox"
@@ -187,7 +188,7 @@ export function BookingWizard({
                           : prev.filter((id) => id !== addon.id),
                       )
                     }
-                    className="size-4 accent-burgundy-600"
+                    className="size-4 accent-brand"
                   />
                   <span className="flex-1 text-sm text-ink">{addon.name}</span>
                   <span className="nums text-sm text-muted">+ {formatPeso(addon.price)}</span>
@@ -213,7 +214,7 @@ export function BookingWizard({
                   min={today}
                   max={lastDate}
                   onChange={(e) => setDate(e.target.value)}
-                  className="mt-1 w-full max-w-xs border border-sand-300 bg-white px-3 py-2 text-sm text-ink focus:border-burgundy-500 focus:outline-none sm:w-auto"
+                  className={`${inputClass} mt-1 max-w-xs sm:w-auto`}
                 />
               </div>
 
@@ -229,10 +230,11 @@ export function BookingWizard({
                           key={s.starts_at}
                           type="button"
                           onClick={() => setChosenSlotStart(s.starts_at)}
-                          className={`nums border px-4 py-2 text-sm transition ${
+                          aria-pressed={active}
+                          className={`nums press rounded-sm border px-4 py-2 text-sm ${
                             active
-                              ? "border-burgundy-600 bg-burgundy-600 text-white"
-                              : "border-sand-300 bg-white text-ink hover:border-burgundy-400"
+                              ? "border-action bg-action text-on-action"
+                              : "border-line bg-surface text-ink hover:border-brand/50"
                           }`}
                         >
                           {formatManilaTime(s.starts_at)}
@@ -262,7 +264,7 @@ export function BookingWizard({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Theme, number of people, special requests…"
-              className="mt-4 w-full border border-sand-300 bg-white px-3 py-2 text-sm text-ink focus:border-burgundy-500 focus:outline-none"
+              className={`${inputClass} mt-4`}
             />
           </section>
         ) : null}
@@ -270,8 +272,8 @@ export function BookingWizard({
 
       {/* Summary */}
       <aside className="lg:sticky lg:top-24 lg:self-start">
-        <div className="border border-burgundy-600/20 bg-white p-6">
-          <h2 className="caps text-burgundy-500">Your booking</h2>
+        <div className="border border-line bg-surface p-6">
+          <h2 className="caps text-brand">Your booking</h2>
 
           {!selected ? (
             <p className="mt-4 text-sm text-muted">Choose a package to begin.</p>
@@ -283,7 +285,7 @@ export function BookingWizard({
               </p>
 
               {slot ? (
-                <p className="mt-4 border-t border-sand-200 pt-4 text-sm text-ink">
+                <p className="mt-4 border-t border-line pt-4 text-sm text-ink">
                   {formatManilaDate(slot.starts_at)}
                   <br />
                   <span className="nums text-muted">
@@ -291,13 +293,13 @@ export function BookingWizard({
                   </span>
                 </p>
               ) : (
-                <p className="mt-4 border-t border-sand-200 pt-4 text-sm text-muted">
+                <p className="mt-4 border-t border-line pt-4 text-sm text-muted">
                   No time selected yet.
                 </p>
               )}
 
               {quote ? (
-                <dl className="mt-4 space-y-1.5 border-t border-sand-200 pt-4 text-sm">
+                <dl className="mt-4 space-y-1.5 border-t border-line pt-4 text-sm">
                   <Row label="Package" value={formatPeso(quote.package_price)} />
                   {chosenAddons.map((a) => (
                     <Row key={a.id} label={a.name} value={`+ ${formatPeso(a.price)}`} muted />
@@ -309,7 +311,7 @@ export function BookingWizard({
                       highlight
                     />
                   ) : null}
-                  <div className="flex items-baseline justify-between border-t border-sand-200 pt-2">
+                  <div className="flex items-baseline justify-between border-t border-line pt-2">
                     <dt className="font-medium text-ink">Total</dt>
                     <dd className="font-display nums text-xl font-semibold text-ink">
                       {formatPeso(quote.total_amount)}
@@ -319,7 +321,7 @@ export function BookingWizard({
               ) : null}
 
               {state.message ? (
-                <p role="alert" className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+                <p role="alert" className="mt-4 rounded-sm bg-danger-tint px-3 py-2 text-sm text-danger">
                   {state.message}
                 </p>
               ) : null}
@@ -327,7 +329,7 @@ export function BookingWizard({
               <button
                 type="submit"
                 disabled={!slot || pending}
-                className="mt-5 w-full rounded-full bg-burgundy-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-burgundy-700 disabled:opacity-50"
+                className="press mt-5 w-full rounded-full bg-action px-6 py-3 text-sm font-semibold text-on-action hover:bg-action-hover disabled:opacity-50"
               >
                 {pending ? "Requesting…" : "Request this booking"}
               </button>
@@ -344,9 +346,9 @@ export function BookingWizard({
 
 function Step({ n, title, optional }: { n: number; title: string; optional?: boolean }) {
   return (
-    <div className="flex items-baseline gap-3 border-b border-burgundy-600/15 pb-3">
-      <span className="caps nums text-burgundy-500/60">{String(n).padStart(2, "0")}</span>
-      <h2 className="font-display text-xl font-semibold text-burgundy-700">{title}</h2>
+    <div className="flex items-baseline gap-3 border-b border-line pb-3">
+      <span className="caps nums text-brand">{String(n).padStart(2, "0")}</span>
+      <h2 className="text-2xl font-semibold text-heading">{title}</h2>
       {optional ? <span className="caps text-muted">Optional</span> : null}
     </div>
   );
@@ -366,7 +368,7 @@ function Row({
   return (
     <div className="flex items-baseline justify-between gap-3">
       <dt className={muted ? "text-muted" : "text-ink"}>{label}</dt>
-      <dd className={`nums ${highlight ? "text-burgundy-600" : muted ? "text-muted" : "text-ink"}`}>
+      <dd className={`nums ${highlight ? "text-brand" : muted ? "text-muted" : "text-ink"}`}>
         {value}
       </dd>
     </div>

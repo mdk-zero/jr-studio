@@ -2,6 +2,9 @@ import Link from "next/link";
 import { getCurrentUser } from "@/lib/dal";
 import { homePathFor } from "@/lib/auth/roles";
 
+const pill =
+  "caps press rounded-full bg-action px-4 py-2 text-on-action hover:bg-action-hover";
+
 /**
  * The only part of the marketing chrome that depends on the visitor, so it is
  * the only part that cannot be cached. Rendered inside <Suspense> by the layout
@@ -12,14 +15,11 @@ export async function AccountNav() {
 
   if (!user) {
     return (
-      <div className="flex items-center gap-4">
-        <Link href="/login" className="caps text-burgundy-700 hover:text-burgundy-500">
+      <div className="flex items-center gap-5">
+        <Link href="/login" className="caps text-muted transition-colors hover:text-ink">
           Sign in
         </Link>
-        <Link
-          href="/signup"
-          className="caps rounded-full bg-burgundy-600 px-4 py-2 text-white transition hover:bg-burgundy-700"
-        >
+        <Link href="/signup" className={pill}>
           Book a session
         </Link>
       </div>
@@ -27,14 +27,11 @@ export async function AccountNav() {
   }
 
   return (
-    <div className="flex items-center gap-4">
-      <Link href={homePathFor(user.role)} className="caps text-burgundy-700 hover:text-burgundy-500">
+    <div className="flex items-center gap-5">
+      <Link href={homePathFor(user.role)} className="caps text-muted transition-colors hover:text-ink">
         {user.fullName.split(" ")[0]}
       </Link>
-      <Link
-        href="/book"
-        className="caps rounded-full bg-burgundy-600 px-4 py-2 text-white transition hover:bg-burgundy-700"
-      >
+      <Link href="/book" className={pill}>
         Book a session
       </Link>
     </div>

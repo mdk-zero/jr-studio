@@ -28,7 +28,7 @@ export function ReviewForm({
 
   if (state.ok) {
     return (
-      <p role="status" className="rounded-lg bg-burgundy-50 px-4 py-6 text-center text-burgundy-700">
+      <p role="status" className="rounded-sm bg-tint px-4 py-6 text-center text-on-tint">
         {state.message}
       </p>
     );
@@ -56,7 +56,7 @@ export function ReviewForm({
               />
               <span
                 aria-hidden="true"
-                className={`text-3xl transition ${n <= rating ? "text-burgundy-600" : "text-sand-300 hover:text-burgundy-300"}`}
+                className={`text-3xl transition ${n <= rating ? "text-brand" : "text-ink/15 hover:text-brand/70"}`}
               >
                 ★
               </span>
@@ -65,7 +65,7 @@ export function ReviewForm({
           ))}
         </div>
         {state.errors?.rating?.length ? (
-          <p role="alert" className="mt-1 text-xs font-medium text-red-700">{state.errors.rating[0]}</p>
+          <p role="alert" className="mt-1 text-xs font-medium text-danger">{state.errors.rating[0]}</p>
         ) : null}
       </fieldset>
 

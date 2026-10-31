@@ -46,26 +46,26 @@ export default async function PackagePage(props: PageProps<"/packages/[slug]">) 
   ].filter((s): s is { label: string; value: string } => s !== null);
 
   return (
-    <article className="mx-auto w-full max-w-6xl px-5 py-14">
+    <article className="mx-auto w-full max-w-6xl px-5 py-16 sm:py-20">
       <nav className="caps text-muted">
-        <Link href="/" className="hover:text-burgundy-700">
+        <Link href="/" className="hover:text-ink">
           Home
         </Link>
-        <span className="mx-2 text-burgundy-600/30">/</span>
-        <Link href="/#packages" className="hover:text-burgundy-700">
+        <span className="mx-2 text-faint">/</span>
+        <Link href="/#packages" className="hover:text-ink">
           Packages
         </Link>
         {pkg.category ? (
           <>
-            <span className="mx-2 text-burgundy-600/30">/</span>
-            <span className="text-burgundy-600">{pkg.category.name}</span>
+            <span className="mx-2 text-faint">/</span>
+            <span className="text-brand">{pkg.category.name}</span>
           </>
         ) : null}
       </nav>
 
       <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
         <div>
-          <h1 className="font-display text-4xl leading-tight font-semibold text-burgundy-700 sm:text-5xl">
+          <h1 className="text-5xl leading-[1.05] font-semibold text-heading sm:text-6xl">
             {pkg.name}
           </h1>
           {pkg.description ? (
@@ -81,7 +81,7 @@ export default async function PackagePage(props: PageProps<"/packages/[slug]">) 
               alt={pkg.name}
               className="mt-10 aspect-16/10 w-full"
               sizes="(min-width: 1024px) 60vw, 100vw"
-              priority
+              preload
             />
           ) : null}
 
@@ -100,11 +100,12 @@ export default async function PackagePage(props: PageProps<"/packages/[slug]">) 
             </div>
           ) : null}
 
-          <dl className="mt-12 grid grid-cols-2 gap-x-8 gap-y-6 border-t border-burgundy-600/15 pt-6 sm:grid-cols-3">
+          {/* The session's settings, laid out like a camera's info screen. */}
+          <dl className="mt-12 grid grid-cols-2 border-t border-l border-line sm:grid-cols-3">
             {specs.map((spec) => (
-              <div key={spec.label}>
+              <div key={spec.label} className="border-r border-b border-line px-4 py-4">
                 <dt className="caps text-muted">{spec.label}</dt>
-                <dd className="font-display nums mt-1 text-lg font-semibold text-ink">
+                <dd className="font-display nums mt-2 text-xl font-semibold text-ink">
                   {spec.value}
                 </dd>
               </div>
@@ -113,13 +114,13 @@ export default async function PackagePage(props: PageProps<"/packages/[slug]">) 
 
           {pkg.inclusions.length > 0 ? (
             <section className="mt-12">
-              <h2 className="font-display text-2xl font-semibold text-burgundy-700">
+              <h2 className="text-3xl font-semibold text-heading">
                 What is included
               </h2>
               <ol className="mt-5 space-y-3">
                 {pkg.inclusions.map((item, i) => (
-                  <li key={item} className="flex gap-4 border-t border-burgundy-600/10 pt-3">
-                    <span className="caps nums text-burgundy-500/60">
+                  <li key={item} className="flex gap-4 border-t border-line pt-3">
+                    <span className="caps nums pt-0.5 text-brand">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="text-sm leading-relaxed text-ink">{item}</span>
@@ -133,10 +134,10 @@ export default async function PackagePage(props: PageProps<"/packages/[slug]">) 
         {/* Price card. The figures come from quote_booking, the same function the
             booking flow uses, so this page cannot disagree with checkout. */}
         <aside className="lg:sticky lg:top-24 lg:self-start">
-          <div className="border border-burgundy-600/15 bg-white p-7">
+          <div className="viewfinder border border-line bg-surface p-7 [--vf-inset:-9px]">
             {hasDiscount ? (
               <div className="flex items-center gap-3">
-                <span className="caps rounded-full bg-burgundy-700 px-3 py-1 text-sand-100">
+                <span className="caps rounded-full bg-burgundy-700 px-3 py-1 text-bone">
                   {quote.discount_percent}% off
                 </span>
                 <span className="nums text-sm text-muted line-through">
@@ -145,7 +146,7 @@ export default async function PackagePage(props: PageProps<"/packages/[slug]">) 
               </div>
             ) : null}
 
-            <p className="font-display nums mt-3 text-4xl font-semibold text-ink">
+            <p className="font-display nums mt-3 text-5xl font-semibold text-ink">
               {formatPeso(quote.total_amount)}
             </p>
             <p className="caps mt-2 text-muted">
@@ -154,7 +155,7 @@ export default async function PackagePage(props: PageProps<"/packages/[slug]">) 
 
             <Link
               href={`/book?package=${pkg.slug}`}
-              className="caps mt-7 block rounded-full bg-burgundy-600 px-6 py-3.5 text-center text-white transition hover:bg-burgundy-700"
+              className="caps press mt-7 block rounded-full bg-action px-6 py-3.5 text-center text-on-action hover:bg-action-hover"
             >
               Book this package
             </Link>
@@ -163,8 +164,8 @@ export default async function PackagePage(props: PageProps<"/packages/[slug]">) 
             </p>
 
             {pkg.addons.length > 0 ? (
-              <div className="mt-8 border-t border-burgundy-600/15 pt-6">
-                <h2 className="caps text-burgundy-500">Add-ons available</h2>
+              <div className="mt-8 border-t border-line pt-6">
+                <h2 className="caps text-brand">Add-ons available</h2>
                 <ul className="mt-4 space-y-3">
                   {pkg.addons.map((addon) => (
                     <li key={addon.id} className="flex items-baseline justify-between gap-4">

@@ -71,8 +71,8 @@ export function BookingActions({
           role={isError ? "alert" : "status"}
           className={
             isError
-              ? "rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700"
-              : "rounded-lg bg-burgundy-50 px-3 py-2 text-sm text-burgundy-700"
+              ? "rounded-sm bg-danger-tint px-3 py-2 text-sm text-danger"
+              : "rounded-sm bg-tint px-3 py-2 text-sm text-on-tint"
           }
         >
           {message}
@@ -90,7 +90,7 @@ export function BookingActions({
                 event.preventDefault();
               }
             }}
-            className="rounded-full border border-sand-300 px-5 py-2.5 text-sm font-medium text-ink transition hover:bg-sand-100 disabled:opacity-60"
+            className="press rounded-full border border-line px-5 py-2.5 text-sm font-medium text-ink hover:bg-raised disabled:opacity-60"
           >
             {cancelPending ? "Cancelling…" : "Cancel booking"}
           </button>
@@ -106,7 +106,7 @@ export function BookingActions({
           <button
             type="submit"
             disabled={undoPending}
-            className="rounded-full bg-burgundy-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-burgundy-700 disabled:opacity-60"
+            className="press rounded-full bg-action px-5 py-2.5 text-sm font-semibold text-on-action hover:bg-action-hover disabled:opacity-60"
           >
             {undoPending ? "Restoring…" : `Undo cancellation (${secondsLeft}s)`}
           </button>

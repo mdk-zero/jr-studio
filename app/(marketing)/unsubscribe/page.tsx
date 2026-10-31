@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 export default function UnsubscribePage(props: PageProps<"/unsubscribe">) {
   return (
     <div className="mx-auto w-full max-w-xl px-5 py-14">
-      <p className="caps text-burgundy-500">Email preferences</p>
-      <h1 className="font-display mt-4 text-4xl font-semibold text-burgundy-700">Unsubscribe</h1>
-      <div className="mt-8 border border-sand-300 bg-white p-6 sm:p-8">
+      <p className="caps text-brand">Email preferences</p>
+      <h1 className="font-display mt-4 text-4xl font-semibold text-heading">Unsubscribe</h1>
+      <div className="mt-8 border border-line bg-surface p-6 sm:p-8">
         <Suspense fallback={<p className="text-sm text-muted">Loading…</p>}>
           <Body searchParams={props.searchParams} />
         </Suspense>

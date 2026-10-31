@@ -23,7 +23,7 @@ export function Field({
       {hint ? <p className="text-xs text-muted">{hint}</p> : null}
       {errors?.length ? (
         // aria-live so a validation error is announced, not just recoloured.
-        <p id={errorId} role="alert" className="text-xs font-medium text-red-700">
+        <p id={errorId} role="alert" className="text-xs font-medium text-danger">
           {errors[0]}
         </p>
       ) : null}
@@ -31,12 +31,13 @@ export function Field({
   );
 }
 
+// Semantic tokens, so the same field reads correctly in the darkroom and on paper.
 export const inputClass =
-  "w-full rounded-lg border border-sand-300 bg-white px-3 py-2 text-sm text-ink " +
-  "placeholder:text-sand-400 focus:border-burgundy-500 focus:outline-none " +
-  "focus:ring-2 focus:ring-burgundy-500/20 disabled:opacity-60";
+  "w-full rounded-sm border border-edge bg-canvas px-3 py-2.5 text-sm text-ink " +
+  "placeholder:text-faint transition-colors focus:border-brand focus:outline-none " +
+  "focus:ring-2 focus:ring-brand/25 disabled:opacity-60";
 
 export const buttonClass =
-  "inline-flex w-full items-center justify-center rounded-lg bg-burgundy-600 px-4 py-2.5 " +
-  "text-sm font-semibold text-white transition hover:bg-burgundy-700 " +
-  "focus:outline-none focus:ring-2 focus:ring-burgundy-500/40 disabled:opacity-60";
+  "press inline-flex w-full items-center justify-center rounded-full bg-action px-4 py-3 " +
+  "text-sm font-semibold text-on-action hover:bg-action-hover " +
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 disabled:opacity-60";

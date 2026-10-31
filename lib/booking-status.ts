@@ -8,14 +8,14 @@ import type { Database } from "@/lib/supabase/database.types";
 export type BookingStatus = Database["public"]["Enums"]["booking_status"];
 export type PaymentMethod = Database["public"]["Enums"]["payment_method"];
 
-/** Customer-facing wording. */
+/** Customer-facing wording. Tones use semantic tokens, so they follow the darkroom theme. */
 export const STATUS_COPY: Record<BookingStatus, { label: string; tone: string }> = {
-  pending: { label: "Awaiting confirmation", tone: "bg-sand-200 text-ink" },
-  approved: { label: "Confirmed", tone: "bg-burgundy-50 text-burgundy-700" },
-  completed: { label: "Completed", tone: "bg-burgundy-100 text-burgundy-800" },
-  cancelled: { label: "Cancelled", tone: "bg-sand-200 text-muted" },
-  rejected: { label: "Declined", tone: "bg-red-50 text-red-700" },
-  expired: { label: "Expired", tone: "bg-sand-200 text-muted" },
+  pending: { label: "Awaiting confirmation", tone: "bg-raised text-ink ring-1 ring-inset ring-edge" },
+  approved: { label: "Confirmed", tone: "bg-tint text-on-tint" },
+  completed: { label: "Completed", tone: "bg-brand/20 text-ink" },
+  cancelled: { label: "Cancelled", tone: "bg-raised text-muted" },
+  rejected: { label: "Declined", tone: "bg-danger-tint text-danger" },
+  expired: { label: "Expired", tone: "bg-raised text-muted" },
 };
 
 /** The back office talks in workflow terms; the tones match STATUS_COPY. */
@@ -29,10 +29,10 @@ export const ADMIN_STATUS_LABEL: Record<BookingStatus, string> = {
 };
 
 export const PAYMENT_COPY: Record<string, { label: string; tone: string }> = {
-  unpaid: { label: "Unpaid", tone: "bg-sand-200 text-muted" },
-  partial: { label: "Part paid", tone: "bg-sand-300 text-ink" },
-  paid: { label: "Paid", tone: "bg-burgundy-50 text-burgundy-700" },
-  refunded: { label: "Refunded", tone: "bg-sand-200 text-muted" },
+  unpaid: { label: "Unpaid", tone: "bg-raised text-muted" },
+  partial: { label: "Part paid", tone: "bg-raised text-ink ring-1 ring-inset ring-edge" },
+  paid: { label: "Paid", tone: "bg-tint text-on-tint" },
+  refunded: { label: "Refunded", tone: "bg-raised text-muted" },
 };
 
 export const PAYMENT_METHOD_LABEL: Record<PaymentMethod, string> = {

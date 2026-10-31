@@ -27,13 +27,20 @@ export function SidebarNav({ items }: { items: NavItem[] }) {
             key={item.href}
             href={item.href}
             aria-current={current ? "page" : undefined}
-            className={`flex shrink-0 items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm transition ${
-              current ? "bg-burgundy-50 font-medium text-burgundy-700" : "text-muted hover:bg-sand-100 hover:text-ink"
+            className={`flex shrink-0 items-center justify-between gap-2 rounded-md px-3 py-2 text-sm transition-colors ${
+              current ? "bg-bone/10 font-medium text-bone" : "text-ash hover:bg-bone/5 hover:text-bone"
             }`}
           >
-            {item.label}
+            <span className="flex items-center gap-2.5">
+              {/* The active section gets the record light, as a camera marks what is live. */}
+              <span
+                aria-hidden
+                className={`hidden size-1.5 rounded-full md:block ${current ? "bg-rec" : "bg-transparent"}`}
+              />
+              {item.label}
+            </span>
             {item.count ? (
-              <span className="nums rounded-full bg-burgundy-600 px-1.5 py-0.5 text-[11px] leading-none font-semibold text-white">
+              <span className="nums rounded-full bg-burgundy-500 px-1.5 py-0.5 text-[11px] leading-none font-semibold text-white">
                 {item.count}
               </span>
             ) : null}

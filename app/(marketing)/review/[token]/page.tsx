@@ -19,9 +19,9 @@ export const metadata: Metadata = {
 export default function ReviewPage(props: PageProps<"/review/[token]">) {
   return (
     <div className="mx-auto w-full max-w-xl px-5 py-14">
-      <p className="caps text-burgundy-500">Your session</p>
-      <h1 className="font-display mt-4 text-4xl font-semibold text-burgundy-700">How did we do?</h1>
-      <div className="mt-8 border border-sand-300 bg-white p-6 sm:p-8">
+      <p className="caps text-brand">Your session</p>
+      <h1 className="font-display mt-4 text-4xl font-semibold text-heading">How did we do?</h1>
+      <div className="mt-8 border border-line bg-surface p-6 sm:p-8">
         <Suspense fallback={<p className="text-sm text-muted">Loading…</p>}>
           <ReviewBody params={props.params} />
         </Suspense>
