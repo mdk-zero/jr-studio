@@ -1,0 +1,4 @@
+Requested  ->  Where the browser ended up
+/admin  ->  /login?next=%2Fadmin
+/account  ->  /login?next=%2Faccount
+/book  ->  /login?next=%2Fbook

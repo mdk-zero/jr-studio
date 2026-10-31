@@ -19,10 +19,13 @@ export default defineConfig({
   // One shared database and a studio-wide no-overlap rule: run in sequence.
   workers: 1,
   fullyParallel: false,
-  reporter: [["list"]],
+  reporter: [["list"], ["html", { open: "never" }]],
   use: {
     baseURL: `http://localhost:${port}`,
-    trace: "retain-on-failure",
+    // Recorded on every run so a pass can be shown, not just a failure.
+    trace: "on",
+    video: "on",
+    screenshot: "on",
     launchOptions: process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {},
   },
   projects: [
