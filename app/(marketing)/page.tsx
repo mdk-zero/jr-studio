@@ -50,8 +50,9 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero: the page as a camera's viewfinder, rolling on the studio's own
-          footage, with the real numbers where the exposure readout would be. */}
-      <section className="relative isolate overflow-hidden border-b border-line bg-canvas">
+          footage, with the real numbers where the exposure readout would be.
+          Dark in both themes: it is a monitor, not a page. */}
+      <section className="darkroom relative isolate overflow-hidden border-b border-line">
         <div aria-hidden className="absolute inset-0 -z-10">
           <Image
             src={REEL.poster}
@@ -64,7 +65,7 @@ export default async function HomePage() {
           />
           <StudioReel src={REEL.src} className="absolute inset-0 size-full object-cover" />
           {/* Grade: the footage is a bright white wall, so it is brought down
-              to the darkroom and fades out behind the copy. */}
+              to the dark grade and fades out behind the copy. */}
           <div className="absolute inset-0 bg-canvas/65 lg:bg-canvas/40" />
           <div className="absolute inset-0 bg-linear-to-r from-canvas from-10% via-canvas/70 via-45% to-canvas/0 to-85%" />
           <div className="absolute inset-x-0 bottom-0 h-2/5 bg-linear-to-t from-canvas to-canvas/0" />
@@ -184,7 +185,7 @@ export default async function HomePage() {
 
         <nav
           aria-label="Package categories"
-          className="sprockets -mx-5 mt-10 overflow-x-auto bg-night-900 sm:mx-0"
+          className="darkroom sprockets -mx-5 mt-10 overflow-x-auto bg-night-900 sm:mx-0"
         >
           <ol className="flex snap-x gap-1.5 px-3">
             {catalog.map((category, i) => (
@@ -295,7 +296,7 @@ export default async function HomePage() {
       ) : null}
 
       <section className="mx-auto w-full max-w-6xl px-5 pb-24">
-        <div className="grid overflow-hidden border border-line bg-surface sm:grid-cols-[1.4fr_1fr]">
+        <div className="darkroom grid overflow-hidden border border-line bg-surface sm:grid-cols-[1.4fr_1fr]">
           <div className="relative px-8 py-14 sm:px-14 sm:py-20">
             <div aria-hidden className="viewfinder pointer-events-none absolute inset-4 text-ink" />
             <p className="caps flex items-center gap-2.5 text-muted">

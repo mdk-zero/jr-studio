@@ -13,12 +13,12 @@ export default async function BookingsLayout({ children }: LayoutProps<"/admin/b
 
   return (
     <div className="flex flex-col gap-6">
-      <nav className="flex flex-wrap gap-1 border-b border-sand-300">
+      <nav className="flex flex-wrap gap-1 border-b border-line">
         {TABS.map((tab) => (
           <Link
             key={tab.href}
             href={tab.href}
-            className="rounded-t-lg px-4 py-2 text-sm text-muted transition hover:bg-sand-100 hover:text-ink"
+            className="rounded-t-lg px-4 py-2 text-sm text-muted transition hover:bg-raised hover:text-ink"
           >
             {tab.label}
           </Link>

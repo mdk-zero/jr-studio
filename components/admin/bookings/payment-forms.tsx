@@ -55,7 +55,7 @@ export function RecordPaymentForm({
       <input type="hidden" name="booking_id" value={bookingId} />
       <input type="hidden" name="kind" value={effectiveKind} />
 
-      <div className="flex gap-1 rounded-lg bg-sand-100 p-1" role="radiogroup" aria-label="Entry type">
+      <div className="flex gap-1 rounded-lg bg-raised p-1" role="radiogroup" aria-label="Entry type">
         {(["payment", "refund"] as const).map((option) => {
           const enabled = option === "payment" ? paymentOpen : refundOpen;
           const active = effectiveKind === option;
@@ -68,7 +68,7 @@ export function RecordPaymentForm({
               disabled={!enabled}
               onClick={() => setKind(option)}
               className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition disabled:opacity-40 ${
-                active ? "bg-white text-ink shadow-sm" : "text-muted hover:text-ink"
+                active ? "bg-surface text-ink shadow-sm" : "text-muted hover:text-ink"
               }`}
             >
               {option === "payment" ? "Payment received" : "Refund given"}
@@ -147,7 +147,7 @@ export function VoidPaymentForm({ bookingId, paymentId }: { bookingId: string; p
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="text-xs font-medium text-muted underline-offset-4 hover:text-red-700 hover:underline"
+        className="text-xs font-medium text-muted underline-offset-4 hover:text-danger hover:underline"
       >
         Void
       </button>
@@ -174,7 +174,7 @@ export function VoidPaymentForm({ bookingId, paymentId }: { bookingId: string; p
         <button type="button" onClick={() => setOpen(false)} className="text-xs text-muted hover:text-ink">
           Keep
         </button>
-        <SubmitButton quiet pendingLabel="…" className="text-red-700">
+        <SubmitButton quiet pendingLabel="…" className="text-danger">
           Void payment
         </SubmitButton>
       </div>

@@ -214,7 +214,7 @@ export function DeleteBookingForm({ bookingId, reference }: { bookingId: string;
       <div>
         <SubmitButton
           quiet
-          className="border-red-200 px-4 py-2 text-sm text-red-700 hover:bg-red-50"
+          className="border-danger/40 px-4 py-2 text-sm text-danger hover:bg-danger-tint"
           pendingLabel="Deleting…"
           confirm={`Delete ${reference} and its history for good?`}
         >

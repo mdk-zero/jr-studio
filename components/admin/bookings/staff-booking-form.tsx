@@ -126,7 +126,7 @@ export function StaffBookingForm({
       <div className="flex flex-col gap-6">
         <Panel title="Customer">
           <input type="hidden" name="customer_mode" value={mode} />
-          <div className="mb-4 flex gap-1 rounded-lg bg-sand-100 p-1" role="radiogroup" aria-label="Customer">
+          <div className="mb-4 flex gap-1 rounded-lg bg-raised p-1" role="radiogroup" aria-label="Customer">
             {(["existing", "new"] as const).map((option) => (
               <button
                 key={option}
@@ -135,7 +135,7 @@ export function StaffBookingForm({
                 aria-checked={mode === option}
                 onClick={() => setMode(option)}
                 className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition ${
-                  mode === option ? "bg-white text-ink shadow-sm" : "text-muted hover:text-ink"
+                  mode === option ? "bg-surface text-ink shadow-sm" : "text-muted hover:text-ink"
                 }`}
               >
                 {option === "existing" ? "Existing customer" : "New walk-in"}
@@ -145,13 +145,13 @@ export function StaffBookingForm({
 
           {mode === "existing" ? (
             customer ? (
-              <div className="flex items-start justify-between gap-3 rounded-lg border border-burgundy-200 bg-burgundy-50 px-4 py-3">
+              <div className="flex items-start justify-between gap-3 rounded-lg border border-brand/30 bg-tint px-4 py-3">
                 <input type="hidden" name="customer_id" value={customer.id} />
                 <div className="text-sm">
                   <p className="font-medium text-ink">{customer.full_name}</p>
                   <p className="text-muted">{[customer.email, customer.phone].filter(Boolean).join(" · ") || "No contact details"}</p>
                 </div>
-                <button type="button" onClick={() => setCustomer(null)} className="text-xs font-medium text-burgundy-700 hover:underline">
+                <button type="button" onClick={() => setCustomer(null)} className="text-xs font-medium text-heading hover:underline">
                   Change
                 </button>
               </div>
@@ -169,13 +169,13 @@ export function StaffBookingForm({
                 />
                 {results ? (
                   results.length > 0 ? (
-                    <ul className="mt-2 divide-y divide-sand-200 rounded-lg border border-sand-300">
+                    <ul className="mt-2 divide-y divide-line rounded-lg border border-line">
                       {results.map((c) => (
                         <li key={c.id}>
                           <button
                             type="button"
                             onClick={() => setCustomer(c)}
-                            className="flex w-full flex-col items-start px-3 py-2 text-left text-sm hover:bg-sand-50"
+                            className="flex w-full flex-col items-start px-3 py-2 text-left text-sm hover:bg-raised"
                           >
                             <span className="font-medium text-ink">{c.full_name}</span>
                             <span className="text-xs text-muted">{[c.email, c.phone].filter(Boolean).join(" · ")}</span>
@@ -186,7 +186,7 @@ export function StaffBookingForm({
                   ) : (
                     <p className="mt-2 text-sm text-muted">
                       No match.{" "}
-                      <button type="button" onClick={() => setMode("new")} className="font-medium text-burgundy-700 hover:underline">
+                      <button type="button" onClick={() => setMode("new")} className="font-medium text-heading hover:underline">
                         Add them as a walk-in
                       </button>
                     </p>
@@ -248,7 +248,7 @@ export function StaffBookingForm({
                           e.target.checked ? [...prev, addon.id] : prev.filter((id) => id !== addon.id),
                         )
                       }
-                      className="size-4 accent-burgundy-600"
+                      className="size-4 accent-brand"
                     />
                     <span className="flex-1">{addon.name}</span>
                     <span className="nums text-muted">+ {formatPeso(addon.price)}</span>
@@ -325,18 +325,18 @@ export function StaffBookingForm({
               </p>
             ) : null}
             {selected && quote ? (
-              <dl className="space-y-1 border-t border-sand-200 pt-3">
+              <dl className="space-y-1 border-t border-line pt-3">
                 <div className="flex justify-between"><dt className="text-muted">Package</dt><dd className="nums">{formatPeso(selected.price)}</dd></div>
                 {quote.addons_total > 0 ? (
                   <div className="flex justify-between"><dt className="text-muted">Add-ons</dt><dd className="nums">+ {formatPeso(quote.addons_total)}</dd></div>
                 ) : null}
                 {quote.discount_amount > 0 ? (
-                  <div className="flex justify-between text-burgundy-700">
+                  <div className="flex justify-between text-heading">
                     <dt>Promotion ({quote.discount_percent}%)</dt>
                     <dd className="nums">− {formatPeso(quote.discount_amount)}</dd>
                   </div>
                 ) : null}
-                <div className="flex justify-between border-t border-sand-200 pt-2 font-semibold">
+                <div className="flex justify-between border-t border-line pt-2 font-semibold">
                   <dt>Total</dt><dd className="nums">{formatPeso(quote.total_amount)}</dd>
                 </div>
               </dl>

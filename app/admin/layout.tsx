@@ -4,6 +4,7 @@ import { getInboxCounts } from "@/lib/admin-content";
 import { SignOutButton } from "@/components/layout/sign-out-button";
 import { SidebarNav } from "@/components/admin/sidebar-nav";
 import { BrandLogo } from "@/components/brand-logo";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 /**
  * Authenticated area: every render reads the session cookie to decide whether
@@ -35,15 +36,13 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
 
   return (
     <div className="flex min-h-full flex-1 flex-col md:flex-row">
-      {/* A dark panel beside a light work surface, the way editing software
-          frames its canvas. The content stays light for dense tables. */}
-      <aside className="border-b border-night-700 bg-night-950 text-bone md:w-56 md:border-r md:border-b-0">
+      {/* Sidebar and work area share one theme, light or dark, chosen by the
+          switcher in the header. */}
+      <aside className="border-b border-line bg-surface md:w-56 md:border-r md:border-b-0">
         <div className="flex items-center justify-between gap-3 p-4">
           <Link href="/admin" className="flex items-center gap-3 transition-opacity hover:opacity-75">
-            <BrandLogo className="size-10 text-bone" />
-            <span className="font-mono text-[11px] font-medium tracking-[0.16em] text-ash uppercase">
-              Back office
-            </span>
+            <BrandLogo className="size-10" />
+            <span className="caps text-muted">Back office</span>
           </Link>
         </div>
         <SidebarNav
@@ -56,14 +55,17 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex flex-wrap items-center justify-between gap-3 border-b border-sand-300 bg-white px-4 py-3">
+        <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-surface px-4 py-3 sm:px-6">
           <p className="text-sm text-muted">
             {user.fullName}
-            <span className="ml-2 rounded-full bg-burgundy-50 px-2 py-0.5 text-xs font-medium text-burgundy-700">
+            <span className="ml-2 rounded-full bg-tint px-2 py-0.5 text-xs font-medium text-on-tint">
               {user.role}
             </span>
           </p>
-          <SignOutButton />
+          <div className="flex items-center gap-4">
+            <ThemeSwitcher />
+            <SignOutButton />
+          </div>
         </header>
         <div className="flex-1 p-4 sm:p-6">{children}</div>
       </div>

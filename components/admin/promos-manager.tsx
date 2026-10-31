@@ -75,7 +75,7 @@ export function PromosManager({
                   <button
                     type="button"
                     onClick={() => setEditing(promo)}
-                    className="rounded-lg border border-sand-300 px-3 py-1.5 text-xs font-medium text-ink transition hover:bg-sand-100"
+                    className="rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink transition hover:bg-raised"
                   >
                     Edit
                   </button>
@@ -142,7 +142,7 @@ export function PromosManager({
                     name="package_ids"
                     value={pkg.id}
                     defaultChecked={memory.includes("package_ids", pkg.id, editing?.packageIds.includes(pkg.id) ?? false)}
-                    className="size-4 accent-burgundy-600"
+                    className="size-4 accent-brand"
                   />
                   {pkg.name}
                 </label>
@@ -158,7 +158,7 @@ export function PromosManager({
               name="visible_to_customers"
               type="checkbox"
               defaultChecked={memory.checked("visible_to_customers", editing ? editing.visible_to_customers : true)}
-              className="size-4 accent-burgundy-600"
+              className="size-4 accent-brand"
             />
             Advertise on the public site
           </label>
@@ -166,7 +166,7 @@ export function PromosManager({
           <div className="flex gap-2">
             <SubmitButton>{editing ? "Save changes" : "Add promotion"}</SubmitButton>
             {editing ? (
-              <button type="button" onClick={() => setEditing(null)} className="rounded-lg border border-sand-300 px-4 py-2 text-sm text-ink transition hover:bg-sand-100">
+              <button type="button" onClick={() => setEditing(null)} className="rounded-lg border border-line px-4 py-2 text-sm text-ink transition hover:bg-raised">
                 Cancel
               </button>
             ) : null}

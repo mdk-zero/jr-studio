@@ -34,14 +34,14 @@ export function PhotoCard({
   const memory = useFormMemory(state);
 
   return (
-    <figure className="flex flex-col gap-2 rounded-lg border border-sand-300 bg-white p-2">
-      <div className="relative aspect-square overflow-hidden rounded-md bg-sand-100">
+    <figure className="flex flex-col gap-2 rounded-lg border border-line bg-surface p-2">
+      <div className="relative aspect-square overflow-hidden rounded-md bg-raised">
         {photo.url ? (
           // eslint-disable-next-line @next/next/no-img-element -- admin thumbnail straight from Storage
           <img src={photo.url} alt={photo.title ?? ""} loading="lazy" className="size-full object-cover" />
         ) : null}
         {isCover ? (
-          <span className="absolute top-2 left-2 rounded-full bg-burgundy-600 px-2 py-0.5 text-[11px] font-semibold text-white">
+          <span className="absolute top-2 left-2 rounded-full bg-action px-2 py-0.5 text-[11px] font-semibold text-on-action">
             Cover
           </span>
         ) : null}
@@ -85,7 +85,7 @@ export function PhotoCard({
             fields={{ id: photo.id }}
             confirm="Delete this photo? The file is removed too."
             feedback="error"
-            className="border-0 bg-transparent px-0 py-0 text-xs text-muted hover:bg-transparent hover:text-red-700"
+            className="border-0 bg-transparent px-0 py-0 text-xs text-muted hover:bg-transparent hover:text-danger"
           >
             Delete
           </ActionButton>

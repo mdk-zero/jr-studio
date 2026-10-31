@@ -71,7 +71,7 @@ export function CampaignForm({
       </div>
 
       <label className="flex items-start gap-2 text-sm text-ink">
-        <input name="confirm" type="checkbox" required defaultChecked={memory.checked("confirm", false)} className="mt-0.5 size-4 accent-burgundy-600" />
+        <input name="confirm" type="checkbox" required defaultChecked={memory.checked("confirm", false)} className="mt-0.5 size-4 accent-brand" />
         <span>
           Send this to {count} customer{count === 1 ? "" : "s"} now. This cannot be undone.
         </span>

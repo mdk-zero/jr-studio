@@ -65,7 +65,7 @@ export default async function EmailCustomersPage() {
       />
 
       {testMode ? (
-        <p className="rounded-lg bg-sand-100 px-4 py-3 text-sm text-ink">
+        <p className="rounded-lg bg-raised px-4 py-3 text-sm text-ink">
           Email is in <strong>test mode</strong>: every message goes to Resend&apos;s test inbox instead of the
           customer. Set <code>EMAIL_MODE=live</code> on the production server to send for real.
         </p>

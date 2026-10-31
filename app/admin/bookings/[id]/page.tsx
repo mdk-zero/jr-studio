@@ -39,22 +39,22 @@ export default async function AdminBookingPage(props: PageProps<"/admin/bookings
     <div className="flex flex-col gap-6">
       <nav className="text-sm text-muted">
         <Link href="/admin/bookings" className="hover:text-ink">Bookings</Link>
-        <span className="mx-2 text-sand-400">/</span>
+        <span className="mx-2 text-faint">/</span>
         <span className="text-ink">{booking.reference}</span>
       </nav>
 
       {created ? (
-        <p role="status" className="rounded-lg bg-burgundy-50 px-4 py-3 text-sm text-burgundy-700">
+        <p role="status" className="rounded-lg bg-tint px-4 py-3 text-sm text-on-tint">
           Booked and approved. Record a deposit below if one was paid.
         </p>
       ) : null}
 
-      <header className="flex flex-wrap items-start justify-between gap-4 border-b border-sand-300 pb-5">
+      <header className="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-5">
         <div>
-          <p className="text-xs font-medium tracking-wide text-muted uppercase">
+          <p className="caps text-muted">
             {booking.reference} · {booking.source === "admin" ? "Studio booking" : "Online request"}
           </p>
-          <h1 className="font-display mt-1 text-2xl font-semibold text-burgundy-700">
+          <h1 className="font-display mt-1 text-2xl font-semibold text-heading">
             {booking.packages?.name ?? "Session"}
           </h1>
           <p className="nums mt-1 text-ink">
@@ -99,7 +99,7 @@ export default async function AdminBookingPage(props: PageProps<"/admin/bookings
               </div>
             </dl>
             {booking.notes ? (
-              <div className="mt-4 rounded-lg bg-sand-50 px-4 py-3 text-sm">
+              <div className="mt-4 rounded-lg bg-raised px-4 py-3 text-sm">
                 <p className="text-xs font-medium text-muted">
                   {booking.source === "customer" ? "Customer's note" : "Booking note"}
                 </p>
@@ -124,12 +124,12 @@ export default async function AdminBookingPage(props: PageProps<"/admin/bookings
                 </div>
               ))}
               {booking.discount_amount > 0 ? (
-                <div className="flex justify-between gap-4 text-burgundy-700">
+                <div className="flex justify-between gap-4 text-heading">
                   <dt>Promotion</dt>
                   <dd className="nums">− {formatPeso(booking.discount_amount)}</dd>
                 </div>
               ) : null}
-              <div className="flex justify-between gap-4 border-t border-sand-200 pt-2 font-semibold text-ink">
+              <div className="flex justify-between gap-4 border-t border-line pt-2 font-semibold text-ink">
                 <dt>Total</dt>
                 <dd className="nums">{formatPeso(booking.total_amount)}</dd>
               </div>
@@ -149,7 +149,7 @@ export default async function AdminBookingPage(props: PageProps<"/admin/bookings
 
           <Panel title="Payments">
             {booking.payments.length > 0 ? (
-              <ul className="mb-5 divide-y divide-sand-200 text-sm">
+              <ul className="mb-5 divide-y divide-line text-sm">
                 {booking.payments.map((p) => (
                   <li key={p.id} className="flex flex-wrap items-start justify-between gap-3 py-3">
                     <div className={p.voided_at ? "text-muted line-through decoration-sand-400" : ""}>

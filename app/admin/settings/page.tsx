@@ -44,7 +44,7 @@ export default async function SettingsPage() {
           <Panel title="Closed days">
             <BlockedDateForm today={manilaToday()} />
             {blocked.length > 0 ? (
-              <ul className="mt-4 divide-y divide-sand-200 text-sm">
+              <ul className="mt-4 divide-y divide-line text-sm">
                 {blocked.map((day) => (
                   <li key={day.blocked_on} className="flex items-center justify-between gap-3 py-2">
                     <span>

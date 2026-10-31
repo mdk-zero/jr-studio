@@ -27,13 +27,13 @@ export default async function PaymentsPage(props: PageProps<"/admin/payments">) 
         description="Money recorded against bookings, by the date it was paid. Voided entries stay listed but do not count."
         action={
           <div className="flex gap-2 text-sm">
-            <Link href={`/admin/payments?month=${addMonths(month, -1)}`} className="rounded-lg border border-sand-300 bg-white px-3 py-1.5 hover:bg-sand-100">
+            <Link href={`/admin/payments?month=${addMonths(month, -1)}`} className="rounded-lg border border-line bg-surface px-3 py-1.5 hover:bg-raised">
               ← {formatMonth(addMonths(month, -1)).split(" ")[0]}
             </Link>
-            <Link href="/admin/payments" className="rounded-lg border border-sand-300 bg-white px-3 py-1.5 hover:bg-sand-100">
+            <Link href="/admin/payments" className="rounded-lg border border-line bg-surface px-3 py-1.5 hover:bg-raised">
               This month
             </Link>
-            <Link href={`/admin/payments?month=${addMonths(month, 1)}`} className="rounded-lg border border-sand-300 bg-white px-3 py-1.5 hover:bg-sand-100">
+            <Link href={`/admin/payments?month=${addMonths(month, 1)}`} className="rounded-lg border border-line bg-surface px-3 py-1.5 hover:bg-raised">
               {formatMonth(addMonths(month, 1)).split(" ")[0]} →
             </Link>
           </div>
@@ -46,8 +46,8 @@ export default async function PaymentsPage(props: PageProps<"/admin/payments">) 
           { label: "Refunded", value: ledger.refunded },
           { label: "Net", value: ledger.net },
         ].map((tile) => (
-          <div key={tile.label} className="rounded-xl border border-sand-300 bg-white p-4">
-            <dt className="text-xs font-medium tracking-wide text-muted uppercase">{tile.label}</dt>
+          <div key={tile.label} className="rounded-xl border border-line bg-surface p-4">
+            <dt className="caps text-muted">{tile.label}</dt>
             <dd className="font-display nums mt-1 text-2xl font-semibold text-ink">{formatPeso(tile.value)}</dd>
           </div>
         ))}
@@ -83,7 +83,7 @@ export default async function PaymentsPage(props: PageProps<"/admin/payments">) 
             </td>
             <td>
               {p.bookings ? (
-                <Link href={`/admin/bookings/${p.bookings.id}`} className="font-medium text-burgundy-700 hover:underline">
+                <Link href={`/admin/bookings/${p.bookings.id}`} className="font-medium text-heading hover:underline">
                   {p.bookings.reference}
                 </Link>
               ) : null}
@@ -95,7 +95,7 @@ export default async function PaymentsPage(props: PageProps<"/admin/payments">) 
             </td>
             <td className="text-muted">{p.recorder?.full_name ?? "—"}</td>
             <td className="nums text-right">
-              <span className={p.voided_at ? "line-through" : p.amount < 0 ? "text-red-700" : "text-ink"}>
+              <span className={p.voided_at ? "line-through" : p.amount < 0 ? "text-danger" : "text-ink"}>
                 {p.amount < 0 ? "− " : ""}
                 {formatPeso(Math.abs(p.amount))}
               </span>

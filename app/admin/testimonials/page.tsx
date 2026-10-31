@@ -29,9 +29,9 @@ const TABS = [
 
 function Stars({ rating }: { rating: number }) {
   return (
-    <span className="text-burgundy-600" aria-label={`${rating} out of 5`}>
+    <span className="text-brand" aria-label={`${rating} out of 5`}>
       {"★".repeat(rating)}
-      <span className="text-sand-300">{"★".repeat(5 - rating)}</span>
+      <span className="text-ink/15">{"★".repeat(5 - rating)}</span>
     </span>
   );
 }
@@ -72,7 +72,7 @@ export default async function TestimonialsPage(props: PageProps<"/admin/testimon
                   href={hrefFor(1, tab.value)}
                   aria-current={active ? "page" : undefined}
                   className={`rounded-full px-4 py-1.5 text-sm transition ${
-                    active ? "bg-burgundy-600 text-white" : "bg-white text-muted hover:bg-sand-100 hover:text-ink"
+                    active ? "bg-action text-on-action" : "bg-surface text-muted hover:bg-raised hover:text-ink"
                   }`}
                 >
                   {tab.label}
@@ -84,7 +84,7 @@ export default async function TestimonialsPage(props: PageProps<"/admin/testimon
 
           <ul className="flex flex-col gap-3">
             {rows.map((t) => (
-              <li key={t.id} className="rounded-xl border border-sand-300 bg-white p-5">
+              <li key={t.id} className="rounded-xl border border-line bg-surface p-5">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <Stars rating={t.rating} />
@@ -125,7 +125,7 @@ export default async function TestimonialsPage(props: PageProps<"/admin/testimon
                   {t.admin_notes ? <span className="block">Studio note: {t.admin_notes}</span> : null}
                 </p>
 
-                <div className="mt-4 flex flex-wrap items-start gap-2 border-t border-sand-200 pt-4">
+                <div className="mt-4 flex flex-wrap items-start gap-2 border-t border-line pt-4">
                   {t.status !== "approved" ? (
                     <ActionButton action={moderateAction} fields={{ id: t.id, status: "approved" }} quiet={false} className="px-4 py-1.5 text-xs">
                       Publish
@@ -151,7 +151,7 @@ export default async function TestimonialsPage(props: PageProps<"/admin/testimon
                       action={deleteTestimonialAction}
                       fields={{ id: t.id }}
                       confirm="Delete this review for good? Hiding it keeps a record."
-                      className="text-red-700"
+                      className="text-danger"
                     >
                       Delete
                     </ActionButton>
@@ -180,7 +180,7 @@ export default async function TestimonialsPage(props: PageProps<"/admin/testimon
           {candidates.length === 0 ? (
             <p className="text-sm text-muted">Every recent session has a review.</p>
           ) : (
-            <ul className="flex flex-col divide-y divide-sand-200 text-sm">
+            <ul className="flex flex-col divide-y divide-line text-sm">
               {candidates.map((c) => (
                 <li key={c.id} className="flex flex-col gap-2 py-3">
                   <div>

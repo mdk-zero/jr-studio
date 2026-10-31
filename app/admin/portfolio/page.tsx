@@ -31,7 +31,7 @@ export default async function PortfolioAdminPage() {
         title="Portfolio"
         description="Albums and photos on the public portfolio page. Changes show there straight away."
         action={
-          <Link href="/portfolio" className="text-sm text-burgundy-700 underline underline-offset-4">
+          <Link href="/portfolio" className="text-sm text-heading underline underline-offset-4">
             View the public page
           </Link>
         }
@@ -40,7 +40,7 @@ export default async function PortfolioAdminPage() {
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_20rem]">
         <div className="flex flex-col gap-6">
           {albums.map((album) => (
-            <section key={album.id} className="rounded-xl border border-sand-300 bg-white p-5">
+            <section key={album.id} className="rounded-xl border border-line bg-surface p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <h2 className="font-display text-xl font-semibold text-ink">{album.title}</h2>
@@ -58,7 +58,7 @@ export default async function PortfolioAdminPage() {
                       ? `Delete “${album.title}” and its ${album.photos.length} photos? The files are removed too.`
                       : `Delete “${album.title}”?`
                   }
-                  className="text-red-700"
+                  className="text-danger"
                 >
                   Delete album
                 </ActionButton>
@@ -85,7 +85,7 @@ export default async function PortfolioAdminPage() {
             </section>
           ))}
 
-          <section className="rounded-xl border border-sand-300 bg-white p-5">
+          <section className="rounded-xl border border-line bg-surface p-5">
             <h2 className="font-display text-xl font-semibold text-ink">Not in an album</h2>
             <p className="text-xs text-muted">Shown at the end of the portfolio page.</p>
             {loose.length > 0 ? (

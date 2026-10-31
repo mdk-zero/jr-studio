@@ -1,8 +1,8 @@
 import Link from "next/link";
-import type { Viewport } from "next";
 import { requireUser } from "@/lib/dal";
 import { SignOutButton } from "@/components/layout/sign-out-button";
 import { BrandLogo } from "@/components/brand-logo";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 /**
  * Authenticated area: every render reads the session cookie to decide whether
@@ -11,13 +11,11 @@ import { BrandLogo } from "@/components/brand-logo";
  */
 export const instant = false;
 
-export const viewport: Viewport = { themeColor: "#0c0a0a" };
-
 export default async function AccountLayout({ children }: LayoutProps<"/account">) {
   const user = await requireUser("/account");
 
   return (
-    <div className="darkroom grain flex min-h-full flex-1 flex-col">
+    <div className="grain flex min-h-full flex-1 flex-col">
       <header className="border-b border-line bg-canvas/80 backdrop-blur-md">
         <div className="mx-auto flex w-full max-w-4xl flex-wrap items-center justify-between gap-3 px-4 py-3">
           <Link href="/" aria-label="J&R Studio, home" className="shrink-0 transition-opacity hover:opacity-75">
@@ -27,6 +25,7 @@ export default async function AccountLayout({ children }: LayoutProps<"/account"
             <Link href="/account" className="caps text-muted transition-colors hover:text-ink">My bookings</Link>
             <Link href="/account/profile" className="caps text-muted transition-colors hover:text-ink">Profile</Link>
             <SignOutButton />
+            <ThemeSwitcher />
           </nav>
         </div>
       </header>

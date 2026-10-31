@@ -75,7 +75,7 @@ export function PackagesManager({
           }
         >
           {packages.map((pkg) => (
-            <tr key={pkg.id} className={editing?.id === pkg.id ? "bg-sand-50" : undefined}>
+            <tr key={pkg.id} className={editing?.id === pkg.id ? "bg-raised" : undefined}>
               <td>
                 <p className="font-medium text-ink">{pkg.name}</p>
                 <p className="text-xs text-muted">
@@ -101,7 +101,7 @@ export function PackagesManager({
                   <button
                     type="button"
                     onClick={() => setEditing(pkg)}
-                    className="rounded-lg border border-sand-300 px-3 py-1.5 text-xs font-medium text-ink transition hover:bg-sand-100"
+                    className="rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink transition hover:bg-raised"
                   >
                     Edit
                   </button>
@@ -249,7 +249,7 @@ export function PackagesManager({
                       name="addon_ids"
                       value={addon.id}
                       defaultChecked={memory.includes("addon_ids", addon.id, editing?.addonIds.includes(addon.id) ?? false)}
-                      className="size-4 accent-burgundy-600"
+                      className="size-4 accent-brand"
                     />
                     <span className="flex-1">{addon.name}</span>
                     <span className="nums text-xs text-muted">{formatPeso(addon.price)}</span>
@@ -267,15 +267,15 @@ export function PackagesManager({
 
             <div className="flex flex-col gap-2">
               <label className="flex items-center gap-2 text-sm text-ink">
-                <input name="digital_images" type="checkbox" defaultChecked={memory.checked("digital_images", editing ? editing.digital_images : true)} className="size-4 accent-burgundy-600" />
+                <input name="digital_images" type="checkbox" defaultChecked={memory.checked("digital_images", editing ? editing.digital_images : true)} className="size-4 accent-brand" />
                 Digital copies included
               </label>
               <label className="flex items-center gap-2 text-sm text-ink">
-                <input name="magazine_cover" type="checkbox" defaultChecked={memory.checked("magazine_cover", editing?.magazine_cover ?? false)} className="size-4 accent-burgundy-600" />
+                <input name="magazine_cover" type="checkbox" defaultChecked={memory.checked("magazine_cover", editing?.magazine_cover ?? false)} className="size-4 accent-brand" />
                 Magazine cover layout
               </label>
               <label className="flex items-center gap-2 text-sm text-ink">
-                <input name="is_active" type="checkbox" defaultChecked={memory.checked("is_active", editing ? editing.is_active : true)} className="size-4 accent-burgundy-600" />
+                <input name="is_active" type="checkbox" defaultChecked={memory.checked("is_active", editing ? editing.is_active : true)} className="size-4 accent-brand" />
                 Show on the public site
               </label>
             </div>
@@ -286,7 +286,7 @@ export function PackagesManager({
                 <button
                   type="button"
                   onClick={() => setEditing(null)}
-                  className="rounded-lg border border-sand-300 px-4 py-2 text-sm text-ink transition hover:bg-sand-100"
+                  className="rounded-lg border border-line px-4 py-2 text-sm text-ink transition hover:bg-raised"
                 >
                   Cancel
                 </button>
@@ -334,8 +334,8 @@ function CoverUploader({ packageId }: { packageId: string }) {
   return (
     <div className="flex flex-col gap-3">
       <ActionFeedback state={state} />
-      {error ? <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p> : null}
-      <label className="inline-flex w-fit cursor-pointer items-center rounded-lg bg-burgundy-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-burgundy-700">
+      {error ? <p role="alert" className="rounded-lg bg-danger-tint px-3 py-2 text-sm text-danger">{error}</p> : null}
+      <label className="inline-flex w-fit cursor-pointer items-center rounded-lg bg-action px-4 py-2 text-sm font-semibold text-on-action transition hover:bg-action-hover">
         {pending ? "Uploading…" : "Choose an image"}
         <input
           type="file"

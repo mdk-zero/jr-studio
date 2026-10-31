@@ -58,7 +58,7 @@ export function CategoriesManager({ categories }: { categories: Category[] }) {
                   <button
                     type="button"
                     onClick={() => setEditing(category)}
-                    className="rounded-lg border border-sand-300 px-3 py-1.5 text-xs font-medium text-ink transition hover:bg-sand-100"
+                    className="rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink transition hover:bg-raised"
                   >
                     Edit
                   </button>
@@ -131,7 +131,7 @@ export function CategoriesManager({ categories }: { categories: Category[] }) {
               name="is_active"
               type="checkbox"
               defaultChecked={memory.checked("is_active", editing ? editing.is_active : true)}
-              className="size-4 accent-burgundy-600"
+              className="size-4 accent-brand"
             />
             Show on the public site
           </label>
@@ -142,7 +142,7 @@ export function CategoriesManager({ categories }: { categories: Category[] }) {
               <button
                 type="button"
                 onClick={() => setEditing(null)}
-                className="rounded-lg border border-sand-300 px-4 py-2 text-sm text-ink transition hover:bg-sand-100"
+                className="rounded-lg border border-line px-4 py-2 text-sm text-ink transition hover:bg-raised"
               >
                 Cancel
               </button>

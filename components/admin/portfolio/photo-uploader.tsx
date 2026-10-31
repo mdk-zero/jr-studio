@@ -61,10 +61,10 @@ export function PhotoUploader({ albumId }: { albumId: string | null }) {
     <div className="flex flex-col gap-2">
       <ActionFeedback state={result} />
       {errors.map((e) => (
-        <p key={e} role="alert" className="text-xs text-red-700">{e}</p>
+        <p key={e} role="alert" className="text-xs text-danger">{e}</p>
       ))}
       <label
-        className={`flex cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-sand-300 bg-sand-50 px-4 py-6 text-center text-sm text-muted transition hover:border-burgundy-300 hover:text-ink ${
+        className={`flex cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-line bg-raised px-4 py-6 text-center text-sm text-muted transition hover:border-brand/50 hover:text-ink ${
           pending ? "pointer-events-none opacity-70" : ""
         }`}
       >

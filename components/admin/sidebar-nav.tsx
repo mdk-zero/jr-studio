@@ -28,7 +28,7 @@ export function SidebarNav({ items }: { items: NavItem[] }) {
             href={item.href}
             aria-current={current ? "page" : undefined}
             className={`flex shrink-0 items-center justify-between gap-2 rounded-md px-3 py-2 text-sm transition-colors ${
-              current ? "bg-bone/10 font-medium text-bone" : "text-ash hover:bg-bone/5 hover:text-bone"
+              current ? "bg-raised font-medium text-ink" : "text-muted hover:bg-raised hover:text-ink"
             }`}
           >
             <span className="flex items-center gap-2.5">

@@ -64,7 +64,7 @@ export function StaffManager({ staff, currentUserId }: { staff: Member[]; curren
                     // eslint-disable-next-line @next/next/no-img-element -- small admin thumbnail
                     <img src={member.photoUrl} alt="" className="size-9 rounded-full object-cover" />
                   ) : (
-                    <span className="flex size-9 items-center justify-center rounded-full bg-sand-200 text-xs font-semibold text-muted">
+                    <span className="flex size-9 items-center justify-center rounded-full bg-raised text-xs font-semibold text-muted">
                       {member.full_name.slice(0, 1)}
                     </span>
                   )}
@@ -89,7 +89,7 @@ export function StaffManager({ staff, currentUserId }: { staff: Member[]; curren
                 <button
                   type="button"
                   onClick={() => setEditingId(member.id)}
-                  className="rounded-lg border border-sand-300 px-3 py-1.5 text-xs font-medium text-ink transition hover:bg-sand-100"
+                  className="rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink transition hover:bg-raised"
                 >
                   Manage
                 </button>
@@ -206,14 +206,14 @@ function StaffForm({ member, onCancel }: { member: Member | null; onCancel: () =
       </div>
 
       <label className="flex items-center gap-2 text-sm text-ink">
-        <input name="show_on_about" type="checkbox" defaultChecked={memory.checked("show_on_about", member?.show_on_about ?? false)} className="size-4 accent-burgundy-600" />
+        <input name="show_on_about" type="checkbox" defaultChecked={memory.checked("show_on_about", member?.show_on_about ?? false)} className="size-4 accent-brand" />
         Show on the About page
       </label>
 
       <div className="flex gap-2">
         <SubmitButton>{member ? "Save" : "Add to team"}</SubmitButton>
         {member ? (
-          <button type="button" onClick={onCancel} className="rounded-lg border border-sand-300 px-4 py-2 text-sm text-ink transition hover:bg-sand-100">
+          <button type="button" onClick={onCancel} className="rounded-lg border border-line px-4 py-2 text-sm text-ink transition hover:bg-raised">
             Close
           </button>
         ) : null}
@@ -225,7 +225,7 @@ function StaffForm({ member, onCancel }: { member: Member | null; onCancel: () =
 function InviteLink({ state }: { state: StaffState }) {
   if (!state.inviteLink) return null;
   return (
-    <div className="rounded-lg bg-sand-50 p-3">
+    <div className="rounded-lg bg-raised p-3">
       <label htmlFor="invite-link" className="text-xs font-medium text-muted">Invite link (works once, for one hour)</label>
       <input
         id="invite-link"
@@ -330,14 +330,14 @@ function PhotoPanel({ member }: { member: Member }) {
   return (
     <div className="flex flex-col gap-3">
       <ActionFeedback state={state} />
-      {error ? <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p> : null}
+      {error ? <p role="alert" className="rounded-lg bg-danger-tint px-3 py-2 text-sm text-danger">{error}</p> : null}
       {member.photoUrl ? (
         // eslint-disable-next-line @next/next/no-img-element -- admin preview of an uploaded file
         <img src={member.photoUrl} alt={member.full_name} className="aspect-square w-32 rounded-lg object-cover" />
       ) : (
         <p className="text-sm text-muted">No photo yet. Shown on the About page when they appear there.</p>
       )}
-      <label className="inline-flex w-fit cursor-pointer items-center rounded-lg border border-sand-300 bg-white px-4 py-2 text-sm font-medium text-ink transition hover:bg-sand-100">
+      <label className="inline-flex w-fit cursor-pointer items-center rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium text-ink transition hover:bg-raised">
         {pending ? "Uploading…" : member.photoUrl ? "Replace photo" : "Upload photo"}
         <input
           type="file"

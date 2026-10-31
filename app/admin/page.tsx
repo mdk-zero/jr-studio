@@ -29,17 +29,17 @@ function Tile({
 }) {
   const body = (
     <>
-      <dt className="text-xs font-medium tracking-wide text-muted uppercase">{label}</dt>
+      <dt className="caps text-muted">{label}</dt>
       <dd className="font-display nums mt-1 text-2xl font-semibold text-ink">{value}</dd>
       {note ? <dd className="mt-1 text-xs text-muted">{note}</dd> : null}
     </>
   );
   return href ? (
-    <Link href={href} className="rounded-xl border border-sand-300 bg-white p-4 transition hover:border-burgundy-300">
+    <Link href={href} className="rounded-xl border border-line bg-surface p-4 transition hover:border-brand/50">
       {body}
     </Link>
   ) : (
-    <div className="rounded-xl border border-sand-300 bg-white p-4">{body}</div>
+    <div className="rounded-xl border border-line bg-surface p-4">{body}</div>
   );
 }
 
@@ -97,11 +97,11 @@ export default async function AdminDashboardPage() {
                 const isCurrent = i === d.revenue.length - 1;
                 return (
                   <div key={m.month} className="group relative flex h-full flex-1 flex-col justify-end">
-                    <span className="nums pointer-events-none absolute -top-5 left-1/2 hidden -translate-x-1/2 rounded bg-ink px-1.5 py-0.5 text-[11px] whitespace-nowrap text-white group-hover:block">
+                    <span className="nums pointer-events-none absolute -top-5 left-1/2 hidden -translate-x-1/2 rounded bg-ink px-1.5 py-0.5 text-[11px] whitespace-nowrap text-canvas group-hover:block">
                       {formatPeso(m.net)}
                     </span>
                     <div
-                      className={`w-full rounded-t ${isCurrent ? "bg-burgundy-600" : "bg-burgundy-300"} ${m.net > 0 ? "min-h-1" : ""}`}
+                      className={`w-full rounded-t ${isCurrent ? "bg-brand" : "bg-brand/40"} ${m.net > 0 ? "min-h-1" : ""}`}
                       style={{ height: `${heights[i] * 100}%` }}
                       title={`${formatMonth(m.month)}: ${formatPeso(m.net)}`}
                     />
@@ -141,13 +141,13 @@ export default async function AdminDashboardPage() {
             <ul className="flex flex-col gap-2.5 text-sm">
               {STATUS_ORDER.filter((s) => d.statusCounts[s] > 0).map((s) => (
                 <li key={s}>
-                  <Link href={`/admin/bookings?status=${s}&when=all`} className="flex items-center justify-between gap-3 hover:text-burgundy-700">
+                  <Link href={`/admin/bookings?status=${s}&when=all`} className="flex items-center justify-between gap-3 hover:text-ink">
                     <span className="text-ink">{ADMIN_STATUS_LABEL[s]}</span>
                     <span className="nums text-muted">{d.statusCounts[s]}</span>
                   </Link>
-                  <div className="mt-1 h-1.5 rounded-full bg-sand-100">
+                  <div className="mt-1 h-1.5 rounded-full bg-raised">
                     <div
-                      className="h-full rounded-full bg-burgundy-400"
+                      className="h-full rounded-full bg-brand/70"
                       style={{ width: `${(d.statusCounts[s] / statusTotal) * 100}%` }}
                     />
                   </div>
@@ -163,7 +163,7 @@ export default async function AdminDashboardPage() {
           {d.upcoming.length === 0 ? (
             <EmptyState>No upcoming sessions.</EmptyState>
           ) : (
-            <ul className="divide-y divide-sand-200 text-sm">
+            <ul className="divide-y divide-line text-sm">
               {d.upcoming.map((b) => (
                 <li key={b.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                   <div className="flex items-baseline gap-4">
@@ -172,7 +172,7 @@ export default async function AdminDashboardPage() {
                       <span className="block text-xs text-muted">{formatManilaTime(b.starts_at)}</span>
                     </span>
                     <span>
-                      <Link href={`/admin/bookings/${b.id}`} className="font-medium text-burgundy-700 hover:underline">
+                      <Link href={`/admin/bookings/${b.id}`} className="font-medium text-heading hover:underline">
                         {b.customers?.full_name}
                       </Link>
                       <span className="block text-xs text-muted">
@@ -186,7 +186,7 @@ export default async function AdminDashboardPage() {
               ))}
             </ul>
           )}
-          <Link href="/admin/bookings/calendar" className="mt-3 inline-block text-sm text-burgundy-700 underline underline-offset-4">
+          <Link href="/admin/bookings/calendar" className="mt-3 inline-block text-sm text-heading underline underline-offset-4">
             Open the calendar
           </Link>
         </Panel>
@@ -199,7 +199,7 @@ export default async function AdminDashboardPage() {
               <ul className="flex flex-col gap-3 text-sm">
                 {d.requests.map((r) => (
                   <li key={r.id}>
-                    <Link href={`/admin/bookings/${r.id}`} className="font-medium text-burgundy-700 hover:underline">
+                    <Link href={`/admin/bookings/${r.id}`} className="font-medium text-heading hover:underline">
                       {r.customers?.full_name}
                     </Link>
                     <span className="nums block text-xs text-muted">

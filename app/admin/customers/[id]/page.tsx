@@ -44,19 +44,19 @@ export default async function CustomerPage(props: PageProps<"/admin/customers/[i
     <div className="flex flex-col gap-6">
       <nav className="text-sm text-muted">
         <Link href="/admin/customers" className="hover:text-ink">Customers</Link>
-        <span className="mx-2 text-sand-400">/</span>
+        <span className="mx-2 text-faint">/</span>
         <span className="text-ink">{customer.full_name}</span>
       </nav>
 
       {created ? (
-        <p role="status" className="rounded-lg bg-burgundy-50 px-4 py-3 text-sm text-burgundy-700">
+        <p role="status" className="rounded-lg bg-tint px-4 py-3 text-sm text-on-tint">
           Customer added.
         </p>
       ) : null}
 
-      <header className="flex flex-wrap items-start justify-between gap-4 border-b border-sand-300 pb-5">
+      <header className="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-5">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-burgundy-700">{customer.full_name}</h1>
+          <h1 className="font-display text-2xl font-semibold text-heading">{customer.full_name}</h1>
           <p className="mt-1 text-sm text-muted">
             {customer.profile_id ? "Online account" : "Walk-in, no login"} · customer since{" "}
             {formatManilaDate(customer.created_at)}
@@ -70,7 +70,7 @@ export default async function CustomerPage(props: PageProps<"/admin/customers/[i
         {customer.status === "active" ? (
           <Link
             href={`/admin/bookings/new?customer=${customer.id}`}
-            className="rounded-full bg-burgundy-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-burgundy-700"
+            className="rounded-full bg-action px-4 py-2 text-sm font-semibold text-on-action transition hover:bg-action-hover"
           >
             Book a session
           </Link>
@@ -91,7 +91,7 @@ export default async function CustomerPage(props: PageProps<"/admin/customers/[i
                 : "—",
           ],
         ].map(([label, value]) => (
-          <div key={label} className="rounded-xl border border-sand-300 bg-white px-4 py-3">
+          <div key={label} className="rounded-xl border border-line bg-surface px-4 py-3">
             <dt className="text-xs text-muted">{label}</dt>
             <dd className="nums mt-1 text-lg font-semibold text-ink">{value}</dd>
           </div>
@@ -104,11 +104,11 @@ export default async function CustomerPage(props: PageProps<"/admin/customers/[i
             {customer.bookings.length === 0 ? (
               <p className="text-sm text-muted">No bookings yet.</p>
             ) : (
-              <ul className="divide-y divide-sand-200 text-sm">
+              <ul className="divide-y divide-line text-sm">
                 {customer.bookings.map((b) => (
                   <li key={b.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                     <div>
-                      <Link href={`/admin/bookings/${b.id}`} className="font-medium text-burgundy-700 hover:underline">
+                      <Link href={`/admin/bookings/${b.id}`} className="font-medium text-heading hover:underline">
                         {b.reference}
                       </Link>
                       <span className="text-muted"> · {b.packages?.name}</span>
@@ -134,7 +134,7 @@ export default async function CustomerPage(props: PageProps<"/admin/customers/[i
             {customer.notes.length > 0 ? (
               <ul className="mt-5 flex flex-col gap-3">
                 {customer.notes.map((note) => (
-                  <li key={note.id} className="rounded-lg bg-sand-50 px-4 py-3 text-sm">
+                  <li key={note.id} className="rounded-lg bg-raised px-4 py-3 text-sm">
                     <p className="whitespace-pre-line text-ink">{note.body}</p>
                     <div className="mt-2 flex items-center justify-between gap-3 text-xs text-muted">
                       <span className="nums">
@@ -145,7 +145,7 @@ export default async function CustomerPage(props: PageProps<"/admin/customers/[i
                           action={deleteNoteAction}
                           fields={{ id: note.id, customer_id: customer.id }}
                           confirm="Delete this note?"
-                          className="border-0 bg-transparent px-0 py-0 text-xs text-muted hover:bg-transparent hover:text-red-700"
+                          className="border-0 bg-transparent px-0 py-0 text-xs text-muted hover:bg-transparent hover:text-danger"
                           feedback="error"
                         >
                           Delete
@@ -160,7 +160,7 @@ export default async function CustomerPage(props: PageProps<"/admin/customers/[i
 
           {customer.emails.length > 0 ? (
             <Panel title="Emails sent">
-              <ul className="divide-y divide-sand-200 text-sm">
+              <ul className="divide-y divide-line text-sm">
                 {customer.emails.map((e) => (
                   <li key={e.id} className="flex flex-wrap justify-between gap-3 py-2">
                     <span className="text-ink">
@@ -207,7 +207,7 @@ export default async function CustomerPage(props: PageProps<"/admin/customers/[i
                 action={deleteCustomerAction}
                 fields={{ customer_id: customer.id }}
                 confirm={`Delete ${customer.full_name} for good?`}
-                className="border-red-200 px-4 py-2 text-sm text-red-700 hover:bg-red-50"
+                className="border-danger/40 px-4 py-2 text-sm text-danger hover:bg-danger-tint"
               >
                 Delete customer
               </ActionButton>

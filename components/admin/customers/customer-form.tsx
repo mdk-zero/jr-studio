@@ -49,7 +49,7 @@ export function CustomerForm({ customer }: { customer?: Customer }) {
             type="email"
             defaultValue={memory.text("email", customer?.email)}
             readOnly={linked}
-            className={`${adminInput} mt-1 ${linked ? "bg-sand-50 text-muted" : ""}`}
+            className={`${adminInput} mt-1 ${linked ? "bg-raised text-muted" : ""}`}
           />
           <p className="mt-1 text-xs text-muted">
             {linked
@@ -85,7 +85,7 @@ export function CustomerForm({ customer }: { customer?: Customer }) {
           name="marketing_opt_in"
           type="checkbox"
           defaultChecked={memory.checked("marketing_opt_in", customer?.marketing_opt_in ?? false)}
-          className="mt-0.5 size-4 accent-burgundy-600"
+          className="mt-0.5 size-4 accent-brand"
         />
         <span>
           Agreed to receive studio news and offers by email

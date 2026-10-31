@@ -55,7 +55,7 @@ export default async function AdminBookingsPage(props: PageProps<"/admin/booking
           awaiting > 0 ? (
             <Link
               href={hrefFor({ status: "pending", when: "upcoming", q: "", page: 1 })}
-              className="rounded-full bg-burgundy-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-burgundy-700"
+              className="rounded-full bg-action px-4 py-2 text-sm font-semibold text-on-action transition hover:bg-action-hover"
             >
               {awaiting} waiting for approval
             </Link>
@@ -107,7 +107,7 @@ export default async function AdminBookingsPage(props: PageProps<"/admin/booking
         }
       >
         {rows.map((b) => (
-          <tr key={b.id} className="hover:bg-sand-50">
+          <tr key={b.id} className="hover:bg-raised">
             <td className="nums whitespace-nowrap">
               <Link href={`/admin/bookings/${b.id}`} className="block text-ink">
                 {formatManilaDate(b.starts_at)}
@@ -117,7 +117,7 @@ export default async function AdminBookingsPage(props: PageProps<"/admin/booking
               </Link>
             </td>
             <td>
-              <Link href={`/admin/bookings/${b.id}`} className="font-medium text-burgundy-700 hover:underline">
+              <Link href={`/admin/bookings/${b.id}`} className="font-medium text-heading hover:underline">
                 {b.reference}
               </Link>
               <span className="block text-xs text-muted">
@@ -146,7 +146,7 @@ export default async function AdminBookingsPage(props: PageProps<"/admin/booking
       {pastEnd ? (
         <EmptyState>
           Nothing on page {page}.{" "}
-          <Link href={hrefFor({ page: 1 })} className="text-burgundy-700 underline underline-offset-4">
+          <Link href={hrefFor({ page: 1 })} className="text-heading underline underline-offset-4">
             Back to the first page
           </Link>
         </EmptyState>
@@ -165,12 +165,12 @@ export default async function AdminBookingsPage(props: PageProps<"/admin/booking
           {pageCount > 1 ? (
             <div className="flex gap-2">
               {page > 1 ? (
-                <Link href={hrefFor({ page: page - 1 })} className="rounded-lg border border-sand-300 bg-white px-3 py-1.5 hover:bg-sand-100">
+                <Link href={hrefFor({ page: page - 1 })} className="rounded-lg border border-line bg-surface px-3 py-1.5 hover:bg-raised">
                   Previous
                 </Link>
               ) : null}
               {page < pageCount ? (
-                <Link href={hrefFor({ page: page + 1 })} className="rounded-lg border border-sand-300 bg-white px-3 py-1.5 hover:bg-sand-100">
+                <Link href={hrefFor({ page: page + 1 })} className="rounded-lg border border-line bg-surface px-3 py-1.5 hover:bg-raised">
                   Next
                 </Link>
               ) : null}

@@ -87,8 +87,8 @@ export function SlotGrid({
             onClick={() => onSelect(s.starts_at)}
             className={`nums rounded-lg border px-3 py-1.5 text-sm transition ${
               active
-                ? "border-burgundy-600 bg-burgundy-600 text-white"
-                : "border-sand-300 bg-white text-ink hover:border-burgundy-400"
+                ? "border-action bg-action text-on-action"
+                : "border-line bg-surface text-ink hover:border-brand/50"
             }`}
           >
             {formatManilaTime(s.starts_at)}

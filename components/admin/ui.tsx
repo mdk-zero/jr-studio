@@ -10,9 +10,9 @@ export function PageHeader({
   action?: ReactNode;
 }) {
   return (
-    <header className="flex flex-wrap items-end justify-between gap-4 border-b border-sand-300 pb-4">
+    <header className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-4">
       <div>
-        <h1 className="font-display text-2xl font-semibold text-burgundy-700">{title}</h1>
+        <h1 className="font-display text-2xl font-semibold text-heading">{title}</h1>
         {description ? <p className="mt-1 text-sm text-muted">{description}</p> : null}
       </div>
       {action}
@@ -22,9 +22,9 @@ export function PageHeader({
 
 export function Panel({ title, children }: { title?: string; children: ReactNode }) {
   return (
-    <section className="rounded-xl border border-sand-300 bg-white p-5">
+    <section className="rounded-xl border border-line bg-surface p-5">
       {title ? (
-        <h2 className="mb-4 text-sm font-semibold tracking-wide text-ink uppercase">{title}</h2>
+        <h2 className="caps mb-4 text-muted">{title}</h2>
       ) : null}
       {children}
     </section>
@@ -33,14 +33,14 @@ export function Panel({ title, children }: { title?: string; children: ReactNode
 
 export function Table({ head, children }: { head: ReactNode; children: ReactNode }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-sand-300 bg-white">
+    <div className="overflow-x-auto rounded-xl border border-line bg-surface">
       <table className="w-full min-w-150 border-collapse text-sm">
-        <thead className="border-b border-sand-300 bg-sand-50 text-left">
-          <tr className="[&>th]:px-4 [&>th]:py-3 [&>th]:text-xs [&>th]:font-semibold [&>th]:tracking-wide [&>th]:text-muted [&>th]:uppercase">
+        <thead className="border-b border-line bg-raised text-left">
+          <tr className="[&>th]:px-4 [&>th]:py-3 [&>th]:font-mono [&>th]:text-[11px] [&>th]:font-medium [&>th]:tracking-[0.12em] [&>th]:text-muted [&>th]:uppercase">
             {head}
           </tr>
         </thead>
-        <tbody className="divide-y divide-sand-200 [&>tr>td]:px-4 [&>tr>td]:py-3">{children}</tbody>
+        <tbody className="divide-y divide-line [&>tr>td]:px-4 [&>tr>td]:py-3">{children}</tbody>
       </table>
     </div>
   );
@@ -48,9 +48,9 @@ export function Table({ head, children }: { head: ReactNode; children: ReactNode
 
 export function Badge({ tone, children }: { tone: "on" | "off" | "info"; children: ReactNode }) {
   const styles = {
-    on: "bg-burgundy-50 text-burgundy-700",
-    off: "bg-sand-200 text-muted",
-    info: "bg-sand-100 text-ink",
+    on: "bg-tint text-on-tint",
+    off: "bg-raised text-muted",
+    info: "bg-raised text-ink",
   } as const;
   return (
     <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${styles[tone]}`}>

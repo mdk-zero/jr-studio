@@ -43,7 +43,7 @@ export default async function MessagesPage(props: PageProps<"/admin/messages">) 
               href={hrefFor(1, filter)}
               aria-current={active ? "page" : undefined}
               className={`rounded-full px-4 py-1.5 text-sm transition ${
-                active ? "bg-burgundy-600 text-white" : "bg-white text-muted hover:bg-sand-100 hover:text-ink"
+                active ? "bg-action text-on-action" : "bg-surface text-muted hover:bg-raised hover:text-ink"
               }`}
             >
               {filter === "all" ? "All" : "Unread"}
@@ -56,12 +56,12 @@ export default async function MessagesPage(props: PageProps<"/admin/messages">) 
         {rows.map((m) => (
           <li
             key={m.id}
-            className={`rounded-xl border bg-white p-5 ${m.is_read ? "border-sand-300" : "border-burgundy-300 shadow-sm"}`}
+            className={`rounded-xl border bg-surface p-5 ${m.is_read ? "border-line" : "border-brand/50 shadow-sm"}`}
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <p className="font-medium text-ink">
-                  {!m.is_read ? <span className="mr-2 inline-block size-2 rounded-full bg-burgundy-600 align-middle" aria-label="Unread" /> : null}
+                  {!m.is_read ? <span className="mr-2 inline-block size-2 rounded-full bg-action align-middle" aria-label="Unread" /> : null}
                   {m.name}
                 </p>
                 <p className="text-sm text-muted">
@@ -86,7 +86,7 @@ export default async function MessagesPage(props: PageProps<"/admin/messages">) 
 
             <p className="mt-3 text-sm leading-relaxed whitespace-pre-line text-ink">{m.message}</p>
 
-            <div className="mt-4 flex flex-wrap gap-2 border-t border-sand-200 pt-4">
+            <div className="mt-4 flex flex-wrap gap-2 border-t border-line pt-4">
               <ActionButton action={markReadAction} fields={{ id: m.id, is_read: String(!m.is_read) }} feedback="error">
                 {m.is_read ? "Mark unread" : "Mark read"}
               </ActionButton>
@@ -95,7 +95,7 @@ export default async function MessagesPage(props: PageProps<"/admin/messages">) 
                   action={deleteMessageAction}
                   fields={{ id: m.id }}
                   confirm={`Delete the message from ${m.name}?`}
-                  className="text-red-700"
+                  className="text-danger"
                   feedback="error"
                 >
                   Delete

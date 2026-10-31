@@ -43,7 +43,7 @@ export function ActionButton({
         {children}
       </SubmitButton>
       {show ? (
-        <span role={state.ok ? "status" : "alert"} className={`text-xs ${state.ok ? "text-burgundy-700" : "text-red-700"}`}>
+        <span role={state.ok ? "status" : "alert"} className={`text-xs ${state.ok ? "text-heading" : "text-danger"}`}>
           {state.message}
         </span>
       ) : null}

@@ -19,9 +19,9 @@ export const instant = false;
 
 // Pending requests are outlined so they read as "not confirmed yet" at a glance.
 const ACCENT = {
-  pending: "border-dashed border-sand-400 bg-white",
-  approved: "border-burgundy-300 bg-burgundy-50",
-  completed: "border-sand-300 bg-sand-100",
+  pending: "border-dashed border-edge bg-surface",
+  approved: "border-brand/50 bg-tint",
+  completed: "border-line bg-raised",
 } as const;
 
 /** "08:00:00" -> "8am", "13:30:00" -> "1:30pm". */
@@ -50,13 +50,13 @@ export default async function BookingCalendarPage(props: PageProps<"/admin/booki
         description={`${sessions} session${sessions === 1 ? "" : "s"}${pending ? `, ${pending} still pending` : ""}. Cancelled and declined bookings are left off.`}
         action={
           <div className="flex gap-2 text-sm">
-            <Link href={`/admin/bookings/calendar?week=${addDaysToDateString(weekStart, -7)}`} className="rounded-lg border border-sand-300 bg-white px-3 py-1.5 hover:bg-sand-100">
+            <Link href={`/admin/bookings/calendar?week=${addDaysToDateString(weekStart, -7)}`} className="rounded-lg border border-line bg-surface px-3 py-1.5 hover:bg-raised">
               ← Previous
             </Link>
-            <Link href="/admin/bookings/calendar" className="rounded-lg border border-sand-300 bg-white px-3 py-1.5 hover:bg-sand-100">
+            <Link href="/admin/bookings/calendar" className="rounded-lg border border-line bg-surface px-3 py-1.5 hover:bg-raised">
               This week
             </Link>
-            <Link href={`/admin/bookings/calendar?week=${addDaysToDateString(weekStart, 7)}`} className="rounded-lg border border-sand-300 bg-white px-3 py-1.5 hover:bg-sand-100">
+            <Link href={`/admin/bookings/calendar?week=${addDaysToDateString(weekStart, 7)}`} className="rounded-lg border border-line bg-surface px-3 py-1.5 hover:bg-raised">
               Next →
             </Link>
           </div>
@@ -68,14 +68,14 @@ export default async function BookingCalendarPage(props: PageProps<"/admin/booki
           <section
             key={day.date}
             aria-label={formatDateString(day.date)}
-            className={`flex min-h-32 flex-col rounded-xl border bg-white p-3 ${
-              day.isToday ? "border-burgundy-500 ring-1 ring-burgundy-500" : "border-sand-300"
+            className={`flex min-h-32 flex-col rounded-xl border bg-surface p-3 ${
+              day.isToday ? "border-brand ring-1 ring-brand" : "border-line"
             }`}
           >
             <header className="mb-2 flex items-baseline justify-between gap-2 lg:block">
               <h2 className="text-sm font-semibold text-ink">
                 {formatDateString(day.date)}
-                {day.isToday ? <span className="ml-1.5 text-xs font-medium text-burgundy-600">Today</span> : null}
+                {day.isToday ? <span className="ml-1.5 text-xs font-medium text-brand">Today</span> : null}
               </h2>
               <p className="text-xs text-muted">
                 {day.blockedReason
@@ -87,15 +87,15 @@ export default async function BookingCalendarPage(props: PageProps<"/admin/booki
             </header>
 
             {day.bookings.length === 0 ? (
-              <p className="text-xs text-sand-400">{day.isOpen ? "Nothing booked" : ""}</p>
+              <p className="text-xs text-faint">{day.isOpen ? "Nothing booked" : ""}</p>
             ) : (
               <ol className="flex flex-col gap-2">
                 {day.bookings.map((b) => (
                   <li key={b.id}>
                     <Link
                       href={`/admin/bookings/${b.id}`}
-                      className={`block rounded-lg border px-2.5 py-2 text-xs transition hover:border-burgundy-500 ${
-                        ACCENT[b.status as keyof typeof ACCENT] ?? "border-sand-300"
+                      className={`block rounded-lg border px-2.5 py-2 text-xs transition hover:border-brand ${
+                        ACCENT[b.status as keyof typeof ACCENT] ?? "border-line"
                       }`}
                     >
                       <span className="nums block font-semibold text-ink">

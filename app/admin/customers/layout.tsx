@@ -13,12 +13,12 @@ export default async function CustomersLayout({ children }: LayoutProps<"/admin/
 
   return (
     <div className="flex flex-col gap-6">
-      <nav className="flex flex-wrap gap-1 border-b border-sand-300">
+      <nav className="flex flex-wrap gap-1 border-b border-line">
         {tabs.map((tab) => (
           <Link
             key={tab.href}
             href={tab.href}
-            className="rounded-t-lg px-4 py-2 text-sm text-muted transition hover:bg-sand-100 hover:text-ink"
+            className="rounded-t-lg px-4 py-2 text-sm text-muted transition hover:bg-raised hover:text-ink"
           >
             {tab.label}
           </Link>

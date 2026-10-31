@@ -27,7 +27,7 @@ export function Pager({
     return (
       <EmptyState>
         Nothing on page {page}.{" "}
-        <Link href={hrefFor(1)} className="text-burgundy-700 underline underline-offset-4">
+        <Link href={hrefFor(1)} className="text-heading underline underline-offset-4">
           Back to the first page
         </Link>
       </EmptyState>
@@ -35,7 +35,7 @@ export function Pager({
   }
   if (shown === 0) return <EmptyState>{empty}</EmptyState>;
 
-  const link = "rounded-lg border border-sand-300 bg-white px-3 py-1.5 hover:bg-sand-100";
+  const link = "rounded-lg border border-line bg-surface px-3 py-1.5 hover:bg-raised";
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-muted">
       <p>

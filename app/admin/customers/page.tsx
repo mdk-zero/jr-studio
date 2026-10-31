@@ -49,7 +49,7 @@ export default async function CustomersPage(props: PageProps<"/admin/customers">
       />
 
       {raw.deleted ? (
-        <p role="status" className="rounded-lg bg-burgundy-50 px-4 py-3 text-sm text-burgundy-700">
+        <p role="status" className="rounded-lg bg-tint px-4 py-3 text-sm text-on-tint">
           Customer deleted.
         </p>
       ) : null}
@@ -121,9 +121,9 @@ export default async function CustomersPage(props: PageProps<"/admin/customers">
         }
       >
         {rows.map((c) => (
-          <tr key={c.id} className="hover:bg-sand-50">
+          <tr key={c.id} className="hover:bg-raised">
             <td>
-              <Link href={`/admin/customers/${c.id}`} className="font-medium text-burgundy-700 hover:underline">
+              <Link href={`/admin/customers/${c.id}`} className="font-medium text-heading hover:underline">
                 {c.full_name}
               </Link>
               <span className="block text-xs text-muted">

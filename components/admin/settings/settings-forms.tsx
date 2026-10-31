@@ -130,7 +130,7 @@ export function BusinessHoursForm({
               name={`is_open_${h.weekday}`}
               checked={open[h.weekday]}
               onChange={(e) => setOpen((prev) => ({ ...prev, [h.weekday]: e.target.checked }))}
-              className="size-4 accent-burgundy-600"
+              className="size-4 accent-brand"
             />
             {DAYS[h.weekday]}
           </label>

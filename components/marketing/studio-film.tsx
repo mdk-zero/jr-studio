@@ -24,7 +24,7 @@ export function StudioFilm({
   const [started, setStarted] = useState(false);
 
   return (
-    <div className="viewfinder relative aspect-video overflow-hidden bg-night-950 text-ink [--vf-inset:0.75rem] [--vf-length:1.5rem]">
+    <div className="darkroom viewfinder relative aspect-video overflow-hidden [--vf-inset:0.75rem] [--vf-length:1.5rem]">
       {started ? (
         // A film the visitor asked for: sound on, their controls.
         <video

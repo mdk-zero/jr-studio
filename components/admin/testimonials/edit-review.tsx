@@ -41,7 +41,7 @@ export function EditReview({
   }
 
   return (
-    <form onSubmit={memory.onSubmit} action={action} className="flex w-full flex-col gap-3 rounded-lg bg-sand-50 p-4">
+    <form onSubmit={memory.onSubmit} action={action} className="flex w-full flex-col gap-3 rounded-lg bg-raised p-4">
       <ActionFeedback state={state} />
       <input type="hidden" name="id" value={id} />
       <div>

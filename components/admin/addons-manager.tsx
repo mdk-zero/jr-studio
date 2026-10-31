@@ -70,7 +70,7 @@ export function AddonsManager({
                   <button
                     type="button"
                     onClick={() => setEditing(addon)}
-                    className="rounded-lg border border-sand-300 px-3 py-1.5 text-xs font-medium text-ink transition hover:bg-sand-100"
+                    className="rounded-lg border border-line px-3 py-1.5 text-xs font-medium text-ink transition hover:bg-raised"
                   >
                     Edit
                   </button>
@@ -119,7 +119,7 @@ export function AddonsManager({
                     name="package_ids"
                     value={pkg.id}
                     defaultChecked={memory.includes("package_ids", pkg.id, editing?.packageIds.includes(pkg.id) ?? false)}
-                    className="size-4 accent-burgundy-600"
+                    className="size-4 accent-brand"
                   />
                   {pkg.name}
                 </label>
@@ -128,14 +128,14 @@ export function AddonsManager({
           </fieldset>
 
           <label className="flex items-center gap-2 text-sm text-ink">
-            <input name="is_active" type="checkbox" defaultChecked={memory.checked("is_active", editing ? editing.is_active : true)} className="size-4 accent-burgundy-600" />
+            <input name="is_active" type="checkbox" defaultChecked={memory.checked("is_active", editing ? editing.is_active : true)} className="size-4 accent-brand" />
             Available to book
           </label>
 
           <div className="flex gap-2">
             <SubmitButton>{editing ? "Save changes" : "Add add-on"}</SubmitButton>
             {editing ? (
-              <button type="button" onClick={() => setEditing(null)} className="rounded-lg border border-sand-300 px-4 py-2 text-sm text-ink transition hover:bg-sand-100">
+              <button type="button" onClick={() => setEditing(null)} className="rounded-lg border border-line px-4 py-2 text-sm text-ink transition hover:bg-raised">
                 Cancel
               </button>
             ) : null}

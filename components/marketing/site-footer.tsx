@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getBusinessHours, getCurrentYear, getStudioSettings } from "@/lib/catalog";
 import { minutesToTime, timeToMinutes } from "@/lib/datetime";
 import { BrandLogo } from "@/components/brand-logo";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 
@@ -120,9 +121,12 @@ export async function SiteFooter() {
           <p>
             © {year} {settings.studio_name}. Nasugbu, Batangas.
           </p>
-          <Link href="/login" className="transition-colors hover:text-ink">
-            Studio sign in
-          </Link>
+          <div className="flex items-center gap-5">
+            <ThemeSwitcher />
+            <Link href="/login" className="transition-colors hover:text-ink">
+              Studio sign in
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
