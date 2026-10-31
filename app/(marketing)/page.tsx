@@ -10,6 +10,7 @@ import { StudioFilm } from "@/components/marketing/studio-film";
 import { StudioReel } from "@/components/marketing/studio-reel";
 import { TestimonialCard } from "@/components/marketing/testimonial-card";
 import { Timecode } from "@/components/marketing/timecode";
+import { WorkGrid } from "@/components/marketing/work-grid";
 
 export const metadata: Metadata = {
   title: "J&R Studio — Photo & Video Studio in Nasugbu, Batangas",
@@ -64,7 +65,7 @@ export default async function HomePage() {
           <StudioReel src={REEL.src} className="absolute inset-0 size-full object-cover" />
           {/* Grade: the footage is a bright white wall, so it is brought down
               to the darkroom and fades out behind the copy. */}
-          <div className="absolute inset-0 bg-canvas/40" />
+          <div className="absolute inset-0 bg-canvas/65 lg:bg-canvas/40" />
           <div className="absolute inset-0 bg-linear-to-r from-canvas from-10% via-canvas/70 via-45% to-canvas/0 to-85%" />
           <div className="absolute inset-x-0 bottom-0 h-2/5 bg-linear-to-t from-canvas to-canvas/0" />
         </div>
@@ -165,33 +166,7 @@ export default async function HomePage() {
           ) : null}
         </header>
 
-        <ol className="mt-10 grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-4 sm:gap-x-4">
-          {COVERS.map((cover, i) => (
-            <li key={cover.image.src}>
-              <figure>
-                <div className="relative aspect-5/7 overflow-hidden bg-surface">
-                  <Image
-                    src={cover.image}
-                    alt={cover.alt}
-                    fill
-                    sizes="(min-width: 1152px) 270px, (min-width: 640px) 25vw, 50vw"
-                    placeholder="blur"
-                    className="object-cover"
-                  />
-                </div>
-                <figcaption className="caps nums mt-2.5 flex justify-between gap-2 text-muted">
-                  <span className="truncate">
-                    <span aria-hidden className="text-faint">
-                      {String(i + 1).padStart(2, "0")}A{" "}
-                    </span>
-                    {cover.title ?? cover.kind}
-                  </span>
-                  {cover.issue ? <span className="shrink-0">{cover.issue}</span> : null}
-                </figcaption>
-              </figure>
-            </li>
-          ))}
-        </ol>
+        <WorkGrid items={COVERS} className="mt-10" />
       </section>
 
       {/* Packages: a contact sheet, with the categories as a strip of film. */}

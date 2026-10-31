@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { getPortfolio } from "@/lib/catalog";
 import { Plate } from "@/components/marketing/plate";
+import { COVERS, FILM, SESSIONS } from "@/components/marketing/showcase";
+import { StudioFilm } from "@/components/marketing/studio-film";
+import { WorkGrid } from "@/components/marketing/work-grid";
 
 export const metadata: Metadata = {
   title: "Portfolio",
@@ -14,43 +17,54 @@ function frameLabel(i: number) {
 
 export default async function PortfolioPage() {
   const { albums, loose } = await getPortfolio();
-  const hasPhotos = albums.some((a) => a.photos.length > 0) || loose.length > 0;
 
   return (
     <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:py-20">
       <header className="border-b border-line pb-8">
         <p className="caps text-brand">Selected work · Stills &amp; motion</p>
         <h1 className="mt-4 text-5xl font-semibold text-heading sm:text-6xl">Portfolio</h1>
-        {!hasPhotos ? (
-          <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted">
-            Albums are set up and photographs are being added. In the meantime, the
-            packages page shows what each kind of session includes.
-          </p>
-        ) : null}
+        <p className="mt-6 max-w-xl text-sm leading-relaxed text-muted">
+          Covers, portraits and family sessions shot in the studio, and a short film of
+          the place itself.
+        </p>
       </header>
 
       <div className="mt-14 space-y-20">
+        {/* The studio's own selection, bundled with the site. Albums from the
+            back office follow it. */}
+        <section aria-labelledby="featured-heading">
+          <SectionHead
+            mark="Roll 00"
+            label="Stills"
+            title="Featured"
+            id="featured-heading"
+            count={COVERS.length + SESSIONS.length}
+          />
+          <WorkGrid items={[...COVERS, ...SESSIONS]} className="mt-6" />
+        </section>
+
+        <section aria-labelledby="motion-heading">
+          <SectionHead mark="Reel 01" label="Motion" title="The studio film" id="motion-heading" />
+          <div className="mt-6 max-w-4xl">
+            <StudioFilm
+              src={FILM.src}
+              poster={FILM.poster}
+              title={FILM.title}
+              duration={FILM.duration}
+              sizes="(min-width: 1024px) 896px, 100vw"
+            />
+          </div>
+        </section>
+
         {albums.map((album, albumIndex) => (
           <section key={album.id}>
-            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-4">
-              <div>
-                <p className="caps nums text-muted">
-                  Roll {String(albumIndex + 1).padStart(2, "0")}
-                  {album.categories?.name ? (
-                    <span className="text-brand"> · {album.categories.name}</span>
-                  ) : null}
-                </p>
-                <h2 className="mt-2 text-3xl font-semibold text-heading">{album.title}</h2>
-                {album.description ? (
-                  <p className="mt-1.5 max-w-lg text-sm text-muted">{album.description}</p>
-                ) : null}
-              </div>
-              {album.photos.length ? (
-                <p className="caps nums text-muted">
-                  {album.photos.length} frame{album.photos.length === 1 ? "" : "s"}
-                </p>
-              ) : null}
-            </div>
+            <SectionHead
+              mark={`Roll ${String(albumIndex + 1).padStart(2, "0")}`}
+              label={album.categories?.name}
+              title={album.title}
+              description={album.description}
+              count={album.photos.length}
+            />
 
             {album.photos.length > 0 ? (
               <ContactSheet
@@ -104,5 +118,42 @@ function ContactSheet({
         </li>
       ))}
     </ol>
+  );
+}
+
+/** A roll or reel's label line, title and frame count, over a hairline. */
+function SectionHead({
+  mark,
+  label,
+  title,
+  id,
+  description,
+  count,
+}: {
+  mark: string;
+  label?: string | null;
+  title: string;
+  id?: string;
+  description?: string | null;
+  count?: number;
+}) {
+  return (
+    <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-4">
+      <div>
+        <p className="caps nums text-muted">
+          {mark}
+          {label ? <span className="text-brand"> · {label}</span> : null}
+        </p>
+        <h2 id={id} className="mt-2 text-3xl font-semibold text-heading">
+          {title}
+        </h2>
+        {description ? <p className="mt-1.5 max-w-lg text-sm text-muted">{description}</p> : null}
+      </div>
+      {count ? (
+        <p className="caps nums text-muted">
+          {count} frame{count === 1 ? "" : "s"}
+        </p>
+      ) : null}
+    </div>
   );
 }
