@@ -1,16 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import {
-  getActivePromotions,
-  getCatalog,
-  getPortfolio,
-  getPublicTestimonials,
-  storageUrl,
-} from "@/lib/catalog";
+import { getActivePromotions, getCatalog, getPublicTestimonials } from "@/lib/catalog";
 import { formatPeso } from "@/lib/money";
 import { PackageCard } from "@/components/marketing/package-card";
 import { PromoBand } from "@/components/marketing/promo-band";
+import { COVERS, FILM, REEL, SESSIONS } from "@/components/marketing/showcase";
+import { StudioFilm } from "@/components/marketing/studio-film";
+import { StudioReel } from "@/components/marketing/studio-reel";
 import { TestimonialCard } from "@/components/marketing/testimonial-card";
 import { Timecode } from "@/components/marketing/timecode";
 
@@ -31,20 +28,17 @@ const button =
   "caps press inline-flex items-center justify-center rounded-full px-6 py-3";
 
 export default async function HomePage() {
-  const [catalog, promos, testimonials, portfolio] = await Promise.all([
+  const [catalog, promos, testimonials] = await Promise.all([
     getCatalog(),
     getActivePromotions(),
     getPublicTestimonials(3),
-    getPortfolio(),
   ]);
 
   const packageCount = catalog.reduce((sum, c) => sum + c.packages.length, 0);
   const cheapest = Math.min(...catalog.flatMap((c) => c.packages.map((p) => Number(p.price))));
 
-  // The studio's first portfolio photograph becomes the hero once it exists;
-  // until then the frame shows the lit, empty backdrop.
-  const heroPhoto = portfolio.albums.flatMap((a) => a.photos)[0] ?? portfolio.loose[0];
-  const heroUrl = storageUrl("portfolio", heroPhoto?.storage_path);
+  // The cover wall sells this package, so it links there with its live price.
+  const magazine = catalog.flatMap((c) => c.packages).find((p) => p.slug === "magazine-concept");
 
   // One contact sheet across categories; the first frame of each category is
   // the anchor its film-strip link jumps to.
@@ -54,23 +48,26 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* Hero: the page as a camera's viewfinder, with the studio's real
-          numbers where the exposure readout would be. */}
-      <section className="backdrop relative isolate overflow-hidden border-b border-line">
-        {heroUrl ? (
-          <>
-            <Image
-              src={heroUrl}
-              alt={heroPhoto?.title ?? "Recent work from J&R Studio"}
-              fill
-              sizes="100vw"
-              preload
-              className="-z-20 object-cover"
-            />
-            {/* Keeps the copy legible over any photograph. */}
-            <div aria-hidden className="absolute inset-0 -z-10 bg-linear-to-r from-canvas via-canvas/75 to-canvas/10" />
-          </>
-        ) : null}
+      {/* Hero: the page as a camera's viewfinder, rolling on the studio's own
+          footage, with the real numbers where the exposure readout would be. */}
+      <section className="relative isolate overflow-hidden border-b border-line bg-canvas">
+        <div aria-hidden className="absolute inset-0 -z-10">
+          <Image
+            src={REEL.poster}
+            alt=""
+            fill
+            sizes="100vw"
+            preload
+            placeholder="blur"
+            className="object-cover"
+          />
+          <StudioReel src={REEL.src} className="absolute inset-0 size-full object-cover" />
+          {/* Grade: the footage is a bright white wall, so it is brought down
+              to the darkroom and fades out behind the copy. */}
+          <div className="absolute inset-0 bg-canvas/40" />
+          <div className="absolute inset-0 bg-linear-to-r from-canvas from-10% via-canvas/70 via-45% to-canvas/0 to-85%" />
+          <div className="absolute inset-x-0 bottom-0 h-2/5 bg-linear-to-t from-canvas to-canvas/0" />
+        </div>
 
         <div className="mx-auto w-full max-w-6xl px-5 py-5 sm:py-8">
           <div className="relative flex min-h-[min(84svh,46rem)] flex-col justify-between px-4 py-5 sm:px-8 sm:py-7">
@@ -143,6 +140,59 @@ export default async function HomePage() {
       </section>
 
       <PromoBand promos={promos} />
+
+      {/* The cover wall: the studio's own covers, hung edge to edge the way
+          they hang in its reception. */}
+      <section aria-labelledby="covers-heading" className="mx-auto w-full max-w-6xl px-5 pt-20 sm:pt-24">
+        <header className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="caps text-brand">Shot at J&amp;R</p>
+            <h2 id="covers-heading" className="mt-3 text-4xl font-semibold text-heading sm:text-5xl">
+              The cover wall
+            </h2>
+          </div>
+          {magazine ? (
+            <p className="max-w-xs text-sm leading-relaxed text-muted">
+              Want your own cover? The{" "}
+              <Link
+                href={`/packages/${magazine.slug}`}
+                className="text-ink underline underline-offset-4 transition-colors hover:text-brand"
+              >
+                {magazine.name}
+              </Link>{" "}
+              session starts at <span className="nums text-ink">{formatPeso(magazine.price)}</span>.
+            </p>
+          ) : null}
+        </header>
+
+        <ol className="mt-10 grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-4 sm:gap-x-4">
+          {COVERS.map((cover, i) => (
+            <li key={cover.image.src}>
+              <figure>
+                <div className="relative aspect-5/7 overflow-hidden bg-surface">
+                  <Image
+                    src={cover.image}
+                    alt={cover.alt}
+                    fill
+                    sizes="(min-width: 1152px) 270px, (min-width: 640px) 25vw, 50vw"
+                    placeholder="blur"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="caps nums mt-2.5 flex justify-between gap-2 text-muted">
+                  <span className="truncate">
+                    <span aria-hidden className="text-faint">
+                      {String(i + 1).padStart(2, "0")}A{" "}
+                    </span>
+                    {cover.title ?? cover.kind}
+                  </span>
+                  {cover.issue ? <span className="shrink-0">{cover.issue}</span> : null}
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ol>
+      </section>
 
       {/* Packages: a contact sheet, with the categories as a strip of film. */}
       <section id="packages" className="mx-auto w-full max-w-6xl scroll-mt-20 px-5 py-20 sm:py-24">
@@ -224,6 +274,33 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* The studio film, behind a poster: it only loads when asked for. */}
+      <section className="mx-auto w-full max-w-6xl px-5 py-20 sm:py-24">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-14">
+          <StudioFilm
+            src={FILM.src}
+            poster={FILM.poster}
+            title={FILM.title}
+            duration={FILM.duration}
+            sizes="(min-width: 1024px) 680px, 100vw"
+          />
+          <div>
+            <p className="caps text-brand">The studio film</p>
+            <h2 className="mt-3 text-4xl font-semibold text-heading">Step inside</h2>
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
+              The cover wall, the shooting bays, hair and makeup, and the people behind
+              the camera. Three minutes, with sound.
+            </p>
+            <Link
+              href="/about"
+              className="caps mt-6 inline-block text-ink underline underline-offset-4 transition-colors hover:text-brand"
+            >
+              More about the studio
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {testimonials.length > 0 ? (
         <section className="mx-auto w-full max-w-6xl px-5 py-20 sm:py-24">
           <p className="caps text-brand">Reviews</p>
@@ -243,22 +320,37 @@ export default async function HomePage() {
       ) : null}
 
       <section className="mx-auto w-full max-w-6xl px-5 pb-24">
-        <div className="backdrop relative isolate overflow-hidden border border-line px-8 py-14 sm:px-14 sm:py-20">
-          <div aria-hidden className="viewfinder pointer-events-none absolute inset-4 text-ink" />
-          <p className="caps flex items-center gap-2.5 text-muted">
-            <span aria-hidden className="size-2 rounded-full bg-brand" />
-            Standing by
-          </p>
-          <h2 className="mt-4 text-4xl font-semibold text-heading sm:text-5xl">Ready when you are.</h2>
-          <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">
-            Create an account to book a slot and keep track of your sessions.
-          </p>
-          <Link
-            href="/signup"
-            className={`${button} mt-8 bg-action text-on-action hover:bg-action-hover`}
-          >
-            Create an account
-          </Link>
+        <div className="grid overflow-hidden border border-line bg-surface sm:grid-cols-[1.4fr_1fr]">
+          <div className="relative px-8 py-14 sm:px-14 sm:py-20">
+            <div aria-hidden className="viewfinder pointer-events-none absolute inset-4 text-ink" />
+            <p className="caps flex items-center gap-2.5 text-muted">
+              <span aria-hidden className="size-2 rounded-full bg-brand" />
+              Standing by
+            </p>
+            <h2 className="mt-4 text-4xl font-semibold text-heading sm:text-5xl">Ready when you are.</h2>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">
+              Create an account to book a slot and keep track of your sessions.
+            </p>
+            <Link
+              href="/signup"
+              className={`${button} mt-8 bg-action text-on-action hover:bg-action-hover`}
+            >
+              Create an account
+            </Link>
+          </div>
+          {/* A portrait on the same grey the studio shoots against, so it
+              meets the panel without a hard edge. */}
+          <div className="relative hidden min-h-80 sm:block">
+            <Image
+              src={SESSIONS[0].image}
+              alt={SESSIONS[0].alt}
+              fill
+              sizes="(min-width: 1152px) 460px, 40vw"
+              placeholder="blur"
+              className="object-cover object-top"
+            />
+            <div aria-hidden className="absolute inset-y-0 left-0 w-1/3 bg-linear-to-r from-surface to-surface/0" />
+          </div>
         </div>
       </section>
     </>
