@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Viewport } from "next";
 import { BrandLogo } from "@/components/brand-logo";
 import { SESSIONS } from "@/components/marketing/showcase";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 /**
  * Authenticated area: every render reads the session cookie to decide whether
@@ -11,42 +11,68 @@ import { SESSIONS } from "@/components/marketing/showcase";
  */
 export const instant = false;
 
-export const viewport: Viewport = { themeColor: "#0c0a0a" };
-
 const portrait = SESSIONS[0];
 
+/**
+ * Split screen on wide displays: the studio's side (a portrait in the
+ * viewfinder, dark in either theme) and the form's side, which follows the
+ * theme. Phones get the form alone, under the same top bar.
+ */
 export default function AuthLayout({ children }: LayoutProps<"/">) {
   return (
-    <div className="darkroom grain flex min-h-full flex-1">
-      {/* Wide screens get a studio portrait beside the form. It stays put
-          while a long form (sign-up) scrolls. Phones skip it entirely. */}
-      <aside className="sticky top-0 hidden h-svh w-[42%] max-w-2xl shrink-0 lg:block">
+    <div className="grain flex min-h-full flex-1">
+      <aside className="darkroom sticky top-0 hidden h-svh w-1/2 max-w-3xl shrink-0 overflow-hidden lg:block">
         <Image
           src={portrait.image}
           alt={portrait.alt}
           fill
-          sizes="42vw"
+          sizes="50vw"
           placeholder="blur"
-          className="object-cover object-top"
+          className="object-cover object-[50%_18%]"
         />
-        <div aria-hidden className="absolute inset-y-0 right-0 w-1/3 bg-linear-to-l from-canvas to-canvas/0" />
-        <div aria-hidden className="viewfinder absolute inset-8 text-bone [--vf-length:1.75rem]" />
-        <p className="caps absolute bottom-14 left-14 text-bone/85">{portrait.kind} · J&amp;R Studio</p>
+        {/* Darkened top and bottom so the logo and the caption always read. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-linear-to-b from-night-950/55 via-night-950/0 via-35% to-night-950/85"
+        />
+        <div aria-hidden className="viewfinder absolute inset-8 text-bone [--vf-length:2rem]" />
+
+        <Link
+          href="/"
+          aria-label="J&R Studio, home"
+          className="absolute top-14 left-14 transition-opacity hover:opacity-75"
+        >
+          <BrandLogo className="size-16 text-bone" />
+        </Link>
+
+        <div className="absolute right-14 bottom-14 left-14">
+          <p className="font-display text-4xl leading-[1.05] font-semibold text-bone">
+            Stills &amp; <em className="font-normal text-burgundy-200">motion</em>,
+            <br />
+            made to keep.
+          </p>
+          <p className="caps mt-5 text-bone/70">{portrait.kind} · Shot at J&amp;R Studio</p>
+        </div>
       </aside>
 
-      <main className="backdrop flex flex-1 flex-col items-center justify-center px-4 py-12">
-        <div className="flex w-full max-w-md flex-col gap-8">
-          <Link href="/" aria-label="J&R Studio, home" className="self-center transition-opacity hover:opacity-75">
-            <BrandLogo className="size-20" />
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="flex items-center justify-between gap-4 px-6 py-5 sm:px-10">
+          <Link href="/" className="caps flex items-center gap-2 text-muted transition-colors hover:text-ink">
+            <span aria-hidden>←</span>
+            Back to site
           </Link>
-          {/* The form sits in frame, with the viewfinder's brackets just outside it. */}
-          <div className="viewfinder text-muted/60 [--vf-inset:-0.625rem]">
-            <div className="border border-line bg-surface/90 p-6 text-ink backdrop-blur-sm sm:p-8">
-              {children}
-            </div>
+          <ThemeSwitcher />
+        </header>
+
+        <main className="flex flex-1 items-center justify-center px-6 pt-6 pb-20 sm:px-10">
+          <div className="w-full max-w-sm">
+            <Link href="/" aria-label="J&R Studio, home" className="mb-10 inline-block transition-opacity hover:opacity-75 lg:hidden">
+              <BrandLogo className="size-16" />
+            </Link>
+            {children}
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

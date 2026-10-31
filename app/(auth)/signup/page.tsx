@@ -15,10 +15,11 @@ export default async function SignUpPage() {
   if (user) redirect(homePathFor(user.role));
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-2xl font-semibold text-heading">Create your account</h1>
-        <p className="mt-1 text-sm text-muted">
+        <p className="caps text-brand">New account</p>
+        <h1 className="mt-3 text-4xl leading-tight font-semibold text-heading">Create your account</h1>
+        <p className="mt-3 text-sm leading-relaxed text-muted">
           You will need an account to book a session and see your booking history.
         </p>
       </div>

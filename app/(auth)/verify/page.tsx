@@ -13,10 +13,11 @@ export default async function VerifyPage(props: PageProps<"/verify">) {
   if (typeof email !== "string" || !email) redirect("/signup");
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-2xl font-semibold text-heading">Confirm your email</h1>
-        <p className="mt-1 text-sm text-muted">
+        <p className="caps text-brand">Confirm email</p>
+        <h1 className="mt-3 text-4xl leading-tight font-semibold text-heading">Confirm your email</h1>
+        <p className="mt-3 text-sm leading-relaxed text-muted">
           We sent a 6-digit code to <span className="font-medium text-ink">{email}</span>. Enter it
           below to finish creating your account.
         </p>

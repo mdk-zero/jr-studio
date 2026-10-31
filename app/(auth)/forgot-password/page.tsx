@@ -6,10 +6,11 @@ export const metadata: Metadata = { title: "Reset your password" };
 
 export default function ForgotPasswordPage() {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-2xl font-semibold text-heading">Reset your password</h1>
-        <p className="mt-1 text-sm text-muted">
+        <p className="caps text-brand">Password reset</p>
+        <h1 className="mt-3 text-4xl leading-tight font-semibold text-heading">Reset your password</h1>
+        <p className="mt-3 text-sm leading-relaxed text-muted">
           Enter your email and we will send you a link to choose a new password.
         </p>
       </div>

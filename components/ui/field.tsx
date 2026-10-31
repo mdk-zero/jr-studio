@@ -33,7 +33,7 @@ export function Field({
 
 // Semantic tokens, so the same field reads correctly in the darkroom and on paper.
 export const inputClass =
-  "w-full rounded-sm border border-edge bg-canvas px-3 py-2.5 text-sm text-ink " +
+  "w-full rounded-sm border border-edge bg-surface px-3 py-2.5 text-sm text-ink " +
   "placeholder:text-faint transition-colors focus:border-brand focus:outline-none " +
   "focus:ring-2 focus:ring-brand/25 disabled:opacity-60";
 

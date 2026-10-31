@@ -27,10 +27,11 @@ export default async function LoginPage(props: PageProps<"/login">) {
   const message = typeof error === "string" ? linkErrors[error] : undefined;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-2xl font-semibold text-heading">Welcome back</h1>
-        <p className="mt-1 text-sm text-muted">Sign in to manage your bookings.</p>
+        <p className="caps text-brand">Sign in</p>
+        <h1 className="mt-3 text-4xl leading-tight font-semibold text-heading">Welcome back</h1>
+        <p className="mt-3 text-sm leading-relaxed text-muted">Sign in to manage your bookings.</p>
       </div>
 
       <FormMessage message={message} />
