@@ -107,15 +107,20 @@ sideways scrolling or any Content Security Policy violation. To use an installed
 Chrome instead of Playwright's own, set `CHROME_PATH`; otherwise run
 `npx playwright install chromium` once.
 
-To test the deployed site instead, set `E2E_BASE_URL` (no build or local server
-needed):
+`npm run test:e2e` forces `EMAIL_MODE=test` for the local server, so a run never
+emails the made-up test customers even when `.env.local` says `live`.
+
+To test the deployed site instead (no build or local server needed):
 
 ```sh
-E2E_BASE_URL=https://www.jrstudio.digital npm run test:e2e public-pages appearance
+npm run test:e2e:live:safe   # the 7 tests that change nothing
+npm run test:e2e:live        # all 50
 ```
 
-The fixtures still write through `.env.local`, so this only works when the site
-uses the same Supabase project. `public-pages` and `appearance` change nothing;
+Both set `E2E_BASE_URL`; any other site works the same way
+(`E2E_BASE_URL=https://… npx playwright test`). The fixtures still write through
+`.env.local`, so this only works when the site uses the same Supabase project,
+and email follows the site's own `EMAIL_MODE`. `public-pages` and `appearance` change nothing;
 every other spec creates accounts and most create bookings, which briefly hold
 real slots, and on a site with `EMAIL_MODE=live` their emails go out for real.
 
