@@ -1,0 +1,3 @@
+Clicked the booking link for pro-portraits while signed out.
+Landed on: http://localhost:3100/login?next=%2Fbook
+The ?package= part of the link is not in the "next" address.

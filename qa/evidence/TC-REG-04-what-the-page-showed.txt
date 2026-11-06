@@ -1,0 +1,20 @@
+URL after submit: http://localhost:3100/verify?email=e2e-duplicate-1793886210410%40example.com
+
+CONFIRM EMAIL
+
+Confirm your email
+
+We sent a 6-digit code to e2e-duplicate-1793886210410@example.com. Enter it below to finish creating your account.
+
+6-digit code
+
+Check your inbox. The code expires in an hour.
+
+Verify email
+Send me a new code
+
+No email after a few minutes? Check your spam or promotions folder, or send a new code above.
+
+Already have an account with this email? No code is sent in that case. Sign in or reset your password.
+
+Wrong address? Start again

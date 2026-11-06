@@ -1,0 +1,2 @@
+HTTP status of the stranger's request: 200
+The page body says the booking was not found.

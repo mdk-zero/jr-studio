@@ -29,8 +29,8 @@ export default defineConfig({
     launchOptions: process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {},
   },
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"] }, testIgnore: /layout\.spec/ },
-    { name: "phone", use: { ...devices["Pixel 7"] }, testMatch: /layout\.spec/ },
+    { name: "desktop", use: { ...devices["Desktop Chrome"] }, testIgnore: /(layout|phone-flows)\.spec/ },
+    { name: "phone", use: { ...devices["Pixel 7"] }, testMatch: /(layout|phone-flows)\.spec/ },
   ],
   webServer: {
     command: `npx next start -p ${port}`,

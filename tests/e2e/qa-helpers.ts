@@ -92,3 +92,34 @@ export async function deleteCustomerByEmail(email: string) {
 export async function deleteContactMessages(email: string) {
   await adminDb().from("contact_messages").delete().eq("email", email);
 }
+
+/** A client signed in as a customer, with the same rights the browser has. */
+export async function signedInClient(account: { email: string; password: string }) {
+  const client = createClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    { auth: { persistSession: false, autoRefreshToken: false } },
+  );
+  const { error } = await client.auth.signInWithPassword(account);
+  if (error) throw error;
+  return client;
+}
+
+/** A client with no sign-in at all: what a visitor's browser can do. */
+export function signedOutClient() {
+  return createClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    { auth: { persistSession: false, autoRefreshToken: false } },
+  );
+}
+
+/** The package id and first open slot of a day, as the booking page would offer them. */
+export async function firstOpenSlot(client: ReturnType<typeof signedOutClient>, packageSlug: string, date: string) {
+  const { data: pkg, error } = await client.from("packages").select("id").eq("slug", packageSlug).single();
+  if (error) throw error;
+  const { data: slots } = await client.rpc("available_slots", { p_package_id: pkg.id, p_date: date });
+  const slot = slots?.[0];
+  if (!slot) throw new Error(`No open slot on ${date} for ${packageSlug}`);
+  return { packageId: pkg.id, startsAt: slot.starts_at, endsAt: slot.ends_at };
+}
