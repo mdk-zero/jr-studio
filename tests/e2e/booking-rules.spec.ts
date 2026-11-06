@@ -80,12 +80,14 @@ test("TC-RULE-03: a customer cannot write a booking straight into the table", as
       starts_at: slot.startsAt,
       ends_at: slot.endsAt,
       status: "approved",
+      source: "customer",
       package_price: 0,
       addons_total: 0,
       discount_amount: 0,
       total_amount: 0,
     });
-    expect(forged.error, "the direct insert is refused").not.toBeNull();
+    // Refused for lack of permission, not for a missing column or a constraint.
+    expect(forged.error?.code, "the direct insert is refused").toBe("42501");
 
     const { data: made } = await adminDb().from("bookings").select("id").eq("customer_id", me!.id);
     expect(made).toHaveLength(0);

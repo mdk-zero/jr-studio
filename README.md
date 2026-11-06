@@ -107,6 +107,18 @@ sideways scrolling or any Content Security Policy violation. To use an installed
 Chrome instead of Playwright's own, set `CHROME_PATH`; otherwise run
 `npx playwright install chromium` once.
 
+To test the deployed site instead, set `E2E_BASE_URL` (no build or local server
+needed):
+
+```sh
+E2E_BASE_URL=https://www.jrstudio.digital npm run test:e2e public-pages appearance
+```
+
+The fixtures still write through `.env.local`, so this only works when the site
+uses the same Supabase project. `public-pages` and `appearance` change nothing;
+every other spec creates accounts and most create bookings, which briefly hold
+real slots, and on a site with `EMAIL_MODE=live` their emails go out for real.
+
 ## Going live
 
 1. **Production Supabase project** (separate from dev, where tests create and
